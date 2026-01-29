@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Evals Handbook | Production AI Evaluation Patterns</title>
+    <meta name="description" content="A practical guide to evaluating AI systems in production. Learn consequence-weighted evaluation, drift monitoring, and human-in-the-loop patterns from real-world deployments.">
+    <meta name="keywords" content="AI Evaluation, LLM Evals, RAG Evaluation, Model Drift, MLOps, AI Governance, Production AI">
+    <meta name="author" content="Saiprapul Thotapally">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="AI Evals Handbook">
+    <meta property="og:description" content="A practical guide to evaluating AI systems in production. Patterns from systems serving millions of users.">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-container">
+            <a href="/" class="nav-logo">
+                <span class="logo-icon">E</span>
+                AI Evals Handbook
+            </a>
+            <ul class="nav-links">
+                <li><a href="#why-evals">Why Evals</a></li>
+                <li><a href="#frameworks">Frameworks</a></li>
+                <li><a href="#case-studies">Case Studies</a></li>
+                <li><a href="#code">Code</a></li>
+                <li><a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="nav-github">GitHub</a></li>
+            </ul>
+            <div class="nav-toggle" id="navToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge">Open Source Guide</div>
+            <h1 class="hero-title">
+                Anyone can build AI.<br>
+                <span class="gradient-text">Few can evaluate it.</span>
+            </h1>
+            <p class="hero-subtitle">
+                A practical guide to evaluating AI systems in production. Patterns and frameworks
+                from systems serving millions of users and processing billions of queries.
+            </p>
+            <div class="hero-quote">
+                <blockquote>
+                    "It's all about evals. The models are commoditizing. The eval systems are the moat."
+                </blockquote>
+            </div>
+            <div class="hero-cta">
+                <a href="#frameworks" class="btn btn-primary">Explore Frameworks</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" class="btn btn-secondary" target="_blank">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+        <div class="hero-bg"></div>
+    </section>
+
+    <!-- Why Evals Section -->
+    <section class="section" id="why-evals">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">The Problem</span>
+                <h2>Why Most AI Evals Are Wrong</h2>
+                <p>Traditional metrics miss what matters in production systems.</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon wrong">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                    </div>
+                    <h3>Accuracy Obsession</h3>
+                    <p>Teams optimize for 95% accuracy without asking: what happens in the 5%? A wrong answer in legal costs infinitely more than a wrong menu translation.</p>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon wrong">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                    </div>
+                    <h3>Static Test Sets</h3>
+                    <p>Benchmarks from 3 months ago don't reflect today's query distribution. Production data drifts. Your evals must drift with it.</p>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon wrong">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                    </div>
+                    <h3>Component Isolation</h3>
+                    <p>Testing retrieval and generation separately misses how they fail together. Users don't care which component broke—they care about wrong answers.</p>
+                </div>
+            </div>
+
+            <div class="solution-intro">
+                <div class="solution-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <h3>A Better Approach: Consequence-Weighted Evaluation</h3>
+                <p>Measure AI systems by the <strong>business impact of failure</strong>, not just correctness. Design eval frameworks that encode domain-specific risk, catch drift before users do, and build confidence through systematic validation.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Frameworks Section -->
+    <section class="section section-alt" id="frameworks">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Core Concepts</span>
+                <h2>Evaluation Frameworks</h2>
+                <p>Production-tested patterns for evaluating AI systems at scale.</p>
+            </div>
+
+            <div class="frameworks-grid">
+                <a href="frameworks/consequence-weighted.html" class="framework-card">
+                    <div class="framework-number">01</div>
+                    <h3>Consequence-Weighted Evaluation</h3>
+                    <p>Not all errors are equal. Learn to weight evaluation metrics by business impact, compliance risk, and user trust implications.</p>
+                    <div class="framework-tags">
+                        <span>Risk Assessment</span>
+                        <span>Governance</span>
+                    </div>
+                    <div class="framework-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </a>
+
+                <a href="frameworks/drift-monitoring.html" class="framework-card">
+                    <div class="framework-number">02</div>
+                    <h3>Drift Monitoring</h3>
+                    <p>Query distribution shifts. Embeddings degrade. Learn to detect drift before it impacts users—with code examples and alerting patterns.</p>
+                    <div class="framework-tags">
+                        <span>MLOps</span>
+                        <span>Monitoring</span>
+                    </div>
+                    <div class="framework-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </a>
+
+                <a href="frameworks/rag-evaluation.html" class="framework-card">
+                    <div class="framework-number">03</div>
+                    <h3>RAG-Specific Evaluation</h3>
+                    <p>Retrieval precision, answer faithfulness, hallucination detection. A complete framework for evaluating retrieval-augmented systems.</p>
+                    <div class="framework-tags">
+                        <span>RAG</span>
+                        <span>Retrieval</span>
+                    </div>
+                    <div class="framework-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </a>
+
+                <a href="frameworks/human-in-the-loop.html" class="framework-card">
+                    <div class="framework-number">04</div>
+                    <h3>Human-in-the-Loop Patterns</h3>
+                    <p>When should AI escalate to humans? Confidence thresholds, escalation triggers, and feedback loops that improve over time.</p>
+                    <div class="framework-tags">
+                        <span>HITL</span>
+                        <span>Trust</span>
+                    </div>
+                    <div class="framework-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </a>
+
+                <a href="frameworks/llm-as-judge.html" class="framework-card">
+                    <div class="framework-number">05</div>
+                    <h3>LLM-as-Judge</h3>
+                    <p>Using LLMs to evaluate LLM outputs. Rubric design, bias mitigation, and when automated evaluation works (and when it doesn't).</p>
+                    <div class="framework-tags">
+                        <span>Automation</span>
+                        <span>Scale</span>
+                    </div>
+                    <div class="framework-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </a>
+
+                <a href="frameworks/governance.html" class="framework-card">
+                    <div class="framework-number">06</div>
+                    <h3>AI Governance Framework</h3>
+                    <p>The Complexity-Criticality Matrix for determining oversight levels. When to use direct LLM output vs. RAG vs. human review.</p>
+                    <div class="framework-tags">
+                        <span>Compliance</span>
+                        <span>Enterprise</span>
+                    </div>
+                    <div class="framework-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo Section -->
+    <section class="section" id="demo">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Interactive</span>
+                <h2>Try It Yourself</h2>
+                <p>See how consequence-weighted scoring changes prioritization.</p>
+            </div>
+
+            <div class="demo-container">
+                <div class="demo-panel">
+                    <h4>Scenario: Two AI Errors</h4>
+                    <div class="demo-scenarios">
+                        <div class="demo-scenario">
+                            <div class="scenario-header">
+                                <span class="scenario-label">Error A</span>
+                                <span class="scenario-domain">Menu Translation</span>
+                            </div>
+                            <p>"Grilled Chicken" translated as "Roasted Chicken"</p>
+                            <div class="scenario-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Accuracy</span>
+                                    <span class="metric-value">Wrong</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Business Impact</span>
+                                    <span class="metric-value low">Low</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="demo-scenario">
+                            <div class="scenario-header">
+                                <span class="scenario-label">Error B</span>
+                                <span class="scenario-domain">Legal Contract</span>
+                            </div>
+                            <p>"30-day termination" summarized as "immediate termination"</p>
+                            <div class="scenario-metrics">
+                                <div class="metric">
+                                    <span class="metric-label">Accuracy</span>
+                                    <span class="metric-value">Wrong</span>
+                                </div>
+                                <div class="metric">
+                                    <span class="metric-label">Business Impact</span>
+                                    <span class="metric-value high">Critical</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="demo-panel demo-result">
+                    <h4>Traditional vs. Consequence-Weighted</h4>
+                    <div class="comparison">
+                        <div class="comparison-row">
+                            <span class="comparison-label">Traditional Accuracy</span>
+                            <div class="comparison-bar">
+                                <div class="bar-fill" style="width: 50%;">50%</div>
+                            </div>
+                            <span class="comparison-note">Both errors weighted equally</span>
+                        </div>
+                        <div class="comparison-row highlight">
+                            <span class="comparison-label">Consequence-Weighted</span>
+                            <div class="comparison-bar critical">
+                                <div class="bar-fill" style="width: 15%;">15%</div>
+                            </div>
+                            <span class="comparison-note">Legal error weighted 10x higher</span>
+                        </div>
+                    </div>
+                    <p class="demo-insight">
+                        <strong>Insight:</strong> Same raw accuracy, vastly different business risk.
+                        Consequence-weighted scoring surfaces the legal error as critical, triggering
+                        human review before deployment.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section class="section section-alt" id="case-studies">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Real World</span>
+                <h2>Case Studies</h2>
+                <p>Anonymized patterns from production AI systems.</p>
+            </div>
+
+            <div class="case-studies-grid">
+                <a href="case-studies/query-drift-rag.html" class="case-study-card">
+                    <div class="case-study-image">
+                        <div class="case-study-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="case-study-content">
+                        <span class="case-study-tag">Drift Detection</span>
+                        <h3>Query Drift in a 150K MAU RAG System</h3>
+                        <p>How query distribution shifted from 70% generic to 40% edge cases in 3 months—and how we caught it before users complained.</p>
+                        <div class="case-study-meta">
+                            <span>B2B SaaS</span>
+                            <span>10M+ queries/mo</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="case-studies/embedding-drift.html" class="case-study-card">
+                    <div class="case-study-image">
+                        <div class="case-study-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M8 12h8"></path>
+                                <path d="M12 8v8"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="case-study-content">
+                        <span class="case-study-tag">Semantic Drift</span>
+                        <h3>Embedding Drift Across Client Domains</h3>
+                        <p>When "inspection" means different things to different clients. How domain-specific terminology broke our embeddings—and how we fixed it.</p>
+                        <div class="case-study-meta">
+                            <span>Multi-tenant AI</span>
+                            <span>92.9% accuracy</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="case-studies/hallucination-reduction.html" class="case-study-card">
+                    <div class="case-study-image">
+                        <div class="case-study-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                                <path d="M2 17l10 5 10-5"></path>
+                                <path d="M2 12l10 5 10-5"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="case-study-content">
+                        <span class="case-study-tag">Hallucination</span>
+                        <h3>Reducing Hallucinations from 8% to 2%</h3>
+                        <p>Chain-of-thought verification, citation requirements, and confidence scoring that cut hallucination rates by 75%.</p>
+                        <div class="case-study-meta">
+                            <span>Enterprise RAG</span>
+                            <span>50K+ docs</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Code Section -->
+    <section class="section" id="code">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Open Source</span>
+                <h2>Evaluation Code</h2>
+                <p>Production-ready patterns you can use today.</p>
+            </div>
+
+            <div class="code-preview">
+                <div class="code-header">
+                    <span class="code-filename">drift_monitor.py</span>
+                    <a href="https://github.com/saiprapul/ai-evals-handbook/blob/main/code/drift_monitor.py" class="code-link" target="_blank">View Full Code</a>
+                </div>
+                <pre><code class="language-python"><span class="comment"># Query Distribution Drift Detection</span>
+<span class="comment"># Catches drift before it impacts user experience</span>
+
+<span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans
+<span class="keyword">from</span> sentence_transformers <span class="keyword">import</span> SentenceTransformer
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="keyword">class</span> <span class="class-name">QueryDriftMonitor</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(self, baseline_embeddings, threshold=<span class="number">0.15</span>):
+        self.baseline = baseline_embeddings
+        self.threshold = threshold
+        self.encoder = SentenceTransformer(<span class="string">'all-MiniLM-L6-v2'</span>)
+
+    <span class="keyword">def</span> <span class="function">detect_drift</span>(self, new_queries: list[str]) -> dict:
+        <span class="string">"""
+        Compare new query distribution against baseline.
+        Returns drift score and flagged clusters.
+        """</span>
+        new_embeddings = self.encoder.encode(new_queries)
+
+        <span class="comment"># Cluster new queries</span>
+        kmeans = KMeans(n_clusters=<span class="number">10</span>)
+        clusters = kmeans.fit_predict(new_embeddings)
+
+        <span class="comment"># Compare cluster centroids to baseline</span>
+        drift_score = self._compute_distribution_shift(
+            new_embeddings, self.baseline
+        )
+
+        <span class="keyword">return</span> {
+            <span class="string">"drift_score"</span>: drift_score,
+            <span class="string">"is_drifted"</span>: drift_score > self.threshold,
+            <span class="string">"emerging_clusters"</span>: self._find_new_clusters(clusters)
+        }</code></pre>
+            </div>
+
+            <div class="code-cards">
+                <a href="code/consequence_scorer.html" class="code-card">
+                    <div class="code-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <h4>Consequence Scorer</h4>
+                    <p>Weight errors by business impact</p>
+                </a>
+
+                <a href="code/rag_evaluator.html" class="code-card">
+                    <div class="code-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    <h4>RAG Evaluator</h4>
+                    <p>Retrieval + generation metrics</p>
+                </a>
+
+                <a href="code/confidence_calibrator.html" class="code-card">
+                    <div class="code-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="20" x2="12" y2="10"></line>
+                            <line x1="18" y1="20" x2="18" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="16"></line>
+                        </svg>
+                    </div>
+                    <h4>Confidence Calibrator</h4>
+                    <p>When to escalate to humans</p>
+                </a>
+
+                <a href="code/eval_pipeline.html" class="code-card">
+                    <div class="code-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                    </div>
+                    <h4>Eval Pipeline</h4>
+                    <p>Nightly regression testing</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section section-alt" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About This Guide</h2>
+                    <p>
+                        I'm <a href="https://saiprapul.github.io" target="_blank">Saiprapul Thotapally</a>, an AI Product Manager
+                        who's spent years building and evaluating AI systems in production—from RAG systems processing
+                        10M+ queries/month to multi-agent pipelines validated by aerospace R&D teams.
+                    </p>
+                    <p>
+                        This handbook distills patterns I've learned the hard way: that accuracy metrics lie,
+                        that production data drifts faster than you expect, and that the difference between
+                        AI that works and AI that fails is almost always in the evaluation.
+                    </p>
+                    <p>
+                        All examples are anonymized. All code is open source. If this helps you build better
+                        AI systems, that's the goal.
+                    </p>
+                    <div class="about-links">
+                        <a href="https://saiprapul.github.io" class="about-link" target="_blank">Portfolio</a>
+                        <a href="https://linkedin.com/in/saiprapul-r-thotapally" class="about-link" target="_blank">LinkedIn</a>
+                        <a href="https://www.irjet.net/archives/V11/i12/IRJET-V11I1293.pdf" class="about-link" target="_blank">Published Research</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>AI Evals Handbook by <a href="https://saiprapul.github.io">Saiprapul Thotapally</a></p>
+                <p class="footer-note">Open source. MIT License.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
