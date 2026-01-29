@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human-in-the-Loop & Agent Evals | AI Evals Handbook</title>
+    <meta name="description"
+        content="Evaluating autonomous agents require strict escalation protocols. Learn how to implement Human-in-the-loop (HITL) workflows and measure agent reliability.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-title">Foundations</div>
+                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
+                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
+                <a href="../glossary.html" class="sidebar-link">Glossary</a>
+                <a href="../faq.html" class="sidebar-link">FAQ</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Architectures</div>
+                <a href="rag-evaluation.html" class="sidebar-link">RAG Systems</a>
+                <a href="human-in-the-loop.html" class="sidebar-link active">Agentic AI</a>
+                <a href="governance.html" class="sidebar-link">Enterprise Governance</a>
+                <a href="drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Techniques</div>
+                <a href="consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
+                <a href="llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Case Studies</div>
+                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
+                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
+                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Implementation</div>
+                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
+                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
+                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
+                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
+                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
+            </div>
+        </aside>
+
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <a href="#">Architectures</a>
+                    <span class="separator">/</span>
+                    <span>Agentic AI</span>
+                </div>
+
+                <h1>Human-in-the-Loop (HITL) & Agents</h1>
+                <p class="framework-subtitle">Agents are powerful but unpredictable. Use humans as the ultimate safety
+                    layer.</p>
+
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content">
+                    <section id="philosophy">
+                        <h2>The Philosophy of Escalation</h2>
+                        <p>In high-stakes environments (Finance, Healthcare), 99% accuracy isn't good enough. You can't
+                            just ship an autonomous agent and hope for the best.</p>
+                        <p>The solution is not "better models", but <strong>better workflows</strong>. We design systems
+                            that know their own limits and escalate to a human expert when unsure.</p>
+                    </section>
+
+                    <section id="escalation-flow">
+                        <h2>The Escalation Logic</h2>
+                        <p>This flowchart defines how an Agent determines if it should act or ask.</p>
+
+                        <div class="mermaid-container"
+                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; border: 1px solid var(--border); margin: 24px 0; display: flex; justify-content: center;">
+                            <pre class="mermaid">
+graph TD
+    Start[User Request] --> Agent{Confidence Check}
+    Agent -->|High (>90%)| Auto[Execute Action]
+    Agent -->|Medium (50-90%)| Confirm[Propose Plan & Ask User]
+    Agent -->|Low (<50%)| Human[Route to Human Support]
+    
+    style Auto fill:#ecfdf5,stroke:#10b981
+    style Human fill:#fef2f2,stroke:#ef4444
+    style Confirm fill:#fffbeb,stroke:#f59e0b
+</pre>
+                        </div>
+                    </section>
+
+                    <section id="types-of-feedback">
+                        <h2>Capturing Feedback Signals</h2>
+                        <p>Evaluating agents requires capturing data from production usage. We categorize feedback into
+                            two types:</p>
+
+                        <div class="card-grid">
+                            <div class="metric-card">
+                                <h3>Explicit Feedback</h3>
+                                <p>Direct user input on quality.</p>
+                                <ul>
+                                    <li>Thumbs Up / Down buttons</li>
+                                    <li>"Regenerate" clicks</li>
+                                    <li>Rating (1-5 stars)</li>
+                                </ul>
+                                <p><em>Pros: Clean data. Cons: Low engagement.</em></p>
+                            </div>
+                            <div class="metric-card">
+                                <h3>Implicit Feedback</h3>
+                                <p>Inferred from user behavior.</p>
+                                <ul>
+                                    <li>User <strong>copies code block</strong> (Positive)</li>
+                                    <li>User <strong>edits the AI draft</strong> (Negative - drift calculation)</li>
+                                    <li>Session length (Short can mean success OR rage quit)</li>
+                                </ul>
+                                <p><em>Pros: High volume. Cons: Noisy.</em></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="metrics">
+                        <h2>Agent-Specific Metrics</h2>
+                        <ul>
+                            <li><strong>Success Rate:</strong> Percent of sessions resolving the user intent without
+                                human takeover.</li>
+                            <li><strong>Escalation Rate:</strong> How often does the agent give up? (Should trend down
+                                as model improves).</li>
+                            <li><strong>Intervention Rate:</strong> How often does a human HAVE to step in to stop a bad
+                                action? (Critical Safety Metric).</li>
+                        </ul>
+                    </section>
+
+                    <section id="calibration">
+                        <h2>Confidence Calibration</h2>
+                        <p>An agent is only useful if its "Confidence Score" reflects reality. If it says "I am 99%
+                            sure" but is wrong, your escalation logic breaks.</p>
+                        <p>Use <strong>Expected Calibration Error (ECE)</strong> to measure this alignment.</p>
+                        <div class="code-block">
+                            <div class="code-header"><span>calibration.py</span></div>
+                            <pre><code><span class="keyword">def</span> <span class="function">calculate_ece</span>(probs, labels, bins=10):
+    <span class="comment"># Group predictions by confidence bin (0.0-0.1, 0.1-0.2...)</span>
+    <span class="comment"># For each bin, calculate |avg_confidence - avg_accuracy|</span>
+    <span class="comment"># Weighted average is your ECE Score.</span>
+    <span class="comment"># Lower is better.</span>
+    <span class="keyword">pass</span></code></pre>
+                        </div>
+                        <p><a href="../code/confidence_calibrator.html" class="btn btn-sm btn-primary"
+                                style="margin-top: 16px;">View Full Calibration Code →</a></p>
+                    </section>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="rag-evaluation.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">← RAG Systems</span>
+                    </a>
+                    <a href="governance.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Enterprise Governance →</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

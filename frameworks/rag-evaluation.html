@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Evaluation Framework | AI Evals Handbook</title>
+    <meta name="description"
+        content="A comprehensive guide to evaluating RAG systems. Learn about the 'RAG Triad', specific metrics like Context Precision and Faithfulness, and how to debug retrieval failures in production.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-title">Foundations</div>
+                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
+                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
+                <a href="../glossary.html" class="sidebar-link">Glossary</a>
+                <a href="../faq.html" class="sidebar-link">FAQ</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Architectures</div>
+                <a href="rag-evaluation.html" class="sidebar-link active">RAG Systems</a>
+                <a href="human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
+                <a href="governance.html" class="sidebar-link">Enterprise Governance</a>
+                <a href="drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Techniques</div>
+                <a href="consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
+                <a href="llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Case Studies</div>
+                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
+                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
+                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Implementation</div>
+                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
+                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
+                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
+                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
+                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
+            </div>
+        </aside>
+
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <a href="#">Architectures</a>
+                    <span class="separator">/</span>
+                    <span>RAG Systems</span>
+                </div>
+
+                <h1>RAG Evaluation Strategies</h1>
+                <p class="framework-subtitle">Deconstruct your pipeline into Retrieval and Generation validation.</p>
+
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content">
+                    <section id="introduction">
+                        <h2>The "Why" of RAG Evals</h2>
+                        <p>Evaluate a RAG system as a single black box, and you'll never know <em>why</em> it failed.
+                            Did it miss the document? Or did it have the document but hallucinates anyway?</p>
+                        <p>We break RAG evaluation into the <strong>RAG Triad</strong>: Query, Context, and Response.
+                        </p>
+
+                        <div class="mermaid-container"
+                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; border: 1px solid var(--border); margin: 24px 0; display: flex; justify-content: center;">
+                            <pre class="mermaid">
+graph LR
+    User[User Query] --> Retriever
+    Retriever -->|Context| LLM
+    User --> LLM
+    LLM --> Answer
+    
+    linkStyle 1 stroke:#6366f1,stroke-width:2px;
+    linkStyle 3 stroke:#10b981,stroke-width:2px;
+</pre>
+                        </div>
+                    </section>
+
+                    <section id="retrieval">
+                        <h2>1. Retrieval Metrics (The Search Engine)</h2>
+                        <p>Before an LLM even sees your prompt, your retrieval system needs to find the right data. If
+                            garbage goes in, garbage comes out.</p>
+
+                        <div class="card-grid">
+                            <div class="metric-card">
+                                <h3>Context Precision</h3>
+                                <p><strong>Definition:</strong> What proportion of retrieved chunks are actually
+                                    relevant?</p>
+                                <p><strong>Why it matters:</strong> Low precision floods the LLM context window with
+                                    noise, increasing cost and "lost in the middle" errors.</p>
+                                <div class="formula"><code>relevant_chunks / k_retrieved_chunks</code></div>
+                            </div>
+
+                            <div class="metric-card">
+                                <h3>Context Recall</h3>
+                                <p><strong>Definition:</strong> Did we retrieve <em>all</em> the necessary information
+                                    to answer the question?</p>
+                                <p><strong>Why it matters:</strong> If the legal statute is in Chunk #50 but you only
+                                    retrieved top-5, the model <em>cannot</em> be correct without hallucinating.</p>
+                            </div>
+                        </div>
+
+                        <div class="callout warning">
+                            <h4>The "Lost in the Middle" Phenomenon</h4>
+                            <p>Research shows LLMs prioritize information at the START and END of their context window.
+                                High precision is often more valuable than high recall if it means shorter contexts.</p>
+                        </div>
+                    </section>
+
+                    <section id="generation">
+                        <h2>2. Generation Metrics (The Writer)</h2>
+                        <p>Once you have the right context, did the model use it correctly?</p>
+
+                        <h3>Faithfulness</h3>
+                        <p>This checks for <strong>Hallucinations</strong>. A faithful answer contains only information
+                            found in the retrieved context.</p>
+                        <ul>
+                            <li><strong>Evaluation Method:</strong> Use an "LLM-as-Judge" to extract claims from the
+                                answer and verify each claim against the source chunks.</li>
+                            <li><strong>Score:</strong> 0.0 (Pure Hallucination) to 1.0 (Fully Grounded).</li>
+                        </ul>
+
+                        <h3>Answer Relevancy</h3>
+                        <p>A model can be faithful ("The sky is blue") but irrelevant to the question ("What is the
+                            capital of France?"). Relevancy measures the semantic similarity between the Query and the
+                            Response.</p>
+                    </section>
+
+                    <section id="implementation">
+                        <h2>Implementation Strategy</h2>
+                        <p>Do not rely on vibes. Build a <code>GoldenDataset</code> of (Question, Context_Ids,
+                            Ground_Truth) tuples.</p>
+
+                        <div class="code-block">
+                            <div class="code-header"><span>rag_eval_example.py</span></div>
+                            <pre><code><span class="keyword">def</span> <span class="function">evaluate_retrieval</span>(retrieved_ids, expected_ids):
+    <span class="comment"># Calculate Intersection over Union (IoU) or simple Recall</span>
+    intersection = <span class="builtin">len</span>(<span class="builtin">set</span>(retrieved_ids) & <span class="builtin">set</span>(expected_ids))
+    recall = intersection / <span class="builtin">len</span>(expected_ids)
+    <span class="keyword">return</span> recall
+
+<span class="keyword">def</span> <span class="function">evaluate_generation_faithfulness</span>(answer, context_text):
+    <span class="comment"># Use a smaller, cheaper model (e.g. GPT-3.5) to verify claims</span>
+    prompt = f<span class="string">"""
+    Context: {context_text}
+    Answer: {answer}
+    
+    Identify any claims in the Answer not supported by the Context.
+    Return Score (0-1).
+    """</span>
+    <span class="keyword">return</span> llm_judge(prompt)</code></pre>
+                        </div>
+                        <p><a href="../code/rag_evaluator.html" class="btn btn-sm btn-primary"
+                                style="margin-top: 16px;">See Full Evaluator Code →</a></p>
+                    </section>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="../ecosystem.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">← The Ecosystem</span>
+                    </a>
+                    <a href="human-in-the-loop.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Agentic AI →</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Mermaid JS -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

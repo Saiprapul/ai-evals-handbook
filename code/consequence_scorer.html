@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConsequenceScorer Code | AI Evals Handbook</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+        </div>
+    </header>
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-title">Foundations</div>
+                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
+                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
+                <a href="../glossary.html" class="sidebar-link">Glossary</a>
+                <a href="../faq.html" class="sidebar-link">FAQ</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Architectures</div>
+                <a href="../frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
+                <a href="../frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
+                <a href="../frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
+                <a href="../frameworks/drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Techniques</div>
+                <a href="../frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
+                <a href="../frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Case Studies</div>
+                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
+                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
+                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Implementation</div>
+                <a href="eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
+                <a href="consequence_scorer.html" class="sidebar-link active">Scorers</a>
+                <a href="rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
+                <a href="confidence_calibrator.html" class="sidebar-link">Calibrator</a>
+                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
+            </div>
+        </aside>
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a><span class="separator">/</span><span>Code</span><span
+                        class="separator">/</span><span>ConsequenceScorer</span>
+                </div>
+                <h1>ConsequenceScorer Class</h1>
+                <p class="framework-subtitle">Applies business weights to evaluation results.</p>
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content">
+                    <section>
+                        <h2>Source Code</h2>
+                        <div class="code-block">
+                            <div class="code-header"><span>consequence_scorer.py</span></div>
+                            <pre><code><span class="keyword">class</span> <span class="class-name">ConsequenceScorer</span>:
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="self">self</span>, category_weights: dict):
+        <span class="self">self</span>.weights = category_weights
+        
+    <span class="keyword">def</span> <span class="function">score</span>(<span class="self">self</span>, output, example):
+        category = example.get(<span class="string">"category"</span>, <span class="string">"general"</span>)
+        weight = <span class="self">self</span>.weights.get(category, 1.0)
+        
+        <span class="comment"># Simplified exact match for demo</span>
+        is_correct = output.strip().lower() == example[<span class="string">"expected"</span>].strip().lower()
+        base_score = 1.0 <span class="keyword">if</span> is_correct <span class="keyword">else</span> 0.0
+        
+        <span class="keyword">return</span> {
+            <span class="string">"accuracy"</span>: base_score,
+            <span class="string">"weighted_score"</span>: base_score * weight,
+            <span class="string">"weight_applied"</span>: weight
+        }</code></pre>
+                        </div>
+                    </section>
+                </div>
+                <div class="docs-footer-nav">
+                    <a href="eval_pipeline.html" class="nav-card"><span class="label">Previous</span><span
+                            class="title">← EvalPipeline</span></a>
+                    <a href="rag_evaluator.html" class="nav-card"><span class="label">Next</span><span class="title">RAG
+                            Evaluator →</span></a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

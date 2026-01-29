@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EvalPipeline Code | AI Evals Handbook</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+        </div>
+    </header>
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-title">Foundations</div>
+                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
+                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
+                <a href="../glossary.html" class="sidebar-link">Glossary</a>
+                <a href="../faq.html" class="sidebar-link">FAQ</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Architectures</div>
+                <a href="../frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
+                <a href="../frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
+                <a href="../frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
+                <a href="../frameworks/drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Techniques</div>
+                <a href="../frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
+                <a href="../frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Case Studies</div>
+                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
+                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
+                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Implementation</div>
+                <a href="eval_pipeline.html" class="sidebar-link active">EvalPipeline</a>
+                <a href="consequence_scorer.html" class="sidebar-link">Scorers</a>
+                <a href="rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
+                <a href="confidence_calibrator.html" class="sidebar-link">Calibrator</a>
+                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
+            </div>
+        </aside>
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a><span class="separator">/</span><span>Code</span><span
+                        class="separator">/</span><span>EvalPipeline</span>
+                </div>
+                <h1>EvalPipeline Class</h1>
+                <p class="framework-subtitle">The orchestrator for running evaluations.</p>
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content">
+                    <section>
+                        <h2>Source Code</h2>
+                        <div class="code-block">
+                            <div class="code-header"><span>eval_pipeline.py</span></div>
+                            <pre><code><span class="keyword">import</span> json
+<span class="keyword">import</span> time
+<span class="keyword">from</span> typing <span class="keyword">import</span> List, Callable, Dict
+
+<span class="keyword">class</span> <span class="class-name">EvalPipeline</span>:
+    <span class="string">"""
+    Orchestrates the evaluation of a model against a dataset using multiple scorers.
+    """</span>
+    <span class="keyword">def</span> <span class="function">__init__</span>(<span class="self">self</span>, data_path: str, model_fn: Callable, scorers: List):
+        <span class="self">self</span>.data = <span class="self">self</span>._load_data(data_path)
+        <span class="self">self</span>.model = model_fn
+        <span class="self">self</span>.scorers = scorers
+        <span class="self">self</span>.results = []
+
+    <span class="keyword">def</span> <span class="function">run</span>(<span class="self">self</span>) -> Dict:
+        <span class="print">print</span>(f<span class="string">"Running eval on {len(self.data)} examples..."</span>)
+        
+        <span class="keyword">for</span> example <span class="keyword">in</span> <span class="self">self</span>.data:
+            input_text = example[<span class="string">"input"</span>]
+            
+            <span class="comment"># 1. Get Model Output</span>
+            start_time = time.time()
+            output = <span class="self">self</span>.model(input_text)
+            latency = time.time() - start_time
+            
+            <span class="comment"># 2. Score Output</span>
+            scores = {}
+            <span class="keyword">for</span> scorer <span class="keyword">in</span> <span class="self">self</span>.scorers:
+                scores.update(scorer.score(output, example))
+            
+            <span class="comment"># 3. Log Result</span>
+            <span class="self">self</span>.results.append({
+                <span class="string">"input"</span>: input_text,
+                <span class="string">"output"</span>: output,
+                <span class="string">"scores"</span>: scores,
+                <span class="string">"latency"</span>: latency
+            })
+            
+        <span class="keyword">return</span> <span class="self">self</span>._aggregate_results()
+
+    <span class="keyword">def</span> <span class="function">_load_data</span>(<span class="self">self</span>, path):
+        <span class="keyword">with</span> <span class="builtin">open</span>(path, <span class="string">'r'</span>) <span class="keyword">as</span> f:
+            <span class="keyword">return</span> json.load(f)
+
+    <span class="keyword">def</span> <span class="function">_aggregate_results</span>(<span class="self">self</span>):
+        <span class="comment"># Simple averaging of scores</span>
+        agg = {}
+        <span class="keyword">if</span> <span class="keyword">not</span> <span class="self">self</span>.results: <span class="keyword">return</span> agg
+        
+        first_scores = <span class="self">self</span>.results[0][<span class="string">"scores"</span>]
+        <span class="keyword">for</span> key <span class="keyword">in</span> first_scores:
+            values = [r[<span class="string">"scores"</span>][key] <span class="keyword">for</span> r <span class="keyword">in</span> <span class="self">self</span>.results]
+            agg[key] = <span class="builtin">sum</span>(values) / <span class="builtin">len</span>(values)
+            
+        <span class="keyword">return</span> {<span class="string">"aggregate"</span>: agg, <span class="string">"examples"</span>: <span class="self">self</span>.results}
+
+    <span class="keyword">def</span> <span class="function">export_report</span>(<span class="self">self</span>, path=<span class="string">"eval_report.json"</span>):
+        <span class="keyword">with</span> <span class="builtin">open</span>(path, <span class="string">'w'</span>) <span class="keyword">as</span> f:
+            json.dump(<span class="self">self</span>.results, f, indent=2)
+        <span class="print">print</span>(f<span class="string">"Report saved to {path}"</span>)</code></pre>
+                        </div>
+                    </section>
+                </div>
+                <div class="docs-footer-nav">
+                    <a href="../case-studies/embedding-drift.html" class="nav-card"><span
+                            class="label">Previous</span><span class="title">← Case Studies</span></a>
+                    <a href="consequence_scorer.html" class="nav-card"><span class="label">Next</span><span
+                            class="title">Consequence Scorer →</span></a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consequence-Weighted Evaluation | AI Evals Handbook</title>
+    <meta name="description"
+        content="A framework for assigning risk scores to AI errors. Learn how to weigh hallucinations in medical advice differently from creative writing errors.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-title">Foundations</div>
+                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
+                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
+                <a href="../glossary.html" class="sidebar-link">Glossary</a>
+                <a href="../faq.html" class="sidebar-link">FAQ</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Architectures</div>
+                <a href="rag-evaluation.html" class="sidebar-link">RAG Systems</a>
+                <a href="human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
+                <a href="governance.html" class="sidebar-link">Enterprise Governance</a>
+                <a href="drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Techniques</div>
+                <a href="consequence-weighted.html" class="sidebar-link active">Consequence Scoring</a>
+                <a href="llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Case Studies</div>
+                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
+                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
+                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Implementation</div>
+                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
+                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
+                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
+                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
+                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
+            </div>
+        </aside>
+
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <a href="#">Techniques</a>
+                    <span class="separator">/</span>
+                    <span>Consequence Weighted</span>
+                </div>
+
+                <h1>Consequence-Weighted Evaluation</h1>
+                <p class="framework-subtitle">Because a wrong medical diagnosis > a wrong joke.</p>
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content">
+                    <section id="concept">
+                        <h2>The Core Concept</h2>
+                        <p>Traditional accuracy metrics treat every query as equal. If you are building a Customer
+                            Support bot:</p>
+                        <ul>
+                            <li>Query A: "Tell me a joke" -> AI Fails. (Annoyance)</li>
+                            <li>Query B: "Can I return this used item?" -> AI Lies. (Financial Loss)</li>
+                        </ul>
+                        <p>If you have 50 queries like A and 1 query like B, getting B wrong means 98% accuracy on
+                            paper, but <strong>100% failure</strong> in business terms.</p>
+                    </section>
+
+                    <section id="formula">
+                        <h2>The Weighted Formula</h2>
+                        <div class="formula" style="text-align: center; font-size: 1.2rem; padding: 40px;">
+                            Score = Σ (Accuracy<sub>i</sub> × RiskWeight<sub>i</sub>) / Σ RiskWeight<sub>i</sub>
+                        </div>
+                        <p>Where <code>RiskWeight</code> is derived from the estimated dollar cost or reputation risk of
+                            a failure in that category.</p>
+                    </section>
+
+                    <section id="risk-tiers">
+                        <h2>Defining Risk Tiers</h2>
+                        <p>Most organizations use a specific Tier system to assign weights.</p>
+
+                        <div class="mermaid-container"
+                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; border: 1px solid var(--border); margin: 24px 0; display: flex; justify-content: center;">
+                            <pre class="mermaid">
+pie title Risk Weight Distribution Example
+    "Critical (Legal/Safety) - 50x" : 10
+    "High (Financial/Policy) - 20x" : 15
+    "Medium (UX/Frustration) - 5x" : 30
+    "Low (ChitChat) - 1x" : 45
+</pre>
+                        </div>
+
+                        <div class="comparison-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Tier</th>
+                                        <th>Example</th>
+                                        <th>Consequence</th>
+                                        <th>Weight</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Critical</strong></td>
+                                        <td>"How do I reset my pacemaker?"</td>
+                                        <td>Safety Risk / Lawsuit</td>
+                                        <td>50.0</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>High</strong></td>
+                                        <td>"What is the refund window?"</td>
+                                        <td>Financial Loss if wrong</td>
+                                        <td>20.0</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Low</strong></td>
+                                        <td>"Write a poem."</td>
+                                        <td>Minor User Annoyance</td>
+                                        <td>1.0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section id="implementation">
+                        <h2>Implementation</h2>
+                        <p>This is implemented by tagging your <code>GoldenDataset</code> with a <code>category</code>
+                            or <code>tier</code> field, and passing a weight map to your scorer.</p>
+                        <p><a href="../code/consequence_scorer.html" class="btn btn-sm btn-primary">View Scorer
+                                Implementation →</a></p>
+                    </section>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="governance.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">← Governance</span>
+                    </a>
+                    <a href="llm-as-judge.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">LLM-as-Judge →</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

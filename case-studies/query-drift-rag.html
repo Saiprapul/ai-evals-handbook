@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Query Drift in RAG | AI Evals Handbook</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+        </div>
+    </header>
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-title">Foundations</div>
+                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
+                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
+                <a href="../glossary.html" class="sidebar-link">Glossary</a>
+                <a href="../faq.html" class="sidebar-link">FAQ</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Architectures</div>
+                <a href="../frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
+                <a href="../frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
+                <a href="../frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
+                <a href="../frameworks/drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Techniques</div>
+                <a href="../frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
+                <a href="../frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Case Studies</div>
+                <a href="query-drift-rag.html" class="sidebar-link active">Query Drift</a>
+                <a href="hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
+                <a href="embedding-drift.html" class="sidebar-link">Embedding Drift</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Implementation</div>
+                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
+                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
+                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
+                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
+                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
+            </div>
+        </aside>
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a><span class="separator">/</span><span>Case Studies</span><span
+                        class="separator">/</span><span>Query Drift</span>
+                </div>
+                <h1>Case Study: The "Holiday Season" Drift</h1>
+                <p class="framework-subtitle">How a 92% accurate RAG system dropped to 68% overnight.</p>
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content">
+                    <section>
+                        <h2>The Timeline</h2>
+                        <div class="mermaid-container"
+                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px;">
+                            <pre class="mermaid">
+timeline
+    title 48 Hours of Drift
+    Normal Operations : 92% Accuracy : "User queries standard"
+    Black Friday Starts : 85% Accuracy : "Traffic spikes 4x"
+    The Incident : 68% Accuracy : "New query pattern: 'Gift Receipt?'"
+    Discovery : Alerts Firing : "Team notices low adherence"
+    Fix Deployed : 94% Accuracy : "Added 'returns' to knowledge base"
+</pre>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h2>The Root Cause</h2>
+                        <p>Our retrieval system was optimized for semantic similarity on technical support. "Gift
+                            receipt" queries were semantically matched to "Receipt generation API", misleading the LLM.
+                        </p>
+                    </section>
+                </div>
+                <div class="docs-footer-nav">
+                    <a href="../frameworks/rag-evaluation.html" class="nav-card"><span
+                            class="label">Previous</span><span class="title">← RAG Framework</span></a>
+                    <a href="hallucination-reduction.html" class="nav-card"><span class="label">Next</span><span
+                            class="title">Hallucination Reduction →</span></a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

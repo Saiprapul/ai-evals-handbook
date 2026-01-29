@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM-as-Judge Patterns | AI Evals Handbook</title>
+    <meta name="description"
+        content="A deep dive into using LLMs to evaluate other LLMs. Learn about G-Eval, Prometheus, handling positional bias, and reducing evaluation costs.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-title">Foundations</div>
+                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
+                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
+                <a href="../glossary.html" class="sidebar-link">Glossary</a>
+                <a href="../faq.html" class="sidebar-link">FAQ</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Architectures</div>
+                <a href="rag-evaluation.html" class="sidebar-link">RAG Systems</a>
+                <a href="human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
+                <a href="governance.html" class="sidebar-link">Enterprise Governance</a>
+                <a href="drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Techniques</div>
+                <a href="consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
+                <a href="llm-as-judge.html" class="sidebar-link active">LLM-as-Judge</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Case Studies</div>
+                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
+                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
+                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Implementation</div>
+                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
+                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
+                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
+                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
+                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
+            </div>
+        </aside>
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a><span class="separator">/</span><span>Techniques</span><span
+                        class="separator">/</span><span>LLM-as-Judge</span>
+                </div>
+                <h1>LLM-as-Judge</h1>
+                <p class="framework-subtitle">Using strong models (like GPT-4) to evaluate the outputs of weaker models
+                    (like Llama-2 or older GPT versions).</p>
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content">
+                    <section id="the-concept">
+                        <h2>The Core Concept</h2>
+                        <p>In many tasks (creative writing, reasoning, summarization), there is no single "correct"
+                            answer string. Exact match metrics (BLEU, ROUGE) correlate poorly with human judgment.</p>
+                        <p><strong>LLM-as-Judge</strong> uses a high-capacity model to act as a human proxy, reading the
+                            input, the output, and a scoring rubric to assign a grade.</p>
+
+                        <div class="mermaid-container"
+                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; margin: 24px 0;">
+                            <pre class="mermaid">
+sequenceDiagram
+    participant User
+    participant Model A (Weak)
+    participant Judge (GPT-4)
+    
+    User->>Model A: "Summarize this article"
+    Model A->>Judge: [Draft Summary]
+    User->>Judge: [Original Article] + [Rubric]
+    Judge->>Judge: Step 1: Analyze Claims
+    Judge->>Judge: Step 2: Check for Hallucinations
+    Judge->>Judge: Step 3: Grade Style (1-5)
+    Judge-->>User: Score: 4, Reason: "Accurate but missed one key date."
+</pre>
+                        </div>
+                    </section>
+
+                    <section id="approaches">
+                        <h2>Evaluation Approaches</h2>
+
+                        <h3>1. Reference-Free Evaluation</h3>
+                        <p>The judge sees only the <code>Input</code> and the <code>Output</code>. It decides if the
+                            output is "good" based on internal knowledge and the prompt instructions.</p>
+                        <ul>
+                            <li><strong>Use Case:</strong> Creative writing, Coding assistants (does it compile?),
+                                General chat.</li>
+                            <li><strong>Pros:</strong> Doesn't require a "Golden Dataset" of answers.</li>
+                            <li><strong>Cons:</strong> Subjective.</li>
+                        </ul>
+
+                        <h3>2. Reference-Based Evaluation</h3>
+                        <p>The judge compares the <code>Output</code> against a <code>Gold Reference</code>.</p>
+                        <ul>
+                            <li><strong>Use Case:</strong> RAG, Fact-extraction.</li>
+                            <li><strong>Pros:</strong> More grounded.</li>
+                            <li><strong>Cons:</strong> Expensive to create references.</li>
+                        </ul>
+                    </section>
+
+                    <section id="biases">
+                        <h2>Biases & Limitations</h2>
+                        <p>Judges are not perfect. Research (Zheng et al., 2023) has identified distinct biases:</p>
+
+                        <div class="comparison-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Bias Type</th>
+                                        <th>Description</th>
+                                        <th>Mitigation Strategy</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Position Bias</strong></td>
+                                        <td>In pairwise comparison, models prefer the first option presented.</td>
+                                        <td>Run eval twice, swapping order (A vs B, then B vs A).</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Verbosity Bias</strong></td>
+                                        <td>Models prefer longer answers, even if they are repetitive or fluff.</td>
+                                        <td>Explicitly penalize length in the system prompt; Use "conciseness" metrics.
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Self-Preference</strong></td>
+                                        <td>GPT-4 tends to rate GPT-4 outputs higher than Claude/Llama outputs.</td>
+                                        <td>Use a neutral judge or ensemble of judges.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section id="prompting">
+                        <h2>The "G-Eval" Prompt Pattern</h2>
+                        <p>The most effective way to use LLM-as-Judge is the <strong>Chain-of-Thought Rubric</strong>
+                            pattern (popularized by the G-Eval paper).</p>
+                        <div class="code-block">
+                            <div class="code-header"><span>Judge System Prompt</span></div>
+                            <pre><code>You are an expert evaluator for search relevance.
+    
+<strong>Task:</strong> Rate the relevance of the AI Answer to the User Query on a scale of 1-5.
+
+<strong>Rubric:</strong>
+1 - Completely irrelevant.
+2 - Tangential connection, misses intent.
+3 - Addresses the topic but lacks detail or specific accuracy.
+4 - Good answer, minor omissions.
+5 - Perfect output, helpful, concise, and accurate.
+
+<strong>Steps:</strong>
+1. Read the Query and identify the user intent.
+2. Read the Answer.
+3. Compare the Answer claims to the intent.
+4. Assign a score based ONLY on the rubric.
+
+Output format: JSON { "score": int, "reasoning": "string" }</code></pre>
+                        </div>
+                    </section>
+                </div>
+                <div class="docs-footer-nav">
+                    <a href="consequence-weighted.html" class="nav-card"><span class="label">Previous</span><span
+                            class="title">← Scoring</span></a>
+                    <a href="../code/eval_pipeline.html" class="nav-card"><span class="label">Next</span><span
+                            class="title">Implementation →</span></a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,6 @@
+# AI Evals Handbook robots.txt
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://saiprapul.github.io/ai-evals-handbook/sitemap.xml

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The AI Ecosystem & State of Evals | AI Evals Handbook</title>
+    <meta name="description"
+        content="Understand the evolution of AI systems from RAG to Agents and Multimodal, and why evaluation methodologies must evolve with them.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/framework-page.css">
+    <link rel="stylesheet" href="css/docs.css">
+</head>
+
+<body>
+    <!-- Persistent Header -->
+    <header class="docs-header">
+        <div class="container">
+            <a href="./" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-layout">
+        <!-- Persistent Sidebar -->
+        <aside class="docs-sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-title">Foundations</div>
+                <a href="getting-started.html" class="sidebar-link">Getting Started</a>
+                <a href="ecosystem.html" class="sidebar-link active">The Ecosystem</a>
+                <a href="glossary.html" class="sidebar-link">Glossary</a>
+                <a href="faq.html" class="sidebar-link">FAQ</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Architectures</div>
+                <a href="frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
+                <a href="frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
+                <a href="frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
+                <a href="frameworks/drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Techniques</div>
+                <a href="frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
+                <a href="frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Case Studies</div>
+                <a href="case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
+                <a href="case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
+                <a href="case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Implementation</div>
+                <a href="code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
+                <a href="code/consequence_scorer.html" class="sidebar-link">Scorers</a>
+                <a href="code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
+                <a href="code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
+                <a href="best-practices.html" class="sidebar-link">Best Practices</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="docs-main">
+            <div class="docs-content">
+                <!-- Breadcrumbs -->
+                <div class="breadcrumbs">
+                    <a href="./">Home</a>
+                    <span class="separator">/</span>
+                    <a href="#">Foundations</a>
+                    <span class="separator">/</span>
+                    <span>The Ecosystem</span>
+                </div>
+
+                <h1>The AI Ecosystem & State of Evals</h1>
+                <p class="framework-subtitle">From simple prompts to autonomous agents: understanding how AI systems
+                    evolve and why "vibes" are no longer enough.</p>
+
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content-grid" style="grid-template-columns: 1fr;">
+
+                    <section id="evolution">
+                        <h2>1. The Rapid Evolution of AI Systems</h2>
+                        <p>We are witnessing a shift from static models to dynamic, complex systems. As the complexity
+                            of the system increases, the difficulty of evaluation compounds.</p>
+
+                        <div class="mermaid-container"
+                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; border: 1px solid var(--border); margin: 24px 0; display: flex; justify-content: center;">
+                            <pre class="mermaid">
+flowchart LR
+    A[Prompting] -->|Add Data| B[RAG]
+    B -->|Add Tools| C[Agents]
+    C -->|Add Modalities| D[Multimodal]
+    
+    style A fill:#eef2ff,stroke:#6366f1,stroke-width:2px
+    style B fill:#eef2ff,stroke:#6366f1,stroke-width:2px
+    style C fill:#eef2ff,stroke:#6366f1,stroke-width:2px
+    style D fill:#eef2ff,stroke:#6366f1,stroke-width:2px
+</pre>
+                        </div>
+
+                        <div class="system-type-grid">
+                            <div class="system-type-card">
+                                <div class="system-icon">🔍</div>
+                                <h3>RAG (Retrieval-Augmented Generation)</h3>
+                                <p>Systems that look up external private data before answering. The challenge is
+                                    evaluating both the <em>retrieval</em> (did I find the right doc?) and
+                                    <em>generation</em> (did I summarize it correctly?).
+                                </p>
+                                <a href="https://docs.llamaindex.ai/en/stable/" target="_blank" class="learn-more">Learn
+                                    about RAG (LlamaIndex) ↗</a>
+                            </div>
+
+                            <div class="system-type-card">
+                                <div class="system-icon">🤖</div>
+                                <h3>Agentic AI</h3>
+                                <p>Systems that use tools (API calls, web search) to solve multi-step problems.
+                                    Evaluation here is about <em>reasoning paths</em> and <em>safety</em>—did the agent
+                                    call the delete API by mistake?</p>
+                                <a href="https://langchain.com/agents" target="_blank" class="learn-more">Learn about
+                                    Agents (LangChain) ↗</a>
+                            </div>
+
+                            <div class="system-type-card">
+                                <div class="system-icon">🖼️</div>
+                                <h3>Multimodal</h3>
+                                <p>Systems that see, hear, and speak. Evals move beyond text matching to semantic
+                                    understanding of images and audio alignment.</p>
+                                <a href="https://openai.com/research/gpt-4" target="_blank" class="learn-more">Learn
+                                    about Multimodal (OpenAI) ↗</a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="state-of-evals">
+                        <h2>2. The State of Evals: Why "Vibes" Fail</h2>
+                        <p>In traditional software, we have unit tests: <code>assert 2 + 2 == 4</code>. In probabilistic
+                            AI, we have <strong>"Vibes-Based Evaluation"</strong>—looking at an output and saying,
+                            "Yeah, looks good."</p>
+
+                        <p>This fails in production because:</p>
+                        <ul>
+                            <li><strong>Drift:</strong> A model update might fix one bug but break 10 others
+                                (Regressions).</li>
+                            <li><strong>Scale:</strong> You can't manually review 10,000 logs a day.</li>
+                            <li><strong>Subjectivity:</strong> "Good" means different things to Legal vs. Marketing.
+                            </li>
+                        </ul>
+
+                        <div class="mermaid-container"
+                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; border: 1px solid var(--border); margin: 24px 0; display: flex; justify-content: center;">
+                            <pre class="mermaid">
+graph TD
+    A[Input Query] --> B[AI System]
+    B --> C[Actual Output]
+    C --> D{Evaluation Layer}
+    D -->|Deterministic| E[Code Assertions]
+    D -->|Semantic| F[Model-Graded Evals]
+    D -->|Human| G[Human Feedback]
+    E --> H[Score Report]
+    F --> H
+    G --> H
+    H -->|Feedback Loop| B
+    
+    style D fill:#fef2f2,stroke:#ef4444,stroke-width:2px
+    style H fill:#ecfdf5,stroke:#10b981,stroke-width:2px
+</pre>
+                        </div>
+
+                        <div class="callout">
+                            <h4>The Industry Shift</h4>
+                            <p>Leading companies are moving to <strong>Custom Evaluation Frameworks</strong>. Instead of
+                                using generic benchmarks (like MMLU), they build "Golden Datasets" from their own
+                                production logs and evaluate against business-specific rules.</p>
+                        </div>
+                    </section>
+
+                    <section id="landscape">
+                        <h2>3. The Tooling Landscape</h2>
+                        <p>You don't need to build everything from scratch. The open-source ecosystem provides powerful
+                            primitives.</p>
+
+                        <div class="ecosystem-grid">
+                            <div class="ecosystem-card">
+                                <div class="card-header">
+                                    <h3>DeepEval</h3>
+                                    <span class="badge open-source">Open Source</span>
+                                </div>
+                                <p>Pytest for LLMs. Best for developers who want to run evals as part of their CI/CD
+                                    pipeline.</p>
+                            </div>
+
+                            <div class="ecosystem-card">
+                                <div class="card-header">
+                                    <h3>Ragas</h3>
+                                    <span class="badge open-source">Open Source</span>
+                                </div>
+                                <p>Specialized metrics for RAG pipelines (Context Precision, Faithfulness).</p>
+                            </div>
+
+                            <div class="ecosystem-card">
+                                <div class="card-header">
+                                    <h3>Arize / Phoenix</h3>
+                                    <span class="badge open-source">Open Source Core</span>
+                                </div>
+                                <p>Observability first. Great for tracing complex agent workflows and visualizing
+                                    traces.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+
+                <!-- Footer Navigation -->
+                <div class="docs-footer-nav">
+                    <a href="getting-started.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">← Getting Started</span>
+                    </a>
+                    <a href="glossary.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Glossary →</span>
+                    </a>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Mermaid JS for Diagrams -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
+    </script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

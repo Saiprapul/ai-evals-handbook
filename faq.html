@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Evaluation FAQ | AI Evals Handbook</title>
+    <meta name="description"
+        content="Frequently asked questions about AI evaluation. Common questions about testing LLMs, measuring accuracy, and building eval systems.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/framework-page.css">
+    <link rel="stylesheet" href="css/docs.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="./" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar">
+            <div class="sidebar-group">
+                <div class="sidebar-title">Foundations</div>
+                <a href="getting-started.html" class="sidebar-link">Getting Started</a>
+                <a href="ecosystem.html" class="sidebar-link">The Ecosystem</a>
+                <a href="glossary.html" class="sidebar-link">Glossary</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Architectures</div>
+                <a href="frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
+                <a href="frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
+                <a href="frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Techniques</div>
+                <a href="frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
+                <a href="frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Case Studies</div>
+                <a href="case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
+                <a href="case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
+                <a href="case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
+            </div>
+            <div class="sidebar-group">
+                <div class="sidebar-title">Implementation</div>
+                <a href="code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
+                <a href="code/consequence_scorer.html" class="sidebar-link">Scorers</a>
+                <a href="code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
+                <a href="code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
+                <a href="best-practices.html" class="sidebar-link">Best Practices</a>
+            </div>
+        </aside>
+
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="./">Home</a><span class="separator">/</span><span>FAQ</span>
+                </div>
+
+                <h1>Frequently Asked Questions</h1>
+                <p class="framework-subtitle">Common questions about evaluating AI systems in production.</p>
+
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content">
+                    <section id="basics">
+                        <h2>Basics</h2>
+                        <div class="faq-item">
+                            <h3>Why can't I just use accuracy?</h3>
+                            <p>Accuracy treats all errors equally, but in production, a legal compliance error is far
+                                more costly than a minor phrasing issue. Consequence weighting surfaces errors that
+                                actually matter.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>How many test cases do I need?</h3>
+                            <p>Start with 50-100 covering critical scenarios. For production, aim for 500+ with good
+                                edge case coverage. Quality matters more than quantity.</p>
+                        </div>
+                    </section>
+
+                    <section id="production">
+                        <h2>Production</h2>
+                        <div class="faq-item">
+                            <h3>How do I know if my model is degrading?</h3>
+                            <p>Monitor for <a href="frameworks/drift-monitoring.html">drift</a>: track query
+                                distributions and human escalation rates. Set alerts for unexpected shifts.</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>When should humans review AI outputs?</h3>
+                            <p>When confidence falls below threshold, in high-stakes domains, and randomly for auditing.
+                                See <a href="frameworks/human-in-the-loop.html">Human-in-the-Loop</a>.</p>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="best-practices.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">← Best Practices</span>
+                    </a>
+                    <a href="./" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Home →</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
