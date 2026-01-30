@@ -4,9 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The AI Ecosystem & State of Evals | AI Evals Handbook</title>
+    <title>Where AI Systems Fail | AI Evals Handbook</title>
     <meta name="description"
-        content="Understand the evolution of AI systems from RAG to Agents and Multimodal, and why evaluation methodologies must evolve with them.">
+        content="Understand where AI systems fail as they evolve from RAG to Agents and Multimodal, and why evaluation must evolve with them.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/ecosystem.html">
+    <meta property="og:title" content="Where AI Systems Fail | AI Evals Handbook">
+    <meta property="og:description" content="Understand where AI systems fail as they evolve from RAG to Agents and Multimodal.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/ecosystem.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Where AI Systems Fail | AI Evals Handbook">
+    <meta name="twitter:description" content="Understand where AI systems fail as they evolve from RAG to Agents and Multimodal.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -23,6 +32,7 @@
         <div class="container">
             <a href="./" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
             <div class="header-actions">
+                <a href="why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
                 <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
             </div>
         </div>
@@ -30,80 +40,129 @@
 
     <div class="docs-layout">
         <!-- Persistent Sidebar -->
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="ecosystem.html" class="sidebar-link active">The Ecosystem</a>
-                <a href="glossary.html" class="sidebar-link">Glossary</a>
-                <a href="faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
-                <a href="frameworks/drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
 
         <!-- Main Content -->
         <main class="docs-main">
             <div class="docs-content">
                 <!-- Breadcrumbs -->
                 <div class="breadcrumbs">
-                    <a href="./">Home</a>
-                    <span class="separator">/</span>
-                    <a href="#">Foundations</a>
-                    <span class="separator">/</span>
-                    <span>The Ecosystem</span>
+                    <a href="./">Home</a><span class="separator">/</span><span>Scoping</span><span
+                        class="separator">/</span><span>Where Failure Emerges</span>
                 </div>
 
-                <h1>The AI Ecosystem & State of Evals</h1>
-                <p class="framework-subtitle">From simple prompts to autonomous agents: understanding how AI systems
-                    evolve and why "vibes" are no longer enough.</p>
+                <h1>Where AI Systems Fail</h1>
+                <p class="framework-subtitle">As AI systems evolve from simple prompts to autonomous agents, the ways they fail evolve too. Understanding failure modes is the first step to evaluating them.</p>
 
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content-grid" style="grid-template-columns: 1fr;">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>Most AI failures come from the system, not just the model. This page maps the AI stack to failure modes so teams can evaluate the right layer and fix the real cause.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Failures can originate in data, retrieval, prompting, or product logic.</li>
+
+
+                            <li>Map the system end-to-end before choosing metrics.</li>
+
+
+                            <li>Evaluate the layer that can actually be changed.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>Where do AI failures usually happen?</h3>
+
+
+                        <p>Most regressions come from upstream data changes, retrieval errors, or policy shifts, not from the base model alone.</p>
+
+
+                        <h3>How do I scope an eval?</h3>
+
+
+                        <p>Start with the system boundary, identify failure points, then choose metrics and data for the highest-risk nodes.</p>
+
+
+                        <h3>What should I measure first?</h3>
+
+
+                        <p>Measure retrieval quality and policy adherence first in RAG systems, then answer quality and user impact.</p>
+
+
+                    </section>
 
                     <section id="evolution">
                         <h2>1. The Rapid Evolution of AI Systems</h2>
                         <p>We are witnessing a shift from static models to dynamic, complex systems. As the complexity
                             of the system increases, the difficulty of evaluation compounds.</p>
 
-                        <div class="mermaid-container"
-                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; border: 1px solid var(--border); margin: 24px 0; display: flex; justify-content: center;">
-                            <pre class="mermaid">
-flowchart LR
-    A[Prompting] -->|Add Data| B[RAG]
-    B -->|Add Tools| C[Agents]
-    C -->|Add Modalities| D[Multimodal]
-    
-    style A fill:#eef2ff,stroke:#6366f1,stroke-width:2px
-    style B fill:#eef2ff,stroke:#6366f1,stroke-width:2px
-    style C fill:#eef2ff,stroke:#6366f1,stroke-width:2px
-    style D fill:#eef2ff,stroke:#6366f1,stroke-width:2px
-</pre>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 900 200" role="img"
+                                aria-label="Evolution from prompting to RAG to agents to multimodal systems">
+                                <defs>
+                                    <marker id="eco-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6"
+                                        markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"></path>
+                                    </marker>
+                                </defs>
+
+                                <rect class="diagram-node diagram-node-accent" x="60" y="70" width="160" height="60"
+                                    rx="12"></rect>
+                                <text x="140" y="103" text-anchor="middle" class="diagram-label">Prompting</text>
+
+                                <rect class="diagram-node diagram-node-accent" x="260" y="70" width="160" height="60"
+                                    rx="12"></rect>
+                                <text x="340" y="103" text-anchor="middle" class="diagram-label">RAG</text>
+
+                                <rect class="diagram-node diagram-node-accent" x="460" y="70" width="160" height="60"
+                                    rx="12"></rect>
+                                <text x="540" y="103" text-anchor="middle" class="diagram-label">Agents</text>
+
+                                <rect class="diagram-node diagram-node-accent" x="660" y="70" width="170" height="60"
+                                    rx="12"></rect>
+                                <text x="745" y="103" text-anchor="middle" class="diagram-label">Multimodal</text>
+
+                                <path class="diagram-line-solid" d="M 220 100 L 260 100"
+                                    marker-end="url(#eco-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 420 100 L 460 100"
+                                    marker-end="url(#eco-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 620 100 L 660 100"
+                                    marker-end="url(#eco-arrow)"></path>
+
+                                <text x="240" y="60" class="diagram-note">Add data</text>
+                                <text x="440" y="60" class="diagram-note">Add tools</text>
+                                <text x="640" y="60" class="diagram-note">Add modalities</text>
+                            </svg>
                         </div>
 
                         <div class="system-type-grid">
@@ -154,24 +213,61 @@ flowchart LR
                             </li>
                         </ul>
 
-                        <div class="mermaid-container"
-                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; border: 1px solid var(--border); margin: 24px 0; display: flex; justify-content: center;">
-                            <pre class="mermaid">
-graph TD
-    A[Input Query] --> B[AI System]
-    B --> C[Actual Output]
-    C --> D{Evaluation Layer}
-    D -->|Deterministic| E[Code Assertions]
-    D -->|Semantic| F[Model-Graded Evals]
-    D -->|Human| G[Human Feedback]
-    E --> H[Score Report]
-    F --> H
-    G --> H
-    H -->|Feedback Loop| B
-    
-    style D fill:#fef2f2,stroke:#ef4444,stroke-width:2px
-    style H fill:#ecfdf5,stroke:#10b981,stroke-width:2px
-</pre>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 900 260" role="img"
+                                aria-label="Evaluation layer connects outputs to deterministic, model-graded, and human feedback">
+                                <defs>
+                                    <marker id="eval-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6"
+                                        markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"></path>
+                                    </marker>
+                                </defs>
+
+                                <rect class="diagram-node" x="40" y="100" width="160" height="60" rx="12"></rect>
+                                <text x="120" y="132" text-anchor="middle" class="diagram-label">Input Query</text>
+
+                                <rect class="diagram-node" x="240" y="100" width="160" height="60" rx="12"></rect>
+                                <text x="320" y="132" text-anchor="middle" class="diagram-label">AI System</text>
+
+                                <rect class="diagram-node" x="440" y="100" width="160" height="60" rx="12"></rect>
+                                <text x="520" y="132" text-anchor="middle" class="diagram-label">Actual Output</text>
+
+                                <rect class="diagram-node diagram-node-accent" x="640" y="90" width="200" height="80"
+                                    rx="12"></rect>
+                                <text x="740" y="120" text-anchor="middle" class="diagram-label">Evaluation Layer</text>
+                                <text x="740" y="140" text-anchor="middle" class="diagram-note">Deterministic + Human</text>
+
+                                <rect class="diagram-node" x="640" y="20" width="200" height="50" rx="10"></rect>
+                                <text x="740" y="50" text-anchor="middle" class="diagram-note">Code Assertions</text>
+
+                                <rect class="diagram-node" x="640" y="190" width="200" height="50" rx="10"></rect>
+                                <text x="740" y="220" text-anchor="middle" class="diagram-note">Model-Graded Evals</text>
+
+                                <rect class="diagram-node" x="440" y="190" width="160" height="50" rx="10"></rect>
+                                <text x="520" y="220" text-anchor="middle" class="diagram-note">Human Feedback</text>
+
+                                <rect class="diagram-node" x="240" y="190" width="160" height="50" rx="10"></rect>
+                                <text x="320" y="220" text-anchor="middle" class="diagram-note">Score Report</text>
+
+                                <path class="diagram-line-solid" d="M 200 130 L 240 130"
+                                    marker-end="url(#eval-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 400 130 L 440 130"
+                                    marker-end="url(#eval-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 600 130 L 640 130"
+                                    marker-end="url(#eval-arrow)"></path>
+
+                                <path class="diagram-line-solid" d="M 740 90 L 740 70"
+                                    marker-end="url(#eval-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 740 170 L 740 190"
+                                    marker-end="url(#eval-arrow)"></path>
+
+                                <path class="diagram-line-solid" d="M 520 190 L 520 160"
+                                    marker-end="url(#eval-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 440 215 L 400 215"
+                                    marker-end="url(#eval-arrow)"></path>
+                                <path class="diagram-line" d="M 240 215 L 240 160 L 320 160"
+                                    marker-end="url(#eval-arrow)"></path>
+                            </svg>
                         </div>
 
                         <div class="callout">
@@ -220,13 +316,13 @@ graph TD
 
                 <!-- Footer Navigation -->
                 <div class="docs-footer-nav">
-                    <a href="getting-started.html" class="nav-card">
+                    <a href="what-are-evals.html" class="nav-card">
                         <span class="label">Previous</span>
-                        <span class="title">← Getting Started</span>
+                        <span class="title">&larr; What Evals Are</span>
                     </a>
-                    <a href="glossary.html" class="nav-card">
+                    <a href="frameworks/governance.html" class="nav-card">
                         <span class="label">Next</span>
-                        <span class="title">Glossary →</span>
+                        <span class="title">Risk-First Scoping &rarr;</span>
                     </a>
                 </div>
 
@@ -234,12 +330,8 @@ graph TD
         </main>
     </div>
 
-    <!-- Mermaid JS for Diagrams -->
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
     <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
 </body>
 
 </html>

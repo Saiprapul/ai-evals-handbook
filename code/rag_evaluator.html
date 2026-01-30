@@ -5,6 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RAGEvaluator Code | AI Evals Handbook</title>
+    <meta name="description" content="Metrics for retrieval and generation quality. Python code for precision, recall, and faithfulness evaluation in RAG systems.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/code/rag_evaluator.html">
+    <meta property="og:title" content="RAGEvaluator Code | AI Evals Handbook">
+    <meta property="og:description" content="Metrics for retrieval and generation quality. Python code example.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/code/rag_evaluator.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="RAGEvaluator Code | AI Evals Handbook">
+    <meta name="twitter:description" content="Metrics for retrieval and generation quality.">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/framework-page.css">
     <link rel="stylesheet" href="../css/docs.css">
@@ -14,49 +24,22 @@
     <header class="docs-header">
         <div class="container">
             <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="../why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
         </div>
     </header>
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="../glossary.html" class="sidebar-link">Glossary</a>
-                <a href="../faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="../frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="../frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="../frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
-                <a href="../frameworks/drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="../frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="../frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="rag_evaluator.html" class="sidebar-link active">RAG Evaluator</a>
-                <a href="confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
-                    <a href="../">Home</a><span class="separator">/</span><span>Code</span><span
-                        class="separator">/</span><span>RAGEvaluator</span>
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <span>Code Examples</span>
+                    <span class="separator">/</span>
+                    <span>RAG Evaluator</span>
                 </div>
                 <h1>RAGEvaluator Class</h1>
                 <p class="framework-subtitle">Metrics for retrieval and generation quality.</p>
@@ -90,14 +73,20 @@
                     </section>
                 </div>
                 <div class="docs-footer-nav">
-                    <a href="consequence_scorer.html" class="nav-card"><span class="label">Previous</span><span
-                            class="title">← Scorers</span></a>
-                    <a href="confidence_calibrator.html" class="nav-card"><span class="label">Next</span><span
-                            class="title">Calibrator →</span></a>
+                    <a href="consequence_scorer.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Scorers</span>
+                    </a>
+                    <a href="confidence_calibrator.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Calibrator &rarr;</span>
+                    </a>
                 </div>
             </div>
         </main>
     </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
 </body>
 
 </html>

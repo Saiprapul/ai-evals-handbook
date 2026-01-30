@@ -2,112 +2,133 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://saiprapul.github.io/ai-evals-handbook/</loc>
-    <lastmod>2024-01-15</lastmod>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://saiprapul.github.io/ai-evals-handbook/getting-started.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/what-are-evals.html</loc>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://saiprapul.github.io/ai-evals-handbook/glossary.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/why-evals-matter.html</loc>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/ecosystem.html</loc>
+    <lastmod>2026-01-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/eval-data-baselines.html</loc>
+    <lastmod>2026-01-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/interpreting-results.html</loc>
+    <lastmod>2026-01-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/kpi-dashboard.html</loc>
+    <lastmod>2026-01-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://saiprapul.github.io/ai-evals-handbook/best-practices.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://saiprapul.github.io/ai-evals-handbook/faq.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/glossary.html</loc>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <!-- Framework Pages -->
   <url>
-    <loc>https://saiprapul.github.io/ai-evals-handbook/frameworks/drift-monitoring.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/faq.html</loc>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://saiprapul.github.io/ai-evals-handbook/frameworks/consequence-weighted.html</loc>
-    <lastmod>2024-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://saiprapul.github.io/ai-evals-handbook/frameworks/rag-evaluation.html</loc>
-    <lastmod>2024-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://saiprapul.github.io/ai-evals-handbook/frameworks/human-in-the-loop.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://saiprapul.github.io/ai-evals-handbook/frameworks/llm-as-judge.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <lastmod>2026-01-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/frameworks/human-in-the-loop.html</loc>
+    <lastmod>2026-01-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/frameworks/drift-monitoring.html</loc>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://saiprapul.github.io/ai-evals-handbook/frameworks/governance.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- Case Studies -->
   <url>
     <loc>https://saiprapul.github.io/ai-evals-handbook/case-studies/query-drift-rag.html</loc>
-    <lastmod>2024-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://saiprapul.github.io/ai-evals-handbook/case-studies/embedding-drift.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://saiprapul.github.io/ai-evals-handbook/case-studies/hallucination-reduction.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
-  <!-- Code Documentation -->
+  <url>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/case-studies/embedding-drift.html</loc>
+    <lastmod>2026-01-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://saiprapul.github.io/ai-evals-handbook/code/eval_pipeline.html</loc>
+    <lastmod>2026-01-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
   <url>
     <loc>https://saiprapul.github.io/ai-evals-handbook/code/consequence_scorer.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://saiprapul.github.io/ai-evals-handbook/code/rag_evaluator.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://saiprapul.github.io/ai-evals-handbook/code/confidence_calibrator.html</loc>
-    <lastmod>2024-01-15</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://saiprapul.github.io/ai-evals-handbook/code/eval_pipeline.html</loc>
-    <lastmod>2024-01-15</lastmod>
+    <lastmod>2026-01-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

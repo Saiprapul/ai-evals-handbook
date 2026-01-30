@@ -1,0 +1,90 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mock dashboard showing query drift impact KPIs and intent mix">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }
+      .panel-muted { fill: #f1f5f9; stroke: #e2e8f0; stroke-width: 1; }
+      .title { font-family: Inter, sans-serif; font-size: 18px; fill: #0f172a; font-weight: 600; }
+      .subtitle { font-family: Inter, sans-serif; font-size: 12px; fill: #64748b; }
+      .label { font-family: Inter, sans-serif; font-size: 11px; fill: #64748b; }
+      .value { font-family: Inter, sans-serif; font-size: 20px; fill: #0f172a; font-weight: 700; }
+      .trend-down { fill: #ef4444; font-family: Inter, sans-serif; font-size: 11px; }
+      .trend-up { fill: #10b981; font-family: Inter, sans-serif; font-size: 11px; }
+      .axis { stroke: #cbd5e1; stroke-width: 1; }
+      .line { fill: none; stroke: #6366f1; stroke-width: 3; }
+      .bar { fill: #e0e7ff; stroke: #6366f1; stroke-width: 1; }
+      .badge { fill: #fee2e2; }
+      .badge-text { font-family: Inter, sans-serif; font-size: 10px; fill: #b91c1c; font-weight: 600; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1200" height="700" />
+
+  <rect x="0" y="0" width="1200" height="56" fill="#0f172a" />
+  <text x="24" y="35" font-family="Inter, sans-serif" font-size="16" fill="#ffffff" font-weight="600">Retail Support Dashboard</text>
+  <text x="1040" y="35" font-family="Inter, sans-serif" font-size="12" fill="#cbd5e1">Nov 25 Incident</text>
+
+  <rect class="panel-muted" x="0" y="56" width="200" height="644" />
+  <text x="20" y="95" class="subtitle">Navigation</text>
+  <text x="20" y="125" class="label">Overview</text>
+  <text x="20" y="150" class="label">Evals</text>
+  <text x="20" y="175" class="label">Drift Alerts</text>
+  <text x="20" y="200" class="label">Policy QA</text>
+
+  <text x="230" y="95" class="title">Query Drift Impact</text>
+  <text x="230" y="118" class="subtitle">Last 48 hours, policy intents spiked</text>
+
+  <!-- KPI cards -->
+  <rect class="panel" x="230" y="140" width="280" height="110" rx="10" />
+  <text x="250" y="170" class="label">Answer Accuracy</text>
+  <text x="250" y="200" class="value">92% to 68%</text>
+  <text x="250" y="222" class="trend-down">-24 pts</text>
+
+  <rect class="panel" x="530" y="140" width="280" height="110" rx="10" />
+  <text x="550" y="170" class="label">Policy Adherence</text>
+  <text x="550" y="200" class="value">88% to 41%</text>
+  <text x="550" y="222" class="trend-down">-47 pts</text>
+
+  <rect class="panel" x="830" y="140" width="280" height="110" rx="10" />
+  <text x="850" y="170" class="label">Context Precision</text>
+  <text x="850" y="200" class="value">0.74 to 0.38</text>
+  <text x="850" y="222" class="trend-down">-0.36</text>
+
+  <rect class="panel" x="230" y="270" width="280" height="110" rx="10" />
+  <text x="250" y="300" class="label">Escalation Rate</text>
+  <text x="250" y="330" class="value">9% to 24%</text>
+  <text x="250" y="352" class="trend-up">2.7x</text>
+
+  <rect class="panel" x="530" y="270" width="280" height="110" rx="10" />
+  <text x="550" y="300" class="label">Refund Exceptions</text>
+  <text x="550" y="330" class="value">1.2% to 4.8%</text>
+  <text x="550" y="352" class="trend-up">4x</text>
+
+  <rect class="panel" x="830" y="270" width="280" height="110" rx="10" />
+  <text x="850" y="300" class="label">CSAT</text>
+  <text x="850" y="330" class="value">4.6 to 3.2</text>
+  <text x="850" y="352" class="trend-down">-1.4</text>
+
+  <!-- Trend chart -->
+  <rect class="panel" x="230" y="400" width="580" height="250" rx="12" />
+  <text x="250" y="430" class="label">Policy Adherence (last 7 days)</text>
+  <line class="axis" x1="260" y1="610" x2="780" y2="610" />
+  <line class="axis" x1="260" y1="460" x2="260" y2="610" />
+  <path class="line" d="M260 500 L320 495 L380 490 L440 470 L500 540 L560 575 L620 580 L680 505 L740 490 L780 485" />
+  <rect class="badge" x="565" y="520" width="96" height="22" rx="6" />
+  <text x="575" y="536" class="badge-text">INCIDENT</text>
+
+  <!-- Intent mix chart -->
+  <rect class="panel" x="830" y="400" width="280" height="250" rx="12" />
+  <text x="850" y="430" class="label">Intent Mix (Black Friday)</text>
+  <rect class="bar" x="850" y="460" width="200" height="18" rx="6" />
+  <text x="1060" y="474" class="label">Returns 34%</text>
+  <rect class="bar" x="850" y="490" width="160" height="18" rx="6" />
+  <text x="1060" y="504" class="label">Gift Receipt 18%</text>
+  <rect class="bar" x="850" y="520" width="120" height="18" rx="6" />
+  <text x="1060" y="534" class="label">Promo 14%</text>
+  <rect class="bar" x="850" y="550" width="80" height="18" rx="6" />
+  <text x="1060" y="564" class="label">Fraud 7%</text>
+  <rect class="bar" x="850" y="580" width="60" height="18" rx="6" />
+  <text x="1060" y="594" class="label">Tracking 22%</text>
+</svg>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Evals Exist | AI Evals Handbook</title>
+    <meta name="description"
+        content="Why AI systems fail silently in production, why static benchmarks collapse, and why continuous evaluation is non-negotiable for production trust.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/why-evals-matter.html">
+    <meta property="og:title" content="Why Evals Exist | AI Evals Handbook">
+    <meta property="og:description" content="Why AI systems fail silently in production, why static benchmarks collapse, and why continuous evaluation is non-negotiable.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/why-evals-matter.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Why Evals Exist | AI Evals Handbook">
+    <meta name="twitter:description" content="Why AI systems fail silently in production, why static benchmarks collapse, and why continuous evaluation is non-negotiable.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/framework-page.css">
+    <link rel="stylesheet" href="css/docs.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="./" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar" id="sidebar"></aside>
+
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="./">Home</a><span class="separator">/</span><span>Foundations</span><span
+                        class="separator">/</span><span>Why Evals Exist</span>
+                </div>
+
+                <h1>Why Evals Exist (and Why Most Fail)</h1>
+                <p class="framework-subtitle">Your AI works today. It will silently stop working tomorrow. Here's why&mdash;and what to do about it.</p>
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content-grid" style="grid-template-columns: 1fr;">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>Production AI systems degrade as the world, users, and dependencies change. Evals catch silent failures and tie quality to business risk so teams can intervene before users feel it.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Drift, user adaptation, and dependency changes quietly break AI systems.</li>
+
+
+                            <li>Uptime and accuracy alone hide risk; output quality must be measured.</li>
+
+
+                            <li>Continuous, consequence-aware evals prevent silent regressions.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>Why do production AI systems fail silently?</h3>
+
+
+                        <p>Because the system keeps running while the input distribution, policies, and dependencies change. Outputs still look plausible, but correctness and risk profile drift.</p>
+
+
+                        <h3>How often should evals run?</h3>
+
+
+                        <p>At minimum weekly for stable systems and daily or per release for fast-changing domains. High-risk workflows should run evals on every release and monitor live traffic.</p>
+
+
+                        <h3>What should I measure besides accuracy?</h3>
+
+
+                        <p>Measure policy adherence, faithfulness, severity-weighted error rates, and user impact signals like escalations or refunds. These reflect business risk, not just correctness.</p>
+
+
+                    </section>
+
+                    <section id="starting-point">
+                        <h2>The Starting Point: It Works</h2>
+                        <p>You've built something real. Your RAG system answers customer questions. Your classification model routes tickets. Your summarization pipeline turns 50-page reports into digestible briefs. Users are happy. Metrics look good.</p>
+
+                        <p>The demo wowed leadership. The pilot proved value. The team is proud&mdash;and they should be. Getting an AI system to work at all is genuinely hard.</p>
+
+                        <p>So the natural next step feels obvious: <strong>ship it.</strong></p>
+                    </section>
+
+                    <section id="false-finish">
+                        <h2>The False Finish Line</h2>
+                        <p>"Ship it" feels like the end of the story, but it's actually the beginning. The moment your AI system hits production, the clock starts ticking on three forces that will degrade it:</p>
+
+                        <h3>1. The World Moves</h3>
+                        <p>Your product launches new features. Your company updates its policies. Your industry changes regulations. Customers start asking questions your training data never anticipated. The knowledge your system was built on becomes stale&mdash;not in years, but in weeks.</p>
+
+                        <h3>2. Users Adapt</h3>
+                        <p>Early users ask simple, predictable questions. As adoption grows, queries get more complex, more specific, more adversarial. The distribution of inputs your system sees in month six looks nothing like what it saw in month one.</p>
+
+                        <h3>3. Dependencies Shift</h3>
+                        <p>Your embedding model gets a silent update. Your vector database changes its similarity algorithm. Your LLM provider adjusts rate limits or modifies safety filters. Each change is minor in isolation. Together, they compound into a system that behaves differently than the one you tested.</p>
+
+                        <div class="callout warning">
+                            <h4>The Dangerous Part</h4>
+                            <p>None of these changes trigger an error. Your system doesn't crash. It doesn't throw exceptions. It keeps running, keeps responding, keeps generating outputs that <em>look</em> correct&mdash;but increasingly aren't.</p>
+                        </div>
+                    </section>
+
+                    <section id="wrong-metrics">
+                        <h2>The Metrics Aren't Wrong&mdash;They're Measuring the Wrong Thing</h2>
+                        <p>Most teams that monitor their AI systems track the obvious signals: latency, uptime, error rates, maybe a basic accuracy score. These metrics stay green while quality degrades, because they measure the <em>system</em>, not the <em>outputs</em>.</p>
+
+                        <div class="problem-grid" style="margin: 2rem 0;">
+                            <div class="problem-card">
+                                <div class="problem-icon wrong">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                                    </svg>
+                                </div>
+                                <h3>Accuracy Obsession</h3>
+                                <p>Teams optimize for 95% accuracy without asking: what happens in the 5%? A wrong answer in legal costs infinitely more than a wrong menu translation.</p>
+                            </div>
+
+                            <div class="problem-card">
+                                <div class="problem-icon wrong">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                                    </svg>
+                                </div>
+                                <h3>Static Test Sets</h3>
+                                <p>Benchmarks from 3 months ago don't reflect today's query distribution. Production data drifts. Your evals must drift with it.</p>
+                            </div>
+
+                            <div class="problem-card">
+                                <div class="problem-icon wrong">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                                    </svg>
+                                </div>
+                                <h3>Component Isolation</h3>
+                                <p>Testing retrieval and generation separately misses how they fail together. Users don't care which component broke&mdash;they care about wrong answers.</p>
+                            </div>
+                        </div>
+
+                        <p>The result? Teams are blind to exactly the failures that matter most. Hallucination rates creep up. Retrieval relevance drops. Answers become subtly wrong in ways that erode user trust&mdash;but the dashboard stays green.</p>
+                    </section>
+
+                    <section id="real-question">
+                        <h2>The Real Question</h2>
+                        <p>The question isn't "does my AI system work?" It already works&mdash;you proved that. The real question is harder:</p>
+
+                        <div class="callout">
+                            <h4>The Question That Matters</h4>
+                            <p><strong>"Can I trust this system to keep serving users well over time, across changing conditions, without me manually checking every output?"</strong></p>
+                        </div>
+
+                        <p>If you can't answer yes with evidence, you have a demo, not a product. And the gap between the two is exactly what evals fill.</p>
+                    </section>
+
+                    <section id="continuous-evaluation">
+                        <h2>The Answer: Continuous Evaluation</h2>
+                        <p>The solution isn't more testing before launch. It's ongoing visibility into how your system performs <em>after</em> launch. This means:</p>
+
+                        <ul>
+                            <li><strong>Measuring output quality, not just system health.</strong> Faithfulness, relevance, safety&mdash;the properties that determine whether users get good answers.</li>
+                            <li><strong>Running evals on production-representative data.</strong> Not your original test set. Data that reflects what users are actually asking today.</li>
+                            <li><strong>Detecting drift before users do.</strong> Automated alerts when quality metrics cross thresholds, so you fix problems proactively.</li>
+                            <li><strong>Weighting failures by consequence.</strong> Not all errors are equal. A hallucinated citation in a legal document matters more than a slightly awkward phrasing in a marketing email.</li>
+                        </ul>
+
+                        <p>This isn't a luxury for mature teams. It's the minimum bar for putting AI in front of users and not getting burned. The rest of this handbook shows you how to build it.</p>
+
+                        <p>Next, we'll look at the specific ways AI systems fail&mdash;and map out where in the ecosystem your evaluation focus should be.</p>
+                    </section>
+
+                </div>
+
+                <div class="docs-footer-nav">
+                    <div></div>
+                    <a href="what-are-evals.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">What Evals Are &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<svg width="1200" height="700" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mock dashboard showing embedding drift by domain">
+  <defs>
+    <style>
+      .bg { fill: #f8fafc; }
+      .panel { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1; }
+      .panel-muted { fill: #f1f5f9; stroke: #e2e8f0; stroke-width: 1; }
+      .title { font-family: Inter, sans-serif; font-size: 18px; fill: #0f172a; font-weight: 600; }
+      .subtitle { font-family: Inter, sans-serif; font-size: 12px; fill: #64748b; }
+      .label { font-family: Inter, sans-serif; font-size: 11px; fill: #64748b; }
+      .value { font-family: Inter, sans-serif; font-size: 20px; fill: #0f172a; font-weight: 700; }
+      .trend-down { fill: #ef4444; font-family: Inter, sans-serif; font-size: 11px; }
+      .trend-up { fill: #10b981; font-family: Inter, sans-serif; font-size: 11px; }
+      .axis { stroke: #cbd5e1; stroke-width: 1; }
+      .line { fill: none; stroke: #6366f1; stroke-width: 3; }
+      .bar { fill: #e0e7ff; stroke: #6366f1; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1200" height="700" />
+
+  <rect x="0" y="0" width="1200" height="56" fill="#0f172a" />
+  <text x="24" y="35" font-family="Inter, sans-serif" font-size="16" fill="#ffffff" font-weight="600">Enterprise Search Health</text>
+  <text x="1010" y="35" font-family="Inter, sans-serif" font-size="12" fill="#cbd5e1">Drift Monitor</text>
+
+  <rect class="panel-muted" x="0" y="56" width="200" height="644" />
+  <text x="20" y="95" class="subtitle">Navigation</text>
+  <text x="20" y="125" class="label">Overview</text>
+  <text x="20" y="150" class="label">Domain Slices</text>
+  <text x="20" y="175" class="label">Embedding Drift</text>
+  <text x="20" y="200" class="label">Escalations</text>
+
+  <text x="230" y="95" class="title">Embedding Drift: Tech Domain</text>
+  <text x="230" y="118" class="subtitle">New terminology caused OOD spike</text>
+
+  <!-- KPI cards -->
+  <rect class="panel" x="230" y="140" width="280" height="110" rx="10" />
+  <text x="250" y="170" class="label">Recall@10 (Tech)</text>
+  <text x="250" y="200" class="value">0.78 to 0.56</text>
+  <text x="250" y="222" class="trend-down">-22 pts</text>
+
+  <rect class="panel" x="530" y="140" width="280" height="110" rx="10" />
+  <text x="550" y="170" class="label">MRR (Tech)</text>
+  <text x="550" y="200" class="value">0.61 to 0.44</text>
+  <text x="550" y="222" class="trend-down">-0.17</text>
+
+  <rect class="panel" x="830" y="140" width="280" height="110" rx="10" />
+  <text x="850" y="170" class="label">OOD Ratio (Tech)</text>
+  <text x="850" y="200" class="value">9% to 28%</text>
+  <text x="850" y="222" class="trend-up">3.1x</text>
+
+  <rect class="panel" x="230" y="270" width="280" height="110" rx="10" />
+  <text x="250" y="300" class="label">Top-1 Doc Match</text>
+  <text x="250" y="330" class="value">63% to 39%</text>
+  <text x="250" y="352" class="trend-down">-24 pts</text>
+
+  <rect class="panel" x="530" y="270" width="280" height="110" rx="10" />
+  <text x="550" y="300" class="label">Escalations</text>
+  <text x="550" y="330" class="value">4.4% to 11.8%</text>
+  <text x="550" y="352" class="trend-up">+7.4 pts</text>
+
+  <rect class="panel" x="830" y="270" width="280" height="110" rx="10" />
+  <text x="850" y="300" class="label">Latency p95</text>
+  <text x="850" y="330" class="value">720ms to 980ms</text>
+  <text x="850" y="352" class="trend-up">+260ms</text>
+
+  <!-- Trend chart -->
+  <rect class="panel" x="230" y="400" width="580" height="250" rx="12" />
+  <text x="250" y="430" class="label">Recall@10 by Month (Tech)</text>
+  <line class="axis" x1="260" y1="610" x2="780" y2="610" />
+  <line class="axis" x1="260" y1="460" x2="260" y2="610" />
+  <path class="line" d="M260 500 L320 495 L380 490 L440 520 L500 555 L560 585 L620 590 L680 520 L740 495 L780 480" />
+
+  <!-- Domain comparison -->
+  <rect class="panel" x="830" y="400" width="280" height="250" rx="12" />
+  <text x="850" y="430" class="label">Recall@10 Drop by Domain</text>
+  <rect class="bar" x="850" y="465" width="60" height="18" rx="6" />
+  <text x="920" y="479" class="label">Finance 5%</text>
+  <rect class="bar" x="850" y="495" width="30" height="18" rx="6" />
+  <text x="920" y="509" class="label">Healthcare 2%</text>
+  <rect class="bar" x="850" y="525" width="180" height="18" rx="6" />
+  <text x="1040" y="539" class="label">Tech 22%</text>
+  <rect class="bar" x="850" y="555" width="50" height="18" rx="6" />
+  <text x="920" y="569" class="label">Retail 4%</text>
+</svg>

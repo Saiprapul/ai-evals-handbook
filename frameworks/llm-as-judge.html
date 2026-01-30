@@ -7,6 +7,15 @@
     <title>LLM-as-Judge Patterns | AI Evals Handbook</title>
     <meta name="description"
         content="A deep dive into using LLMs to evaluate other LLMs. Learn about G-Eval, Prometheus, handling positional bias, and reducing evaluation costs.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/frameworks/llm-as-judge.html">
+    <meta property="og:title" content="LLM-as-Judge Patterns | AI Evals Handbook">
+    <meta property="og:description" content="Using strong models to evaluate the outputs of weaker models. Learn about G-Eval, biases, and cost reduction.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/frameworks/llm-as-judge.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="LLM-as-Judge Patterns | AI Evals Handbook">
+    <meta name="twitter:description" content="Using strong models to evaluate the outputs of weaker models.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -15,10 +24,6 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/framework-page.css">
     <link rel="stylesheet" href="../css/docs.css">
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
 </head>
 
 <body>
@@ -26,51 +31,21 @@
         <div class="container">
             <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
             <div class="header-actions">
+                <a href="../why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
                 <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
             </div>
         </div>
     </header>
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="../glossary.html" class="sidebar-link">Glossary</a>
-                <a href="../faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="governance.html" class="sidebar-link">Enterprise Governance</a>
-                <a href="drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="llm-as-judge.html" class="sidebar-link active">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
-                    <a href="../">Home</a><span class="separator">/</span><span>Techniques</span><span
-                        class="separator">/</span><span>LLM-as-Judge</span>
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <span>Eval Design</span>
+                    <span class="separator">/</span>
+                    <span>LLM-as-Judge</span>
                 </div>
                 <h1>LLM-as-Judge</h1>
                 <p class="framework-subtitle">Using strong models (like GPT-4) to evaluate the outputs of weaker models
@@ -78,6 +53,69 @@
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>LLM-as-judge uses models to score other models with a rubric. It can scale evaluation but must be calibrated and audited for bias.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Use clear rubrics and few-shot examples.</li>
+
+
+                            <li>Validate with human review and spot checks.</li>
+
+
+                            <li>Monitor judge drift and disagreement rates.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>When is LLM-as-judge reliable?</h3>
+
+
+                        <p>It works best for structured rubrics and factuality checks; it is weaker for subjective or ambiguous tasks.</p>
+
+
+                        <h3>How do I calibrate the judge?</h3>
+
+
+                        <p>Compare judge scores against human labels on a validation set and adjust prompts or thresholds.</p>
+
+
+                        <h3>What are common failure modes?</h3>
+
+
+                        <p>Overconfidence, preference for verbosity, and bias toward certain styles or providers.</p>
+
+
+                    </section>
                     <section id="the-concept">
                         <h2>The Core Concept</h2>
                         <p>In many tasks (creative writing, reasoning, summarization), there is no single "correct"
@@ -85,22 +123,44 @@
                         <p><strong>LLM-as-Judge</strong> uses a high-capacity model to act as a human proxy, reading the
                             input, the output, and a scoring rubric to assign a grade.</p>
 
-                        <div class="mermaid-container"
-                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; margin: 24px 0;">
-                            <pre class="mermaid">
-sequenceDiagram
-    participant User
-    participant Model A (Weak)
-    participant Judge (GPT-4)
-    
-    User->>Model A: "Summarize this article"
-    Model A->>Judge: [Draft Summary]
-    User->>Judge: [Original Article] + [Rubric]
-    Judge->>Judge: Step 1: Analyze Claims
-    Judge->>Judge: Step 2: Check for Hallucinations
-    Judge->>Judge: Step 3: Grade Style (1-5)
-    Judge-->>User: Score: 4, Reason: "Accurate but missed one key date."
-</pre>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 900 240" role="img"
+                                aria-label="LLM-as-judge flow from user input to model output to judge score">
+                                <defs>
+                                    <marker id="judge-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6"
+                                        markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"></path>
+                                    </marker>
+                                </defs>
+
+                                <rect class="diagram-node" x="40" y="80" width="160" height="60" rx="12"></rect>
+                                <text x="120" y="108" text-anchor="middle" class="diagram-label">User Input</text>
+                                <text x="120" y="128" text-anchor="middle" class="diagram-note">Article + Prompt</text>
+
+                                <rect class="diagram-node" x="240" y="80" width="170" height="60" rx="12"></rect>
+                                <text x="325" y="108" text-anchor="middle" class="diagram-label">Model A (Weak)</text>
+                                <text x="325" y="128" text-anchor="middle" class="diagram-note">Draft Summary</text>
+
+                                <rect class="diagram-node diagram-node-accent" x="460" y="60" width="170" height="90"
+                                    rx="12"></rect>
+                                <text x="545" y="92" text-anchor="middle" class="diagram-label">Judge (LLM)</text>
+                                <text x="545" y="112" text-anchor="middle" class="diagram-note">Rubric + Checks</text>
+                                <text x="545" y="132" text-anchor="middle" class="diagram-note">Hallucination, Style</text>
+
+                                <rect class="diagram-node" x="670" y="80" width="190" height="60" rx="12"></rect>
+                                <text x="765" y="108" text-anchor="middle" class="diagram-label">Score + Rationale</text>
+
+                                <path class="diagram-line-solid" d="M 200 110 L 240 110"
+                                    marker-end="url(#judge-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 410 110 L 460 110"
+                                    marker-end="url(#judge-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 630 110 L 670 110"
+                                    marker-end="url(#judge-arrow)"></path>
+
+                                <path class="diagram-line" d="M 120 80 L 120 40 L 545 40 L 545 60"
+                                    marker-end="url(#judge-arrow)"></path>
+                                <text x="330" y="34" text-anchor="middle" class="diagram-note">Original + Rubric</text>
+                            </svg>
                         </div>
                     </section>
 
@@ -189,14 +249,20 @@ Output format: JSON { "score": int, "reasoning": "string" }</code></pre>
                     </section>
                 </div>
                 <div class="docs-footer-nav">
-                    <a href="consequence-weighted.html" class="nav-card"><span class="label">Previous</span><span
-                            class="title">← Scoring</span></a>
-                    <a href="../code/eval_pipeline.html" class="nav-card"><span class="label">Next</span><span
-                            class="title">Implementation →</span></a>
+                    <a href="rag-evaluation.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; RAG Evals</span>
+                    </a>
+                    <a href="human-in-the-loop.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Human-in-the-Loop &rarr;</span>
+                    </a>
                 </div>
             </div>
         </main>
     </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
 </body>
 
 </html>

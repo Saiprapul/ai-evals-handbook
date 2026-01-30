@@ -7,6 +7,15 @@
     <title>Human-in-the-Loop & Agent Evals | AI Evals Handbook</title>
     <meta name="description"
         content="Evaluating autonomous agents require strict escalation protocols. Learn how to implement Human-in-the-loop (HITL) workflows and measure agent reliability.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/frameworks/human-in-the-loop.html">
+    <meta property="og:title" content="Human-in-the-Loop & Agent Evals | AI Evals Handbook">
+    <meta property="og:description" content="Tool misuse, reasoning loops, goal drift — and knowing when to hand off to humans.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/frameworks/human-in-the-loop.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Human-in-the-Loop & Agent Evals | AI Evals Handbook">
+    <meta name="twitter:description" content="Tool misuse, reasoning loops, goal drift — and knowing when to hand off to humans.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -22,56 +31,23 @@
         <div class="container">
             <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
             <div class="header-actions">
+                <a href="../why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
                 <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
             </div>
         </div>
     </header>
 
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="../glossary.html" class="sidebar-link">Glossary</a>
-                <a href="../faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="human-in-the-loop.html" class="sidebar-link active">Agentic AI</a>
-                <a href="governance.html" class="sidebar-link">Enterprise Governance</a>
-                <a href="drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
 
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
                     <a href="../">Home</a>
                     <span class="separator">/</span>
-                    <a href="#">Architectures</a>
+                    <span>Eval Design</span>
                     <span class="separator">/</span>
-                    <span>Agentic AI</span>
+                    <span>Agents & HITL</span>
                 </div>
 
                 <h1>Human-in-the-Loop (HITL) & Agents</h1>
@@ -81,6 +57,69 @@
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>Human-in-the-loop systems route uncertain or high-risk outputs to people. The goal is to reduce critical errors while creating feedback for improvement.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Define escalation thresholds by risk.</li>
+
+
+                            <li>Route low-confidence cases to experts.</li>
+
+
+                            <li>Feed corrections back into evaluation data.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>When should I escalate to a human?</h3>
+
+
+                        <p>Escalate when confidence is low or the potential impact is high, such as compliance or safety scenarios.</p>
+
+
+                        <h3>How do I set thresholds?</h3>
+
+
+                        <p>Start with conservative thresholds, then tune using false negative and false positive rates on a labeled set.</p>
+
+
+                        <h3>How do I use human feedback?</h3>
+
+
+                        <p>Convert corrections into labeled examples and update the rubric and golden sets.</p>
+
+
+                    </section>
                     <section id="philosophy">
                         <h2>The Philosophy of Escalation</h2>
                         <p>In high-stakes environments (Finance, Healthcare), 99% accuracy isn't good enough. You can't
@@ -93,19 +132,48 @@
                         <h2>The Escalation Logic</h2>
                         <p>This flowchart defines how an Agent determines if it should act or ask.</p>
 
-                        <div class="mermaid-container"
-                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; border: 1px solid var(--border); margin: 24px 0; display: flex; justify-content: center;">
-                            <pre class="mermaid">
-graph TD
-    Start[User Request] --> Agent{Confidence Check}
-    Agent -->|High (>90%)| Auto[Execute Action]
-    Agent -->|Medium (50-90%)| Confirm[Propose Plan & Ask User]
-    Agent -->|Low (<50%)| Human[Route to Human Support]
-    
-    style Auto fill:#ecfdf5,stroke:#10b981
-    style Human fill:#fef2f2,stroke:#ef4444
-    style Confirm fill:#fffbeb,stroke:#f59e0b
-</pre>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 900 260" role="img"
+                                aria-label="Escalation logic flow based on confidence thresholds">
+                                <defs>
+                                    <marker id="hitl-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6"
+                                        markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"></path>
+                                    </marker>
+                                </defs>
+
+                                <rect class="diagram-node" x="70" y="90" width="170" height="60" rx="12"></rect>
+                                <text x="155" y="122" text-anchor="middle" class="diagram-label">User Request</text>
+
+                                <polygon class="diagram-node diagram-node-accent"
+                                    points="360,70 450,120 360,170 270,120"></polygon>
+                                <text x="360" y="110" text-anchor="middle" class="diagram-label">Confidence</text>
+                                <text x="360" y="130" text-anchor="middle" class="diagram-note">Check</text>
+
+                                <rect class="diagram-node" x="540" y="30" width="200" height="60" rx="12"
+                                    style="fill: #ecfdf5; stroke: #10b981;"></rect>
+                                <text x="640" y="62" text-anchor="middle" class="diagram-label">Execute Action</text>
+                                <text x="640" y="82" text-anchor="middle" class="diagram-note">High &gt; 90%</text>
+
+                                <rect class="diagram-node" x="540" y="100" width="200" height="60" rx="12"
+                                    style="fill: #fffbeb; stroke: #f59e0b;"></rect>
+                                <text x="640" y="132" text-anchor="middle" class="diagram-label">Propose Plan</text>
+                                <text x="640" y="152" text-anchor="middle" class="diagram-note">50–90%</text>
+
+                                <rect class="diagram-node" x="540" y="170" width="200" height="60" rx="12"
+                                    style="fill: #fef2f2; stroke: #ef4444;"></rect>
+                                <text x="640" y="202" text-anchor="middle" class="diagram-label">Route to Human</text>
+                                <text x="640" y="222" text-anchor="middle" class="diagram-note">&lt; 50%</text>
+
+                                <path class="diagram-line-solid" d="M 240 120 L 270 120"
+                                    marker-end="url(#hitl-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 450 120 L 540 60"
+                                    marker-end="url(#hitl-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 450 120 L 540 130"
+                                    marker-end="url(#hitl-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 450 120 L 540 200"
+                                    marker-end="url(#hitl-arrow)"></path>
+                            </svg>
                         </div>
                     </section>
 
@@ -170,24 +238,21 @@ graph TD
                 </div>
 
                 <div class="docs-footer-nav">
-                    <a href="rag-evaluation.html" class="nav-card">
+                    <a href="llm-as-judge.html" class="nav-card">
                         <span class="label">Previous</span>
-                        <span class="title">← RAG Systems</span>
+                        <span class="title">&larr; LLM-as-Judge</span>
                     </a>
-                    <a href="governance.html" class="nav-card">
+                    <a href="../eval-data-baselines.html" class="nav-card">
                         <span class="label">Next</span>
-                        <span class="title">Enterprise Governance →</span>
+                        <span class="title">Data & Baselines &rarr;</span>
                     </a>
                 </div>
             </div>
         </main>
     </div>
 
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
     <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
 </body>
 
 </html>

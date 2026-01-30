@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data, Golden Sets, and Baselines | AI Evals Handbook</title>
+    <meta name="description"
+        content="The hard part. Why most golden sets rot, how to bootstrap from customer reality, and when to refresh. Synthetic vs real data tradeoffs.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/eval-data-baselines.html">
+    <meta property="og:title" content="Data, Golden Sets, and Baselines | AI Evals Handbook">
+    <meta property="og:description" content="Why most golden sets rot, how to bootstrap from customer reality, and when to refresh.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/eval-data-baselines.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Data, Golden Sets, and Baselines | AI Evals Handbook">
+    <meta name="twitter:description" content="Why most golden sets rot, how to bootstrap from customer reality, and when to refresh.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/framework-page.css">
+    <link rel="stylesheet" href="css/docs.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="./" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar" id="sidebar"></aside>
+
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="./">Home</a>
+                    <span class="separator">/</span>
+                    <span>Eval Design</span>
+                    <span class="separator">/</span>
+                    <span>Data &amp; Baselines</span>
+                </div>
+
+                <h1>Data, Golden Sets, and Baselines</h1>
+                <p class="framework-subtitle">The hard part. Why most golden sets rot, how to bootstrap from customer reality, and when to refresh.</p>
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>Reliable evals need curated data and stable baselines. This page shows how to build golden sets, set thresholds, and refresh them as production data drifts.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Sample real queries and label them with a clear rubric.</li>
+
+
+                            <li>Track baseline metrics and define release thresholds.</li>
+
+
+                            <li>Refresh datasets on a cadence tied to drift and product change.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>How big should a golden set be?</h3>
+
+
+                        <p>Start with 200 to 500 examples for core flows, then add slices for edge cases and high-risk intents.</p>
+
+
+                        <h3>How often should I refresh eval data?</h3>
+
+
+                        <p>At least monthly for dynamic systems, and immediately after major policy or product changes.</p>
+
+
+                        <h3>What is a baseline?</h3>
+
+
+                        <p>A baseline is the current best-known performance used for comparison. It anchors regressions and release gates.</p>
+
+
+                    </section>
+                    <section id="golden-set">
+                        <h2>What a Golden Set Is (and Isn't)</h2>
+                        <p>A <strong>Golden Set</strong> is a curated baseline of representative inputs and expected
+                            outcomes. It is not a full map of everything the system can answer.</p>
+                        <div class="comparison-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Golden Set Is</th>
+                                        <th>Golden Set Isn't</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>A fixed baseline for regression testing</td>
+                                        <td>A complete list of every possible question</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Focused on critical user journeys</td>
+                                        <td>A single snapshot that never changes</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Owned and versioned internally</td>
+                                        <td>A customer-facing promise of coverage</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section id="why-rot">
+                        <h2>Why Golden Sets Rot</h2>
+                        <p>Most golden sets become useless within months. Three forces cause decay:</p>
+
+                        <h3>1. Staleness</h3>
+                        <p>Your product changes, policies update, and new features launch. Questions that were critical
+                           6 months ago may no longer be relevant. Expected answers reference outdated information.</p>
+
+                        <h3>2. Distribution Shift</h3>
+                        <p>Early users ask different questions than mature users. Your golden set reflects the queries
+                           from launch, not the queries from today. Month 3 users ask edge cases your month 1 set doesn't cover.</p>
+
+                        <h3>3. Scope Creep</h3>
+                        <p>Teams add test cases ad-hoc without retiring old ones. The set grows to 500+ cases,
+                           runs take forever, and nobody knows which cases actually matter.</p>
+
+                        <div class="callout warning">
+                            <h4>The Rot Symptom</h4>
+                            <p>When your eval suite passes consistently but users still complain, your golden set has rotted.
+                               You're testing the past while users live in the present.</p>
+                        </div>
+                    </section>
+
+                    <section id="building">
+                        <h2>Building a Golden Set from Customer Reality</h2>
+                        <p>Start with 50-100 cases covering these categories:</p>
+
+                        <div class="flow-card">
+                            <div class="flow-card-header">
+                                <h3>From customer questions to an internal golden set</h3>
+                                <p>PMs collect representative questions using an intake template. Engineering turns
+                                    those into a golden set for evals.</p>
+                            </div>
+                            <div class="flow-diagram">
+                                <svg class="flow-svg" viewBox="0 0 900 200" role="img"
+                                    aria-label="Flow from customer questions to PM intake template to golden set to eval runs">
+                                    <defs>
+                                        <marker id="flow-arrow" viewBox="0 0 10 10" refX="8" refY="5"
+                                            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                            <path d="M 0 0 L 10 5 L 0 10 z" class="flow-arrow"></path>
+                                        </marker>
+                                    </defs>
+
+                                    <path class="flow-line" d="M 210 80 L 250 80" marker-end="url(#flow-arrow)"></path>
+                                    <path class="flow-line" d="M 420 80 L 460 80" marker-end="url(#flow-arrow)"></path>
+                                    <path class="flow-line" d="M 630 80 L 670 80" marker-end="url(#flow-arrow)"></path>
+
+                                    <rect class="flow-node" x="40" y="50" width="170" height="60" rx="12" ry="12">
+                                    </rect>
+                                    <text x="125" y="78" text-anchor="middle" class="flow-label">
+                                        <tspan x="125" dy="0">Customer</tspan>
+                                        <tspan x="125" dy="18">Questions</tspan>
+                                    </text>
+
+                                    <rect class="flow-node flow-node-accent" x="250" y="50" width="170" height="60"
+                                        rx="12" ry="12"></rect>
+                                    <text x="335" y="78" text-anchor="middle" class="flow-label">
+                                        <tspan x="335" dy="0">PM Intake</tspan>
+                                        <tspan x="335" dy="18">Template</tspan>
+                                    </text>
+
+                                    <rect class="flow-node flow-node-accent" x="460" y="50" width="170" height="60"
+                                        rx="12" ry="12"></rect>
+                                    <text x="545" y="78" text-anchor="middle" class="flow-label">
+                                        <tspan x="545" dy="0">Golden Set</tspan>
+                                        <tspan x="545" dy="18">(Internal)</tspan>
+                                    </text>
+
+                                    <rect class="flow-node" x="670" y="50" width="190" height="60" rx="12" ry="12">
+                                    </rect>
+                                    <text x="765" y="78" text-anchor="middle" class="flow-label">
+                                        <tspan x="765" dy="0">Eval Runs</tspan>
+                                        <tspan x="765" dy="18">&amp; Iteration</tspan>
+                                    </text>
+
+                                    <circle class="flow-pulse" cx="395" cy="62" r="7"></circle>
+                                    <circle class="flow-pulse flow-pulse-delay" cx="605" cy="62" r="7"></circle>
+                                    <circle class="flow-pulse" cx="815" cy="62" r="7"></circle>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <ul class="checklist">
+                            <li class="check-item"><strong>Start with top workflows:</strong> 10-20 questions that map to
+                                your most common user intents.</li>
+                            <li class="check-item"><strong>Include edge cases:</strong> high-risk or policy-sensitive
+                                asks.</li>
+                            <li class="check-item"><strong>Pull from reality:</strong> sales demos, support tickets, and
+                                production logs (anonymized).</li>
+                            <li class="check-item"><strong>Define success:</strong> for each question, specify what a
+                                "good" answer must include or avoid.</li>
+                        </ul>
+
+                        <div class="code-block">
+                            <div class="code-header"><span>dataset_sample.json</span></div>
+                            <pre><code>[
+  {
+    <span class="string">"input"</span>: <span class="string">"I want to return my order #12345"</span>,
+    <span class="string">"context"</span>: [<span class="string">"Return Policy: Returns allowed within 30 days..."</span>],
+    <span class="string">"expected_output"</span>: <span class="string">"I can help with that. Is the item in its original condition?"</span>,
+    <span class="string">"tags"</span>: [<span class="string">"support"</span>, <span class="string">"returns"</span>],
+    <span class="string">"tier"</span>: <span class="string">"high"</span>
+  }
+]</code></pre>
+                        </div>
+                    </section>
+
+                    <section id="synthetic-real">
+                        <h2>Synthetic vs Real Data</h2>
+                        <p>Both have a place. Neither is sufficient alone.</p>
+
+                        <div class="comparison-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Aspect</th>
+                                        <th>Real Data</th>
+                                        <th>Synthetic Data</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Distribution</strong></td>
+                                        <td>Matches actual usage</td>
+                                        <td>May miss real patterns</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Edge cases</strong></td>
+                                        <td>Hard to get enough volume</td>
+                                        <td>Can generate at scale</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Adversarial</strong></td>
+                                        <td>Limited malicious examples</td>
+                                        <td>Easy to create attacks</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Privacy</strong></td>
+                                        <td>Requires anonymization</td>
+                                        <td>No PII concerns</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cost</strong></td>
+                                        <td>Expensive to label</td>
+                                        <td>Cheap to generate</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="callout">
+                            <h4>The Hybrid Approach</h4>
+                            <p>Use <strong>real data</strong> for your core golden set (50-100 cases that define success).
+                               Use <strong>synthetic data</strong> to stress-test edges: adversarial inputs, rare intents,
+                               and safety scenarios you can't source from production.</p>
+                        </div>
+                    </section>
+
+                    <section id="metrics">
+                        <h2>Selecting Metrics</h2>
+                        <p>Avoid "kitchen sink" metrics. Choose 2-3 that actually map to business value.</p>
+                        <div class="comparison-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>What it measures</th>
+                                        <th>When to use</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Faithfulness</strong></td>
+                                        <td>Does the answer come <em>only</em> from the context?</td>
+                                        <td>RAG systems (prevent hallucinations).</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Semantic Similarity</strong></td>
+                                        <td>Is the meaning close to the Golden Answer? (Embedding distance)</td>
+                                        <td>Q&A where accurate phrasing matters.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tool Call Safety</strong></td>
+                                        <td>Did the agent call <code>delete_db</code> with correct params?</td>
+                                        <td>Agentic/Action-based systems.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section id="refresh">
+                        <h2>Refresh Strategies Without Chasing Noise</h2>
+                        <p>Golden sets are living artifacts. But you can't refresh constantly—you'll lose the baseline.</p>
+
+                        <h3>Quarterly Review Cadence</h3>
+                        <ul>
+                            <li><strong>Add new cases</strong> when new workflows or intents emerge.</li>
+                            <li><strong>Retire cases</strong> when they no longer reflect real usage.</li>
+                            <li><strong>Re-label</strong> when expected answers are outdated.</li>
+                            <li><strong>Version</strong> every change so you can compare across time.</li>
+                        </ul>
+
+                        <h3>Signals That Trigger Refresh</h3>
+                        <ul>
+                            <li>New product feature or policy change.</li>
+                            <li>Drift alert from production monitoring.</li>
+                            <li>Support escalations in a new category.</li>
+                            <li>Eval scores plateau while user complaints rise.</li>
+                        </ul>
+
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 860 200" role="img"
+                                aria-label="Lifecycle of a golden set">
+                                <defs>
+                                    <marker id="loop-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6"
+                                        markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"></path>
+                                    </marker>
+                                </defs>
+                                <circle class="diagram-ring" cx="430" cy="95" r="70"></circle>
+                                <circle class="diagram-ring-outer" cx="430" cy="95" r="92"></circle>
+
+                                <text x="430" y="70" text-anchor="middle" class="diagram-label">Version</text>
+                                <text x="430" y="92" text-anchor="middle" class="diagram-label">Run</text>
+                                <text x="430" y="114" text-anchor="middle" class="diagram-label">Review</text>
+
+                                <path class="diagram-line" d="M 510 35 L 560 35" marker-end="url(#loop-arrow)"></path>
+                                <text x="600" y="39" class="diagram-note">Add new intents</text>
+
+                                <path class="diagram-line" d="M 510 155 L 560 155" marker-end="url(#loop-arrow)"></path>
+                                <text x="600" y="160" class="diagram-note">Retire stale cases</text>
+                            </svg>
+                        </div>
+                    </section>
+
+                    <section id="eval-loop">
+                        <h2>The Evaluation Loop</h2>
+                        <p>Run your evals as part of your CI/CD pipeline, not just locally on your laptop.</p>
+                        <div class="code-block">
+                            <div class="code-header"><span>pipeline_runner.py</span></div>
+                            <pre><code><span class="keyword">for</span> example <span class="keyword">in</span> golden_dataset:
+    <span class="comment"># 1. Generate</span>
+    actual_output = model.generate(example[<span class="string">"input"</span>])
+
+    <span class="comment"># 2. Evaluate (Parallelize this in production)</span>
+    faith_score = measure_faithfulness(actual_output, example[<span class="string">"context"</span>])
+    sim_score = measure_similarity(actual_output, example[<span class="string">"expected_output"</span>])
+
+    <span class="comment"># 3. Log</span>
+    logger.log({
+        <span class="string">"input"</span>: example[<span class="string">"input"</span>],
+        <span class="string">"scores"</span>: { <span class="string">"faithfulness"</span>: faith_score, <span class="string">"similarity"</span>: sim_score }
+    })</code></pre>
+                        </div>
+                        <p>For real-world context, see <a href="case-studies/query-drift-rag.html">Query Drift</a> and
+                            <a href="case-studies/embedding-drift.html">Embedding Drift</a>.</p>
+                    </section>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="frameworks/human-in-the-loop.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Agents &amp; HITL</span>
+                    </a>
+                    <a href="interpreting-results.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Reading Results &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
+</body>
+
+</html>

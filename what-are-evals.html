@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What Evals Actually Are | AI Evals Handbook</title>
+    <meta name="description"
+        content="What AI evaluations actually are, why traditional QA fails for probabilistic systems, and why evals are surprisingly often all you need.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/what-are-evals.html">
+    <meta property="og:title" content="What Evals Actually Are | AI Evals Handbook">
+    <meta property="og:description" content="What AI evaluations actually are, why traditional QA fails for probabilistic systems, and why evals are surprisingly often all you need.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/what-are-evals.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="What Evals Actually Are | AI Evals Handbook">
+    <meta name="twitter:description" content="What AI evaluations actually are, why traditional QA fails for probabilistic systems.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/framework-page.css">
+    <link rel="stylesheet" href="css/docs.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="./" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar" id="sidebar"></aside>
+
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="./">Home</a><span class="separator">/</span><span>Foundations</span><span
+                        class="separator">/</span><span>What Evals Are</span>
+                </div>
+
+                <h1>What Are Evals?</h1>
+                <p class="framework-subtitle">Not testing. Not benchmarks. The discipline of knowing whether your AI system actually works.</p>
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content-grid" style="grid-template-columns: 1fr;">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>Evals are structured tests that measure AI system outputs against clear success criteria. They can be automated, human-reviewed, or LLM-judged and are used for release gates and ongoing monitoring.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Evals define what success looks like for a real task.</li>
+
+
+                            <li>They use representative data and rubrics to score outputs.</li>
+
+
+                            <li>They are used both pre-release and in production monitoring.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>Are evals the same as benchmarks?</h3>
+
+
+                        <p>No. Benchmarks are generic and static; evals are task-specific, risk-aware, and updated with live data as the system changes.</p>
+
+
+                        <h3>How much data do I need for an eval?</h3>
+
+
+                        <p>Start small: 50 to 200 labeled examples per critical slice can reveal regressions. Expand as you learn the failure modes.</p>
+
+
+                        <h3>What is the fastest way to start?</h3>
+
+
+                        <p>Pick one high-risk workflow, define a rubric, label a small dataset, and run a simple baseline before each release.</p>
+
+
+                    </section>
+
+                    <section id="not-what-you-think">
+                        <h2>Evals Are Not What You Think</h2>
+                        <p>If you come from traditional software engineering, you might hear "evaluation" and think <em>unit tests</em>. If you come from machine learning research, you might think <em>benchmarks</em>. Both intuitions will mislead you.</p>
+
+                        <p><strong>Unit tests</strong> verify deterministic behavior: given input X, the function must return Y. They work because software is predictable. <code>add(2, 3)</code> always returns <code>5</code>. But ask an LLM to summarize a legal contract, and you'll get a different answer every time&mdash;even with the same prompt, the same model, the same temperature. The output is <em>probabilistic</em>, not deterministic.</p>
+
+                        <p><strong>Benchmarks</strong> (MMLU, HumanEval, GPQA) measure general model capability. They tell you whether GPT-4 is smarter than GPT-3.5 on average, across thousands of academic questions. But they tell you nothing about whether <em>your</em> system, with <em>your</em> prompts, over <em>your</em> data, produces outputs <em>your</em> users can trust.</p>
+
+                        <p>Evals are neither. They sit in the gap between generic benchmarks and deterministic tests&mdash;the gap where production AI systems actually live.</p>
+
+                        <div class="callout">
+                            <h4>A Working Definition</h4>
+                            <p><strong>Evals</strong> are systematic measurements of whether an AI system meets specific, domain-relevant quality bars&mdash;run continuously, against real-world conditions, to catch degradation before users do.</p>
+                        </div>
+                    </section>
+
+                    <section id="probabilistic-nature">
+                        <h2>The Probabilistic Problem</h2>
+                        <p>Traditional software has a comforting property: it either works or it doesn't. A REST API either returns the right JSON or it throws an error. You can write a test, and it passes or fails.</p>
+
+                        <p>AI systems don't have this property. They exist on a spectrum:</p>
+                        <ul>
+                            <li><strong>Sometimes right, sometimes wrong.</strong> The same question might get a correct answer 9 out of 10 times&mdash;and a confidently wrong answer on the 10th.</li>
+                            <li><strong>Right in different ways.</strong> Two valid summaries of the same document can look completely different. Which one is "correct"?</li>
+                            <li><strong>Wrong in invisible ways.</strong> A hallucinated citation looks exactly like a real one. A subtly incorrect legal interpretation reads just as fluently as the right one.</li>
+                            <li><strong>Right today, wrong tomorrow.</strong> A model update, a prompt change, a shift in user behavior&mdash;any of these can silently degrade quality without triggering a single error.</li>
+                        </ul>
+
+                        <p>This is why traditional QA fails for AI. You can't write an assertion for "the summary is good." You need a different approach entirely.</p>
+                    </section>
+
+                    <section id="why-qa-fails">
+                        <h2>Why Traditional QA Doesn't Work</h2>
+                        <p>Consider a customer support chatbot. In traditional software, you'd test:</p>
+
+                        <div class="code-block">
+                            <div class="code-header"><span>traditional_test.py</span></div>
+                            <pre><code><span class="comment"># Traditional QA: deterministic assertion</span>
+<span class="keyword">def</span> <span class="function">test_return_policy</span>():
+    response = get_response(<span class="string">"What is your return policy?"</span>)
+    <span class="keyword">assert</span> response == <span class="string">"You can return items within 30 days."</span></code></pre>
+                        </div>
+
+                        <p>This test will fail immediately. The AI might say "Our return window is 30 days from purchase" or "Returns are accepted within a month of buying." Both are correct. The assertion is wrong&mdash;not the AI.</p>
+
+                        <p>Evals solve this by measuring <em>properties</em> of the output rather than matching exact strings:</p>
+                        <ul>
+                            <li><strong>Faithfulness:</strong> Does the answer come only from the provided context? (No hallucinations)</li>
+                            <li><strong>Completeness:</strong> Does it cover the key information the user needs?</li>
+                            <li><strong>Safety:</strong> Does it avoid giving advice the company shouldn't give?</li>
+                            <li><strong>Relevance:</strong> Does it actually answer what was asked?</li>
+                        </ul>
+
+                        <p>These properties can be measured at scale&mdash;by other models, by embedding similarity, by deterministic rules&mdash;and tracked over time to catch regression.</p>
+                    </section>
+
+                    <section id="evals-are-all-you-need">
+                        <h2>"Evals Are Surprisingly Often All You Need"</h2>
+
+                        <div class="callout">
+                            <h4>From the Field</h4>
+                            <p>Greg Brockman, OpenAI co-founder, put it bluntly: <strong>"Evals are surprisingly often all you need."</strong> Not more data. Not a bigger model. Not a fancier architecture. Just the discipline of measuring what matters and iterating on what you find.</p>
+                        </div>
+
+                        <p>This insight cuts against the instinct most teams have. When an AI system underperforms, the default reaction is to reach for a more powerful model, add more training data, or redesign the prompt from scratch. But often the real problem is simpler: <strong>you don't know what "good" looks like</strong>, so you can't tell whether your changes actually helped.</p>
+
+                        <p>Evals give you that definition. They turn "I think it's working better" into "faithfulness improved from 0.82 to 0.91 after the prompt change, while safety scores held steady." They make improvement measurable.</p>
+                    </section>
+
+                    <section id="trust-not-correctness">
+                        <h2>The Shift: From "Does It Work?" to "Can I Trust It?"</h2>
+                        <p>The deeper question behind evals isn't "is this output correct?" It's "can I trust this system to keep producing good outputs as conditions change?"</p>
+
+                        <p>This is a fundamentally different question. Correctness is a snapshot. Trust is a trajectory. It requires:</p>
+                        <ul>
+                            <li><strong>Continuous measurement</strong>&mdash;not a one-time check before launch</li>
+                            <li><strong>Business-relevant metrics</strong>&mdash;not abstract accuracy scores</li>
+                            <li><strong>Failure awareness</strong>&mdash;knowing what kinds of errors matter most</li>
+                            <li><strong>Drift detection</strong>&mdash;catching degradation before users report it</li>
+                        </ul>
+
+                        <p>That's what this handbook is about. Not how to run a benchmark. How to build the <em>ongoing discipline</em> of knowing whether your AI system deserves the trust you're placing in it.</p>
+
+                        <p>In the next section, we'll look at why this matters more than most teams realize&mdash;and what happens when you skip it.</p>
+                    </section>
+
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="why-evals-matter.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Why Evals Exist</span>
+                    </a>
+                    <a href="ecosystem.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Where Failure Emerges &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
+</body>
+
+</html>

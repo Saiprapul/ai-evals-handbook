@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interpreting Results | AI Evals Handbook</title>
+    <meta name="description" content="Turn evaluation scores into decisions, not confusion. Error taxonomies, regression detection, and metrics that lie.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/interpreting-results.html">
+    <meta property="og:title" content="Reading Results | AI Evals Handbook">
+    <meta property="og:description" content="Error taxonomies, regression traps, and metrics that look green while quality decays.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/interpreting-results.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Reading Results | AI Evals Handbook">
+    <meta name="twitter:description" content="Error taxonomies, regression traps, and metrics that look green while quality decays.">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/framework-page.css">
+    <link rel="stylesheet" href="css/docs.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="./" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="docs-layout">
+        <aside class="docs-sidebar" id="sidebar"></aside>
+
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="./">Home</a>
+                    <span class="separator">/</span>
+                    <span>Operating</span>
+                    <span class="separator">/</span>
+                    <span>Reading Results</span>
+                </div>
+
+                <h1>Interpreting Results</h1>
+                <p class="framework-subtitle">Turn evaluation scores into decisions, not confusion.</p>
+                <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
+
+                <div class="content">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>Interpreting evals means slicing results by risk, comparing to baselines, and choosing the right fix. The goal is not just score improvement but controlled, explainable changes.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Look for regressions by slice, not just averages.</li>
+
+
+                            <li>Tie changes to business risk and user impact.</li>
+
+
+                            <li>Pick the smallest intervention that fixes the failure mode.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>What delta is significant?</h3>
+
+
+                        <p>Use thresholds by severity tier; a 2-point drop can be critical in high-risk slices even if the overall average is stable.</p>
+
+
+                        <h3>How do I avoid overreacting to noise?</h3>
+
+
+                        <p>Compare against variance and confidence intervals, and require consistent regression across multiple runs or time windows.</p>
+
+
+                        <h3>How do I decide the next action?</h3>
+
+
+                        <p>Trace failures to the layer that can change: prompt, retrieval, policy, or product constraints, then re-evaluate.</p>
+
+
+                    </section>
+                    <section id="taxonomy">
+                        <h2>Build an Error Taxonomy First</h2>
+                        <p>Raw scores tell you what happened, not why it happened. A simple taxonomy lets teams
+                            diagnose failures and fix the right component.</p>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 900 220" role="img"
+                                aria-label="Error taxonomy categories for evaluation">
+                                <rect class="diagram-node" x="60" y="40" width="160" height="60" rx="12"></rect>
+                                <text x="140" y="70" text-anchor="middle" class="diagram-label">Retrieval</text>
+                                <text x="140" y="90" text-anchor="middle" class="diagram-note">Wrong doc</text>
+
+                                <rect class="diagram-node" x="260" y="40" width="160" height="60" rx="12"></rect>
+                                <text x="340" y="70" text-anchor="middle" class="diagram-label">Reasoning</text>
+                                <text x="340" y="90" text-anchor="middle" class="diagram-note">Logic gap</text>
+
+                                <rect class="diagram-node" x="460" y="40" width="160" height="60" rx="12"></rect>
+                                <text x="540" y="70" text-anchor="middle" class="diagram-label">Grounding</text>
+                                <text x="540" y="90" text-anchor="middle" class="diagram-note">Hallucination</text>
+
+                                <rect class="diagram-node" x="660" y="40" width="160" height="60" rx="12"></rect>
+                                <text x="740" y="70" text-anchor="middle" class="diagram-label">Policy</text>
+                                <text x="740" y="90" text-anchor="middle" class="diagram-note">Unsafe output</text>
+
+                                <path class="diagram-line" d="M 220 70 L 260 70"></path>
+                                <path class="diagram-line" d="M 420 70 L 460 70"></path>
+                                <path class="diagram-line" d="M 620 70 L 660 70"></path>
+
+                                <text x="450" y="150" text-anchor="middle" class="diagram-caption">Tag each failure so
+                                    fixes map to the right component.</text>
+                            </svg>
+                        </div>
+                    </section>
+
+                    <section id="regressions">
+                        <h2>Regression vs Improvement</h2>
+                        <p>Track trends, not just snapshots. A small drop in a high-risk category can outweigh a large
+                            gain in low-risk tasks.</p>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 860 220" role="img"
+                                aria-label="Trend line comparing overall score and high risk score">
+                                <line class="diagram-axis" x1="60" y1="170" x2="800" y2="170"></line>
+                                <line class="diagram-axis" x1="60" y1="40" x2="60" y2="170"></line>
+
+                                <path class="diagram-line-solid" d="M 80 130 L 220 110 L 360 120 L 500 100 L 640 90 L 780 80"></path>
+                                <path class="diagram-line-accent" d="M 80 150 L 220 140 L 360 135 L 500 145 L 640 150 L 780 155"></path>
+
+                                <circle class="diagram-dot" cx="500" cy="145" r="4"></circle>
+                                <text x="520" y="150" class="diagram-note">High-risk dip</text>
+
+                                <text x="80" y="190" class="diagram-note">v1</text>
+                                <text x="220" y="190" class="diagram-note">v2</text>
+                                <text x="360" y="190" class="diagram-note">v3</text>
+                                <text x="500" y="190" class="diagram-note">v4</text>
+                                <text x="640" y="190" class="diagram-note">v5</text>
+                                <text x="780" y="190" class="diagram-note">v6</text>
+
+                                <text x="640" y="70" class="diagram-legend">Overall score</text>
+                                <text x="640" y="90" class="diagram-legend diagram-legend-accent">High-risk score</text>
+                            </svg>
+                        </div>
+                    </section>
+
+                    <section id="metrics-that-lie">
+                        <h2>Metrics That Lie</h2>
+                        <ul class="checklist">
+                            <li class="check-item"><strong>High average accuracy:</strong> hides critical failures in rare
+                                intents.</li>
+                            <li class="check-item"><strong>LLM-as-judge only:</strong> can drift with prompt changes or
+                                model updates.</li>
+                            <li class="check-item"><strong>Static test set:</strong> misses real-world query shifts.</li>
+                        </ul>
+                    </section>
+
+                    <section id="pm-playbook">
+                        <h2>PM Playbook: What To Do Next</h2>
+                        <ol>
+                            <li><strong>Identify the failing bucket:</strong> map each failure to the taxonomy.
+                            </li>
+                            <li><strong>Decide if it is a regression:</strong> compare against the previous release.
+                            </li>
+                            <li><strong>Choose the action:</strong> prompt fix, retrieval fix, policy update, or product
+                                constraint.</li>
+                            <li><strong>Communicate clearly:</strong> share the impact on user trust and business risk.
+                            </li>
+                        </ol>
+                        <p>For an example of how drift surfaces in production, see <a
+                                href="case-studies/query-drift-rag.html">Query Drift</a>.</p>
+                    </section>
+
+                    <section id="kpi-dashboards">
+                        <h2>KPI Dashboards & Executive Readouts</h2>
+                        <p>Once the taxonomy is defined, consolidate the signals into an executive-ready dashboard.</p>
+                        <p><a href="kpi-dashboard.html" class="btn btn-sm btn-primary">View KPI Dashboards & Playbooks →</a></p>
+                    </section>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="eval-data-baselines.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Data &amp; Baselines</span>
+                    </a>
+                    <a href="frameworks/drift-monitoring.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">6a. Drift Monitoring &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
+</body>
+
+</html>

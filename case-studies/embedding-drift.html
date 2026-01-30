@@ -5,93 +5,325 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Case Study: Embedding Drift | AI Evals Handbook</title>
+    <meta name="description" content="Composite case study: when the world changes but embeddings stay the same, causing a 22% retrieval drop in tech queries.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/case-studies/embedding-drift.html">
+    <meta property="og:title" content="Case Study: Embedding Drift | AI Evals Handbook">
+    <meta property="og:description" content="Composite case study of embedding drift causing a 22% retrieval drop in tech queries.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/case-studies/embedding-drift.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Case Study: Embedding Drift | AI Evals Handbook">
+    <meta name="twitter:description" content="Composite case study of embedding drift and its impact.">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/framework-page.css">
     <link rel="stylesheet" href="../css/docs.css">
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
 </head>
 
 <body>
     <header class="docs-header">
         <div class="container">
             <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="../why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
         </div>
     </header>
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="../glossary.html" class="sidebar-link">Glossary</a>
-                <a href="../faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="../frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="../frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="../frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
-                <a href="../frameworks/drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="../frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="../frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="embedding-drift.html" class="sidebar-link active">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
-                    <a href="../">Home</a><span class="separator">/</span><span>Case Studies</span><span
-                        class="separator">/</span><span>Embedding Drift</span>
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <span>Case Studies</span>
+                    <span class="separator">/</span>
+                    <span>Embedding Drift</span>
                 </div>
-                <h1>The Silent Killer: Embedding Drift</h1>
-                <p class="framework-subtitle">When the world changes, but your vectors stay the same.</p>
+                <h1>Case Study Archetype: The Silent Killer — Embedding Drift</h1>
+                <p class="framework-subtitle">A composite case study where the world changed, but the vectors stayed the same.</p>
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content">
+
+
                     <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>This composite case study shows how tech-domain terminology drift broke retrieval and how re-embedding restored performance.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>New acronyms pushed tech queries out-of-distribution.</li>
+
+
+                            <li>Recall dropped while other domains stayed stable.</li>
+
+
+                            <li>Re-embedding and lexical fallbacks restored recall.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>How do you detect embedding drift?</h3>
+
+
+                        <p>Monitor centroid shift, OOD ratios, and retrieval metrics like Recall@10 by domain slice.</p>
+
+
+                        <h3>Why was drift domain-specific?</h3>
+
+
+                        <p>Tech terms evolved faster than the embedding model vocabulary, while other domains stayed stable.</p>
+
+
+                        <h3>What fixed the issue?</h3>
+
+
+                        <p>Re-embedding the corpus with a newer model and adding lexical fallbacks for emerging terms.</p>
+
+
+                    </section>
+                    <div class="callout">
+                        <h4>About this case study</h4>
+                        <ul>
+                            <li><strong>Composite archetype:</strong> Synthesized from multiple production deployments
+                                to illustrate real-world eval workflows.</li>
+                            <li><strong>Data:</strong> Numbers are illustrative and anonymized to show drift impact and
+                                remediation.</li>
+                            <li><strong>System:</strong> Multi-tenant enterprise search across finance, healthcare,
+                                tech, and retail.</li>
+                        </ul>
+                    </div>
+
+                    <section id="snapshot">
+                        <h2>System Snapshot</h2>
+                        <ul>
+                            <li>Index: 60M passages, 4 languages, 12 verticals.</li>
+                            <li>Embedding model: 2021-vintage general encoder, updated quarterly.</li>
+                            <li>Evaluation: monthly retrieval benchmark (1,000 queries per domain).</li>
+                            <li>Primary metric: Recall@10 with a 0.70 minimum per domain.</li>
+                        </ul>
+                    </section>
+
+                    <section id="drift-domain">
                         <h2>Drift by Domain</h2>
-                        <div class="mermaid-container"
-                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px;">
-                            <pre class="mermaid">
-xychart-beta
-    title Retrieval Performance Drop (3 Months)
-    x-axis [Finance, Healthcare, Tech, Retail]
-    y-axis "Accuracy Drop (%)" 0 --> 25
-    bar [5, 2, 22, 4]
-</pre>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 860 240" role="img"
+                                aria-label="Retrieval performance drop by domain over three months">
+                                <text x="40" y="30" class="diagram-label">Retrieval Performance Drop (3 Months)</text>
+                                <line class="diagram-axis" x1="80" y1="190" x2="800" y2="190"></line>
+                                <line class="diagram-axis" x1="80" y1="60" x2="80" y2="190"></line>
+
+                                <rect class="diagram-bar diagram-bar-low" x="140" y="170" width="80" height="20"></rect>
+                                <text x="180" y="210" text-anchor="middle" class="diagram-note">Finance</text>
+                                <text x="180" y="165" text-anchor="middle" class="diagram-note">5%</text>
+
+                                <rect class="diagram-bar diagram-bar-low" x="300" y="178" width="80" height="12"></rect>
+                                <text x="340" y="210" text-anchor="middle" class="diagram-note">Healthcare</text>
+                                <text x="340" y="173" text-anchor="middle" class="diagram-note">2%</text>
+
+                                <rect class="diagram-bar diagram-bar-critical" x="460" y="110" width="80" height="80">
+                                </rect>
+                                <text x="500" y="210" text-anchor="middle" class="diagram-note">Tech</text>
+                                <text x="500" y="105" text-anchor="middle" class="diagram-note">22%</text>
+
+                                <rect class="diagram-bar diagram-bar-low" x="620" y="174" width="80" height="16"></rect>
+                                <text x="660" y="210" text-anchor="middle" class="diagram-note">Retail</text>
+                                <text x="660" y="169" text-anchor="middle" class="diagram-note">4%</text>
+                            </svg>
                         </div>
-                        <p>Tech queries suffered a massive 22% drop. Why? Because new acronyms ("GPT-4", "Llama-3")
-                            didn't exist in our 2021 embedding model.</p>
+                        <p>Drift was isolated to <strong>tech queries</strong>. New acronyms (“GPT-4”, “Llama-3”, “QLoRA”)
+                            and product names were out-of-vocabulary for the 2021 encoder, collapsing nearest neighbors.</p>
+                    </section>
+
+                    <section id="where">
+                        <h2>Where the Drift Happened</h2>
+                        <p>Embedding drift was measured as the cosine distance between query centroids month-to-month.
+                            Tech queries jumped from 0.08 to 0.34 (threshold 0.20). Retrieval recall@10 dropped 22 pts,
+                            while other domains stayed within 5 pts.</p>
+                        <div class="performance-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Metric (Tech)</th>
+                                        <th>Baseline</th>
+                                        <th>Drift Month</th>
+                                        <th>Threshold</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Recall@10</td>
+                                        <td>0.78</td>
+                                        <td>0.56</td>
+                                        <td>0.70</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MRR</td>
+                                        <td>0.61</td>
+                                        <td>0.44</td>
+                                        <td>0.55</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Query centroid shift</td>
+                                        <td>0.08</td>
+                                        <td>0.34</td>
+                                        <td>0.20</td>
+                                    </tr>
+                                    <tr>
+                                        <td>OOD query ratio</td>
+                                        <td>9%</td>
+                                        <td>28%</td>
+                                        <td>15%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section id="dashboard">
+                        <h2>Retrieval Health Dashboard</h2>
+                        <div class="diagram-card">
+                            <img src="../images/case-studies/embedding-drift-dashboard.svg"
+                                alt="Mock enterprise search dashboard showing embedding drift impact by domain"
+                                style="width: 100%; height: auto; border-radius: 10px;">
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">
+                                Illustrative dashboard (synthetic data).
+                            </p>
+                        </div>
+                        <div class="kpi-grid">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Tech Recall@10</div>
+                                <div class="kpi-value">0.78 → 0.56</div>
+                                <div class="kpi-trend down">-22 pts</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Finance Recall@10</div>
+                                <div class="kpi-value">0.81 → 0.76</div>
+                                <div class="kpi-trend warning">-5 pts</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Tech OOD Ratio</div>
+                                <div class="kpi-value">9% → 28%</div>
+                                <div class="kpi-trend up">3.1x</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Top-1 Doc Match</div>
+                                <div class="kpi-value">63% → 39%</div>
+                                <div class="kpi-trend down">-24 pts</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Search Escalations</div>
+                                <div class="kpi-value">4.4% → 11.8%</div>
+                                <div class="kpi-trend up">+7.4 pts</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Latency (p95)</div>
+                                <div class="kpi-value">720ms → 980ms</div>
+                                <div class="kpi-trend warning">+260ms</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="methodology">
+                        <h2>Measurement Methodology (How This Would Be Measured)</h2>
+                        <ul>
+                            <li>Monthly benchmark set per domain with relevance judgments from SMEs.</li>
+                            <li>Drift measured by centroid shift and OOD query ratio on embedding space.</li>
+                            <li>Release gate: no domain may fall below Recall@10 = 0.70.</li>
+                            <li>Escalation metrics pulled from search fallback logs and user feedback surveys.</li>
+                        </ul>
+                    </section>
+
+                    <section id="fix">
+                        <h2>What Changed Because of Evals</h2>
+                        <ol>
+                            <li>Re-embedded the tech corpus with a newer encoder tuned on recent terminology.</li>
+                            <li>Added a lexical fallback (BM25) for new product names and acronyms.</li>
+                            <li>Created a “tech drift” slice (300 queries) that must pass before release.</li>
+                            <li>Added a rolling alias dictionary for emerging terms.</li>
+                        </ol>
+                        <div class="performance-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Metric (Tech)</th>
+                                        <th>Drift Month</th>
+                                        <th>After Fix</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Recall@10</td>
+                                        <td>0.56</td>
+                                        <td>0.82</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MRR</td>
+                                        <td>0.44</td>
+                                        <td>0.65</td>
+                                    </tr>
+                                    <tr>
+                                        <td>OOD Query Ratio</td>
+                                        <td>28%</td>
+                                        <td>12%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Escalation Rate</td>
+                                        <td>11.8%</td>
+                                        <td>4.1%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="key-takeaway">
+                            <strong>Key takeaway</strong>
+                            <p>Embedding drift is often <em>domain-specific</em>. Without domain-sliced evals, the system
+                                looked “healthy” while a critical segment was collapsing.</p>
+                        </div>
                     </section>
                 </div>
                 <div class="docs-footer-nav">
-                    <a href="hallucination-reduction.html" class="nav-card"><span class="label">Previous</span><span
-                            class="title">← Hallucination</span></a>
-                    <a href="../code/eval_pipeline.html" class="nav-card"><span class="label">Next</span><span
-                            class="title">Code & Implementation →</span></a>
+                    <a href="hallucination-reduction.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Hallucination Reduction</span>
+                    </a>
+                    <a href="../code/eval_pipeline.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Eval Pipeline &rarr;</span>
+                    </a>
                 </div>
             </div>
         </main>
     </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
 </body>
 
 </html>

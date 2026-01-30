@@ -4,91 +4,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Governance | AI Evals Handbook</title>
+    <title>Risk-First Scoping | AI Evals Handbook</title>
+    <meta name="description"
+        content="Consequence weighting, critical user journeys, and turning 'what if it fails?' into testable hypotheses. Match evaluation depth to business risk.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/frameworks/governance.html">
+    <meta property="og:title" content="Risk-First Scoping | AI Evals Handbook">
+    <meta property="og:description" content="Consequence weighting, critical user journeys, and turning 'what if it fails?' into testable hypotheses.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/frameworks/governance.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Risk-First Scoping | AI Evals Handbook">
+    <meta name="twitter:description" content="Consequence weighting, critical user journeys, and testable hypotheses.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/framework-page.css">
     <link rel="stylesheet" href="../css/docs.css">
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
 </head>
 
 <body>
     <header class="docs-header">
         <div class="container">
             <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="../why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
         </div>
     </header>
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="../glossary.html" class="sidebar-link">Glossary</a>
-                <a href="../faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="governance.html" class="sidebar-link active">Enterprise Governance</a>
-                <a href="drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
-                    <a href="../">Home</a><span class="separator">/</span><span>Architectures</span><span
-                        class="separator">/</span><span>Governance</span>
+                    <a href="../">Home</a><span class="separator">/</span><span>Scoping</span><span
+                        class="separator">/</span><span>Risk-First Scoping</span>
                 </div>
-                <h1>Enterprise Governance Framework</h1>
-                <p class="framework-subtitle">Moving from "cool demo" to "safe for production".</p>
+                <h1>Risk-First Scoping</h1>
+                <p class="framework-subtitle">Consequence weighting, critical user journeys, and turning "what if it fails?" into testable hypotheses.</p>
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>The governance framework uses a Complexity-Criticality matrix to decide oversight level, testing depth, and release controls.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Classify systems by complexity and criticality.</li>
+
+
+                            <li>Assign controls that match risk.</li>
+
+
+                            <li>Review and update as systems evolve.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>What is criticality?</h3>
+
+
+                        <p>Criticality reflects potential harm or business impact if the system fails.</p>
+
+
+                        <h3>What is complexity?</h3>
+
+
+                        <p>Complexity reflects how many components, dependencies, and decision paths the system has.</p>
+
+
+                        <h3>How do I choose the right controls?</h3>
+
+
+                        <p>Higher criticality requires stricter evals, audit trails, and human oversight.</p>
+
+
+                    </section>
                     <section id="matrix">
                         <h2>The Severity/Complexity Matrix</h2>
                         <p>Not all AI features require the same level of scrutiny. We categorize use cases to determine
                             the required "Evaluation Depth".</p>
 
-                        <div class="mermaid-container"
-                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px;">
-                            <pre class="mermaid">
-quadrantChart
-    title Risk Assessment Matrix
-    x-axis Low Complexity --> High Complexity
-    y-axis Low Consequence --> High Consequence
-    quadrant-1 "Human Review Required"
-    quadrant-2 "Strict Automated Gates"
-    quadrant-3 "Spot Checks & Monitoring"
-    quadrant-4 "Basic Unit Tests"
-    "Medical Advice Bot": [0.8, 0.9]
-    "Internal SQL Agent": [0.7, 0.7]
-    "Support Chatbot": [0.5, 0.4]
-    "Product Description Gen": [0.2, 0.3]
-    "Holiday Email Writer": [0.2, 0.1]
-</pre>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 860 320" role="img"
+                                aria-label="Risk assessment matrix showing complexity versus consequence">
+                                <rect x="120" y="40" width="520" height="220" fill="#ffffff"
+                                    stroke="var(--border)" stroke-width="1.5"></rect>
+                                <line class="diagram-axis" x1="380" y1="40" x2="380" y2="260"></line>
+                                <line class="diagram-axis" x1="120" y1="150" x2="640" y2="150"></line>
+
+                                <text x="120" y="22" class="diagram-note">Low Consequence</text>
+                                <text x="120" y="300" class="diagram-note">High Consequence</text>
+                                <text x="60" y="160" class="diagram-note" transform="rotate(-90 60 160)">Low Complexity</text>
+                                <text x="800" y="160" class="diagram-note" transform="rotate(90 800 160)">High Complexity</text>
+
+                                <text x="140" y="70" class="diagram-note">Basic Unit Tests</text>
+                                <text x="400" y="70" class="diagram-note">Strict Automated Gates</text>
+                                <text x="140" y="200" class="diagram-note">Spot Checks & Monitoring</text>
+                                <text x="400" y="200" class="diagram-note">Human Review Required</text>
+
+                                <circle class="diagram-dot" cx="560" cy="90" r="5"></circle>
+                                <text x="570" y="94" class="diagram-note">Medical Advice Bot</text>
+
+                                <circle class="diagram-dot" cx="520" cy="120" r="5"></circle>
+                                <text x="530" y="124" class="diagram-note">Internal SQL Agent</text>
+
+                                <circle class="diagram-dot" cx="430" cy="170" r="5"></circle>
+                                <text x="440" y="174" class="diagram-note">Support Chatbot</text>
+
+                                <circle class="diagram-dot" cx="220" cy="180" r="5"></circle>
+                                <text x="230" y="184" class="diagram-note">Product Description Gen</text>
+
+                                <circle class="diagram-dot" cx="220" cy="120" r="5"></circle>
+                                <text x="230" y="124" class="diagram-note">Holiday Email Writer</text>
+                            </svg>
+                        </div>
+                    </section>
+
+                    <section id="consequence-weighting">
+                        <h2>Consequence Weighting: Not All Errors Are Equal</h2>
+                        <p>Traditional accuracy metrics treat every query as equal. But in production:</p>
+                        <ul>
+                            <li>Query A: "Tell me a joke" &rarr; AI fails. (Annoyance)</li>
+                            <li>Query B: "Can I return this used item?" &rarr; AI lies. (Financial Loss)</li>
+                        </ul>
+                        <p>If you have 50 queries like A and 1 query like B, getting B wrong means 98% accuracy on
+                            paper, but <strong>100% failure</strong> in business terms.</p>
+
+                        <h3>The Weighted Formula</h3>
+                        <div class="formula" style="text-align: center; font-size: 1.2rem; padding: 40px; background: var(--bg-secondary); border-radius: var(--radius); margin: 20px 0;">
+                            Score = &Sigma; (Accuracy<sub>i</sub> &times; RiskWeight<sub>i</sub>) / &Sigma; RiskWeight<sub>i</sub>
+                        </div>
+                        <p>Where <code>RiskWeight</code> is derived from the estimated dollar cost or reputation risk of
+                            a failure in that category.</p>
+                    </section>
+
+                    <section id="risk-tiers">
+                        <h2>Risk Tiers</h2>
+                        <p>Most organizations use a specific tier system to assign weights.</p>
+
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 860 220" role="img"
+                                aria-label="Risk weight distribution example by tier">
+                                <text x="40" y="30" class="diagram-label">Risk Weight Distribution Example</text>
+
+                                <text x="40" y="70" class="diagram-note">Critical (Legal/Safety) - 50x</text>
+                                <rect class="diagram-bar diagram-bar-critical" x="260" y="56" width="360" height="18">
+                                </rect>
+                                <text x="630" y="70" class="diagram-note">10%</text>
+
+                                <text x="40" y="105" class="diagram-note">High (Financial/Policy) - 20x</text>
+                                <rect class="diagram-bar diagram-bar-high" x="260" y="91" width="240" height="18">
+                                </rect>
+                                <text x="510" y="105" class="diagram-note">15%</text>
+
+                                <text x="40" y="140" class="diagram-note">Medium (UX/Frustration) - 5x</text>
+                                <rect class="diagram-bar diagram-bar-medium" x="260" y="126" width="300" height="18">
+                                </rect>
+                                <text x="570" y="140" class="diagram-note">30%</text>
+
+                                <text x="40" y="175" class="diagram-note">Low (ChitChat) - 1x</text>
+                                <rect class="diagram-bar diagram-bar-low" x="260" y="161" width="360" height="18">
+                                </rect>
+                                <text x="630" y="175" class="diagram-note">45%</text>
+                            </svg>
+                        </div>
+
+                        <div class="comparison-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Tier</th>
+                                        <th>Example</th>
+                                        <th>Consequence</th>
+                                        <th>Weight</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Critical</strong></td>
+                                        <td>"How do I reset my pacemaker?"</td>
+                                        <td>Safety Risk / Lawsuit</td>
+                                        <td>50.0</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>High</strong></td>
+                                        <td>"What is the refund window?"</td>
+                                        <td>Financial Loss if wrong</td>
+                                        <td>20.0</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Medium</strong></td>
+                                        <td>"How do I contact support?"</td>
+                                        <td>User Frustration</td>
+                                        <td>5.0</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Low</strong></td>
+                                        <td>"Write a poem."</td>
+                                        <td>Minor Annoyance</td>
+                                        <td>1.0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section id="hypotheses">
+                        <h2>From Risk to Testable Hypotheses</h2>
+                        <p>Vague risks lead to vague evals. Turn "what if it fails?" into specific, testable criteria:</p>
+
+                        <div class="comparison-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Vague Risk</th>
+                                        <th>Testable Hypothesis</th>
+                                        <th>Eval Approach</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>"It might hallucinate"</td>
+                                        <td>"All claims are grounded in retrieved context"</td>
+                                        <td>Faithfulness score &gt; 0.9</td>
+                                    </tr>
+                                    <tr>
+                                        <td>"Users might get wrong info"</td>
+                                        <td>"Policy questions match official docs"</td>
+                                        <td>Golden set accuracy &gt; 95%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>"It could say something unsafe"</td>
+                                        <td>"Safety-critical queries trigger guardrails"</td>
+                                        <td>100% escalation on safety set</td>
+                                    </tr>
+                                    <tr>
+                                        <td>"Quality might degrade"</td>
+                                        <td>"Week-over-week scores don't drop &gt;5%"</td>
+                                        <td>Drift monitoring alerts</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </section>
 
@@ -105,12 +292,12 @@ quadrantChart
 
                         <h3>Level 2: Managed (The "Unit Test" Phase)</h3>
                         <ul>
-                            <li><strong>Method:</strong> deterministic regression tests (String matching).</li>
+                            <li><strong>Method:</strong> Deterministic regression tests (string matching).</li>
                             <li><strong>Dataset:</strong> Small CSV of inputs/outputs.</li>
                             <li><strong>Risk:</strong> Medium. Catches bugs, but fails to measure hallucinations.</li>
                         </ul>
 
-                        <h3>Level 3: Optimized ( The "Production" Phase)</h3>
+                        <h3>Level 3: Optimized (The "Production" Phase)</h3>
                         <ul>
                             <li><strong>Method:</strong> LLM-as-a-Judge, Semantic Similarity, RAG Metrics.</li>
                             <li><strong>Dataset:</strong> Curated "Golden Dataset" from production logs.</li>
@@ -138,16 +325,30 @@ quadrantChart
                             </p>
                         </div>
                     </section>
+
+                    <section id="implementation">
+                        <h2>Implementation</h2>
+                        <p>This is implemented by tagging your <code>GoldenDataset</code> with a <code>category</code>
+                            or <code>tier</code> field, and passing a weight map to your scorer.</p>
+                        <p><a href="../code/consequence_scorer.html" class="btn btn-sm btn-primary">View Scorer
+                                Implementation &rarr;</a></p>
+                    </section>
                 </div>
                 <div class="docs-footer-nav">
-                    <a href="human-in-the-loop.html" class="nav-card"><span class="label">Previous</span><span
-                            class="title">← Agents</span></a>
-                    <a href="consequence-weighted.html" class="nav-card"><span class="label">Next</span><span
-                            class="title">Techniques →</span></a>
+                    <a href="../ecosystem.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Where Failure Emerges</span>
+                    </a>
+                    <a href="rag-evaluation.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">RAG Evals &rarr;</span>
+                    </a>
                 </div>
             </div>
         </main>
     </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
 </body>
 
 </html>

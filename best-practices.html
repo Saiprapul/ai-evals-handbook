@@ -4,7 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Best Practices | AI Evals Handbook</title>
+    <title>Making Evals Real | AI Evals Handbook</title>
+    <meta name="description" content="Eval pipelines as first-class infrastructure. CI/CD integration, canaries, release gates, and operational practices.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/best-practices.html">
+    <meta property="og:title" content="Making Evals Real | AI Evals Handbook">
+    <meta property="og:description" content="Eval pipelines as first-class infrastructure. CI/CD, canaries, release gates.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/best-practices.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Making Evals Real | AI Evals Handbook">
+    <meta name="twitter:description" content="Eval pipelines as first-class infrastructure. CI/CD, canaries, release gates.">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/framework-page.css">
     <link rel="stylesheet" href="css/docs.css">
@@ -14,54 +24,91 @@
     <header class="docs-header">
         <div class="container">
             <a href="./" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
         </div>
     </header>
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="glossary.html" class="sidebar-link">Glossary</a>
-                <a href="faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
-                <a href="frameworks/drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="best-practices.html" class="sidebar-link active">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
-                    <a href="./">Home</a><span class="separator">/</span><span>Best Practices</span>
+                    <a href="./">Home</a>
+                    <span class="separator">/</span>
+                    <span>Operating</span>
+                    <span class="separator">/</span>
+                    <span>Making Evals Real</span>
                 </div>
                 <h1>Best Practices</h1>
                 <p class="framework-subtitle">Do's and Don'ts for production evaluation.</p>
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>Making evals real means integrating them into the product lifecycle: release gates, drift monitoring, human escalation, and feedback loops.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Automate evals in CI/CD and block regressions.</li>
+
+
+                            <li>Monitor live drift and human escalations.</li>
+
+
+                            <li>Continuously refresh data and rubrics.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>How do I prevent alert fatigue?</h3>
+
+
+                        <p>Use severity tiers, rate limits, and only alert on changes that require action.</p>
+
+
+                        <h3>What belongs in a release gate?</h3>
+
+
+                        <p>High-risk KPIs like critical hallucination rate, policy adherence, and security constraints.</p>
+
+
+                        <h3>How do I scale evals?</h3>
+
+
+                        <p>Prioritize the top-risk workflows, then expand with automation and targeted golden sets.</p>
+
+
+                    </section>
                     <section>
                         <h2>The Golden Rules</h2>
                         <ul class="checklist">
@@ -85,14 +132,20 @@
                     </section>
                 </div>
                 <div class="docs-footer-nav">
-                    <a href="code/confidence_calibrator.html" class="nav-card"><span class="label">Previous</span><span
-                            class="title">← Code</span></a>
-                    <a href="getting-started.html" class="nav-card"><span class="label">Next</span><span
-                            class="title">Start Over →</span></a>
+                    <a href="kpi-dashboard.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Evals as Product</span>
+                    </a>
+                    <a href="case-studies/query-drift-rag.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Query Drift &rarr;</span>
+                    </a>
                 </div>
             </div>
         </main>
     </div>
+    <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
 </body>
 
 </html>

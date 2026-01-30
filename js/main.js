@@ -114,5 +114,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Reading time calculation
+    const content = document.querySelector('.docs-content .content, .docs-content .content-grid');
+    const h1 = document.querySelector('.docs-content h1');
+
+    if (content && h1) {
+        const text = content.textContent || '';
+        const wordCount = text.trim().split(/\s+/).length;
+        const readingTime = Math.ceil(wordCount / 200);
+
+        if (readingTime > 0) {
+            const readingTimeEl = document.createElement('p');
+            readingTimeEl.className = 'reading-time';
+            readingTimeEl.textContent = `${readingTime} min read`;
+            h1.insertAdjacentElement('afterend', readingTimeEl);
+        }
+    }
+
+    // Add anchor links to h2 headings with IDs
+    document.querySelectorAll('h2[id]').forEach(heading => {
+        const anchor = document.createElement('a');
+        anchor.className = 'anchor-link';
+        anchor.href = `#${heading.id}`;
+        anchor.textContent = '#';
+        anchor.setAttribute('aria-label', `Link to ${heading.textContent}`);
+        heading.insertAdjacentElement('afterbegin', anchor);
+    });
+
     console.log('AI Evals Handbook loaded');
 });

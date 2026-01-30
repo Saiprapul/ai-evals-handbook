@@ -7,6 +7,15 @@
     <title>AI Evaluation FAQ | AI Evals Handbook</title>
     <meta name="description"
         content="Frequently asked questions about AI evaluation. Common questions about testing LLMs, measuring accuracy, and building eval systems.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/faq.html">
+    <meta property="og:title" content="AI Evaluation FAQ | AI Evals Handbook">
+    <meta property="og:description" content="Frequently asked questions about AI evaluation. Testing LLMs, measuring accuracy, building eval systems.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/faq.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AI Evaluation FAQ | AI Evals Handbook">
+    <meta name="twitter:description" content="Frequently asked questions about AI evaluation.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -22,50 +31,23 @@
         <div class="container">
             <a href="./" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
             <div class="header-actions">
+                <a href="why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
                 <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
             </div>
         </div>
     </header>
 
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="glossary.html" class="sidebar-link">Glossary</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
 
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
-                    <a href="./">Home</a><span class="separator">/</span><span>FAQ</span>
+                    <a href="./">Home</a>
+                    <span class="separator">/</span>
+                    <span>Reference</span>
+                    <span class="separator">/</span>
+                    <span>FAQ</span>
                 </div>
 
                 <h1>Frequently Asked Questions</h1>
@@ -74,6 +56,69 @@
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>This page answers common questions about evaluation setup, ownership, cost, and rollout. Start small, focus on risk, and iterate with real data.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Start with one high-risk workflow and a small labeled set.</li>
+
+
+                            <li>Define a rubric and automate what you can.</li>
+
+
+                            <li>Scale once you have clear signals and owners.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ Highlights</h2>
+
+
+                        <h3>How do I start evals with limited time?</h3>
+
+
+                        <p>Pick a single high-impact workflow, define a clear rubric, and evaluate 50 to 200 examples before release.</p>
+
+
+                        <h3>Who should own evals?</h3>
+
+
+                        <p>A product or eval lead typically owns the rubric and KPIs, with engineering and support closing the loop.</p>
+
+
+                        <h3>How expensive is evaluation?</h3>
+
+
+                        <p>Early stages are low cost and mostly labeling time; costs rise only when you scale automated judging.</p>
+
+
+                    </section>
                     <section id="basics">
                         <h2>Basics</h2>
                         <div class="faq-item">
@@ -105,19 +150,17 @@
                 </div>
 
                 <div class="docs-footer-nav">
-                    <a href="best-practices.html" class="nav-card">
+                    <a href="glossary.html" class="nav-card">
                         <span class="label">Previous</span>
-                        <span class="title">← Best Practices</span>
+                        <span class="title">&larr; Glossary</span>
                     </a>
-                    <a href="./" class="nav-card">
-                        <span class="label">Next</span>
-                        <span class="title">Home →</span>
-                    </a>
+                    <div></div>
                 </div>
             </div>
         </main>
     </div>
     <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
 </body>
 
 </html>

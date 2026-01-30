@@ -5,6 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Evaluation Glossary | AI Evals Handbook</title>
+    <meta name="description" content="Common terms in AI evaluation and safety. Definitions for drift, hallucination, faithfulness, LLM-as-Judge, and more.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/glossary.html">
+    <meta property="og:title" content="AI Evaluation Glossary | AI Evals Handbook">
+    <meta property="og:description" content="Common terms in AI evaluation and safety. Drift, hallucination, faithfulness, LLM-as-Judge.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/glossary.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AI Evaluation Glossary | AI Evals Handbook">
+    <meta name="twitter:description" content="Common terms in AI evaluation and safety.">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/framework-page.css">
     <link rel="stylesheet" href="css/docs.css">
@@ -14,54 +24,91 @@
     <header class="docs-header">
         <div class="container">
             <a href="./" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
         </div>
     </header>
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="glossary.html" class="sidebar-link active">Glossary</a>
-                <a href="faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
-                <a href="frameworks/drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
-                    <a href="./">Home</a><span class="separator">/</span><span>Glossary</span>
+                    <a href="./">Home</a>
+                    <span class="separator">/</span>
+                    <span>Reference</span>
+                    <span class="separator">/</span>
+                    <span>Glossary</span>
                 </div>
                 <h1>Glossary of Terms</h1>
                 <p class="framework-subtitle">Common terms in AI evaluation and safety.</p>
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>This glossary defines core evaluation terms so teams can align on metrics, failure modes, and workflows.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Use these definitions to standardize eval discussions.</li>
+
+
+                            <li>Map each term to a measurable metric or rubric.</li>
+
+
+                            <li>Keep the glossary updated as your system evolves.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>Faithfulness vs. accuracy - what is the difference?</h3>
+
+
+                        <p>Accuracy measures correctness against a reference answer; faithfulness measures whether the answer is supported by evidence.</p>
+
+
+                        <h3>What is the RAG triad?</h3>
+
+
+                        <p>The RAG triad is Query, Context, and Response - each must be evaluated separately to diagnose failures.</p>
+
+
+                        <h3>What is drift?</h3>
+
+
+                        <p>Drift is a shift in data distribution or embedding space that degrades performance over time.</p>
+
+
+                    </section>
                     <section class="glossary-grid">
                         <div class="glossary-item">
                             <h3>Drift</h3>
@@ -86,14 +133,20 @@
                     </section>
                 </div>
                 <div class="docs-footer-nav">
-                    <a href="ecosystem.html" class="nav-card"><span class="label">Previous</span><span class="title">←
-                            The Ecosystem</span></a>
-                    <a href="frameworks/rag-evaluation.html" class="nav-card"><span class="label">Next</span><span
-                            class="title">RAG Systems →</span></a>
+                    <a href="code/confidence_calibrator.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Calibrator</span>
+                    </a>
+                    <a href="faq.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">FAQ &rarr;</span>
+                    </a>
                 </div>
             </div>
         </main>
     </div>
+    <script src="js/main.js"></script>
+    <script src="js/sidebar.js"></script>
 </body>
 
 </html>

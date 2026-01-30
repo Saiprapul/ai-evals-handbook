@@ -5,100 +5,363 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Case Study: Reducing Hallucinations | AI Evals Handbook</title>
+    <meta name="description" content="Composite case study of grounding a legal compliance assistant and reducing hallucinations from 45% to 2%.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/case-studies/hallucination-reduction.html">
+    <meta property="og:title" content="Case Study: Reducing Hallucinations | AI Evals Handbook">
+    <meta property="og:description" content="Composite case study: grounding a compliance assistant from 45% to 2% hallucination rate.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/case-studies/hallucination-reduction.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Case Study: Reducing Hallucinations | AI Evals Handbook">
+    <meta name="twitter:description" content="Composite case study: grounding a compliance assistant and reducing hallucinations.">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/framework-page.css">
     <link rel="stylesheet" href="../css/docs.css">
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
 </head>
 
 <body>
     <header class="docs-header">
         <div class="container">
             <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="../why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
         </div>
     </header>
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="../glossary.html" class="sidebar-link">Glossary</a>
-                <a href="../faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="../frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="../frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="../frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
-                <a href="../frameworks/drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="../frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="../frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="hallucination-reduction.html" class="sidebar-link active">Hallucination Reduction</a>
-                <a href="embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
-                    <a href="../">Home</a><span class="separator">/</span><span>Case Studies</span><span
-                        class="separator">/</span><span>Hallucination</span>
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <span>Case Studies</span>
+                    <span class="separator">/</span>
+                    <span>Hallucination Reduction</span>
                 </div>
-                <h1>Zero to 2%: Reducing Hallucinations</h1>
-                <p class="framework-subtitle">A systematic approach to grounding a legal chatbot.</p>
+                <h1>Case Study Archetype: Reducing Hallucinations to 2%</h1>
+                <p class="framework-subtitle">A composite case study of grounding a legal compliance assistant.</p>
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content">
+
+
                     <section>
-                        <h2>Error Distribution (Initial)</h2>
-                        <div class="mermaid-container"
-                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px;">
-                            <pre class="mermaid">
-pie title Analysis of 500 Failures
-    "Invented Facts (Hallucination)" : 45
-    "Wrong Context Retrieved" : 30
-    "Reasoning Error" : 15
-    "Refusal Error" : 10
-</pre>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>This composite case study shows how a compliance assistant reduced hallucinations by enforcing citations and judge-based penalties.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Hallucinations were defined by unsupported claims.</li>
+
+
+                            <li>Citation requirements and judge penalties raised faithfulness.</li>
+
+
+                            <li>Critical error rate dropped below 1% after six weeks.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>What counts as a hallucination?</h3>
+
+
+                        <p>Any claim that cannot be supported by retrieved policy text, especially if it contradicts policy.</p>
+
+
+                        <h3>How was faithfulness measured?</h3>
+
+
+                        <p>Claims were mapped to evidence spans and penalized if citations were missing or incorrect.</p>
+
+
+                        <h3>Which controls reduced risk most?</h3>
+
+
+                        <p>Mandatory citations, domain filtering, and LLM-judge penalties for uncited claims.</p>
+
+
+                    </section>
+                    <div class="callout">
+                        <h4>About this case study</h4>
+                        <ul>
+                            <li><strong>Composite archetype:</strong> Synthesized from multiple production deployments
+                                to illustrate real-world eval workflows.</li>
+                            <li><strong>Data:</strong> All numbers are illustrative and anonymized to show evaluation
+                                impact.</li>
+                            <li><strong>System:</strong> Legal compliance assistant for HR policy questions.</li>
+                        </ul>
+                    </div>
+
+                    <section id="snapshot">
+                        <h2>System Snapshot</h2>
+                        <ul>
+                            <li>Traffic: ~180k questions/month across 14 policy domains.</li>
+                            <li>Stack: RAG with policy PDF ingestion, top-5 passages, answer + citations.</li>
+                            <li>Risk: incorrect advice triggers compliance exposure and audit findings.</li>
+                            <li>Success criteria: high faithfulness + citations; low critical hallucination rate.</li>
+                        </ul>
+                    </section>
+
+                    <section id="definition">
+                        <h2>Definition of Hallucination (and Consequence)</h2>
+                        <p>Hallucination was defined as <strong>any claim not supported by retrieved policy text</strong>.
+                            Claims that contradicted policy or cited the wrong statute were labeled critical.</p>
+                        <div class="performance-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Severity</th>
+                                        <th>Definition</th>
+                                        <th>Rate (Initial)</th>
+                                        <th>Consequence</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Critical</td>
+                                        <td>Contradicts policy or fabricates legal requirement</td>
+                                        <td>18%</td>
+                                        <td>Audit risk / legal escalation</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Major</td>
+                                        <td>Missing citation or incomplete policy section</td>
+                                        <td>17%</td>
+                                        <td>Manual review required</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Minor</td>
+                                        <td>Formatting or ambiguous wording</td>
+                                        <td>10%</td>
+                                        <td>Low impact</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </section>
 
-                    <section>
-                        <h2>The Solution</h2>
-                        <ol>
-                            <li>Implemented <strong>Ragas Faithfulness</strong> metric.</li>
-                            <li>Added citation requirement to system prompt.</li>
-                            <li>Used <strong>LLM-as-Judge</strong> to penalize uncited claims.</li>
-                        </ol>
+                    <section id="initial-errors">
+                        <h2>Error Distribution (Initial)</h2>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 860 220" role="img"
+                                aria-label="Analysis of 500 failures by category">
+                                <text x="40" y="30" class="diagram-label">Analysis of 500 Failures</text>
+
+                                <text x="40" y="70" class="diagram-note">Invented Facts (Hallucination)</text>
+                                <rect class="diagram-bar diagram-bar-critical" x="320" y="56" width="360" height="18">
+                                </rect>
+                                <text x="690" y="70" class="diagram-note">45%</text>
+
+                                <text x="40" y="105" class="diagram-note">Wrong Context Retrieved</text>
+                                <rect class="diagram-bar diagram-bar-high" x="320" y="91" width="240" height="18">
+                                </rect>
+                                <text x="570" y="105" class="diagram-note">30%</text>
+
+                                <text x="40" y="140" class="diagram-note">Reasoning Error</text>
+                                <rect class="diagram-bar diagram-bar-medium" x="320" y="126" width="180" height="18">
+                                </rect>
+                                <text x="510" y="140" class="diagram-note">15%</text>
+
+                                <text x="40" y="175" class="diagram-note">Refusal Error</text>
+                                <rect class="diagram-bar diagram-bar-low" x="320" y="161" width="120" height="18"></rect>
+                                <text x="450" y="175" class="diagram-note">10%</text>
+                            </svg>
+                        </div>
+                        <p>Most failures were hallucinations, but the <em>critical</em> cases were concentrated in a few
+                            HR policy topics (leave policy exceptions, contractor classification, and termination).</p>
+                    </section>
+
+                    <section id="eval-design">
+                        <h2>Eval Design That Made This Actionable</h2>
+                        <ul>
+                            <li>1,200-query golden set balanced by policy domain and severity tier.</li>
+                            <li>Faithfulness score (Ragas-style) + citation coverage (answer spans must map to sources).</li>
+                            <li>LLM-as-judge rubric: “Does each claim cite the supporting clause?”</li>
+                            <li>Automatic escalation if critical hallucination rate exceeds 2% weekly.</li>
+                        </ul>
+                    </section>
+
+                    <section id="methodology">
+                        <h2>Measurement Methodology (How This Would Be Measured)</h2>
+                        <ul>
+                            <li>Golden set balanced across policy domains; reviewers label evidence spans and severity.</li>
+                            <li>Faithfulness computed as claim-to-evidence overlap; citation coverage computed as cited spans / total claims.</li>
+                            <li>LLM-as-judge rubric used for consistency checks; disagreements sampled for human audit.</li>
+                            <li>Operational impact from audit logs: escalations, review time, and user trust survey scores.</li>
+                        </ul>
+                    </section>
+
+                    <section id="dashboard">
+                        <h2>Operational Dashboard (Before Fix)</h2>
+                        <div class="diagram-card">
+                            <img src="../images/case-studies/hallucination-dashboard.svg"
+                                alt="Mock compliance dashboard showing hallucination risk metrics before fixes"
+                                style="width: 100%; height: auto; border-radius: 10px;">
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">
+                                Illustrative dashboard (synthetic data).
+                            </p>
+                        </div>
+                        <div class="kpi-grid">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Faithfulness</div>
+                                <div class="kpi-value">0.61</div>
+                                <div class="kpi-trend down">Below 0.80 target</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Citation Coverage</div>
+                                <div class="kpi-value">12%</div>
+                                <div class="kpi-trend down">-68 pts vs target</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Critical Hallucinations</div>
+                                <div class="kpi-value">18%</div>
+                                <div class="kpi-trend down">9x above limit</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Escalation Rate</div>
+                                <div class="kpi-value">6.2%</div>
+                                <div class="kpi-trend up">+3.1 pts</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Avg. Resolution Time</div>
+                                <div class="kpi-value">9.4 min</div>
+                                <div class="kpi-trend up">+3.5 min</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">User Trust Score</div>
+                                <div class="kpi-value">3.1 / 5</div>
+                                <div class="kpi-trend down">-1.2</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="interventions">
+                        <h2>Interventions (and Their Measured Impact)</h2>
+                        <div class="intervention-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Change</th>
+                                        <th>Why</th>
+                                        <th>Measured Impact</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Mandatory citations in answer template</td>
+                                        <td>Force evidence grounding</td>
+                                        <td>+52 pts citation coverage</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Passage filtering by policy domain</td>
+                                        <td>Reduce cross-policy confusion</td>
+                                        <td>-9 pts critical hallucinations</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Answer length cap + “I don’t know” policy</td>
+                                        <td>Prevent speculative wording</td>
+                                        <td>-6 pts hallucinations</td>
+                                    </tr>
+                                    <tr>
+                                        <td>LLM-as-judge penalty for uncited claims</td>
+                                        <td>Enforce evidence consistency</td>
+                                        <td>+0.18 faithfulness</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section id="results">
+                        <h2>Results After 6 Weeks</h2>
+                        <div class="performance-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>Before</th>
+                                        <th>After</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Hallucination Rate</td>
+                                        <td>45%</td>
+                                        <td>2%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Critical Hallucinations</td>
+                                        <td>18%</td>
+                                        <td>0.6%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Faithfulness</td>
+                                        <td>0.61</td>
+                                        <td>0.91</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Citation Coverage</td>
+                                        <td>12%</td>
+                                        <td>94%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Escalation Rate</td>
+                                        <td>6.2%</td>
+                                        <td>1.1%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="key-takeaway">
+                            <strong>Key takeaway</strong>
+                            <p>“Reduce hallucinations” became a measurable, auditable objective. Evals turned a vague
+                                quality goal into concrete controls with clear business impact.</p>
+                        </div>
                     </section>
                 </div>
                 <div class="docs-footer-nav">
-                    <a href="query-drift-rag.html" class="nav-card"><span class="label">Previous</span><span
-                            class="title">← Query Drift</span></a>
-                    <a href="embedding-drift.html" class="nav-card"><span class="label">Next</span><span
-                            class="title">Embedding Drift →</span></a>
+                    <a href="query-drift-rag.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Query Drift</span>
+                    </a>
+                    <a href="embedding-drift.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Embedding Drift &rarr;</span>
+                    </a>
                 </div>
             </div>
         </main>
     </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
 </body>
 
 </html>

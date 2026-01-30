@@ -5,100 +5,357 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Case Study: Query Drift in RAG | AI Evals Handbook</title>
+    <meta name="description" content="Composite case study of holiday-season query drift: how a 92% accurate RAG system dropped to 68% overnight.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/case-studies/query-drift-rag.html">
+    <meta property="og:title" content="Case Study: Query Drift in RAG | AI Evals Handbook">
+    <meta property="og:description" content="Composite case study of holiday-season query drift and its operational impact.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/case-studies/query-drift-rag.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Case Study: Query Drift in RAG | AI Evals Handbook">
+    <meta name="twitter:description" content="Composite case study of holiday-season query drift and impact.">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/framework-page.css">
     <link rel="stylesheet" href="../css/docs.css">
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
 </head>
 
 <body>
     <header class="docs-header">
         <div class="container">
             <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="../why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
         </div>
     </header>
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="../glossary.html" class="sidebar-link">Glossary</a>
-                <a href="../faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="../frameworks/rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="../frameworks/human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="../frameworks/governance.html" class="sidebar-link">Enterprise Governance</a>
-                <a href="../frameworks/drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="../frameworks/consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="../frameworks/llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="query-drift-rag.html" class="sidebar-link active">Query Drift</a>
-                <a href="hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
-                    <a href="../">Home</a><span class="separator">/</span><span>Case Studies</span><span
-                        class="separator">/</span><span>Query Drift</span>
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <span>Case Studies</span>
+                    <span class="separator">/</span>
+                    <span>Query Drift</span>
                 </div>
-                <h1>Case Study: The "Holiday Season" Drift</h1>
-                <p class="framework-subtitle">How a 92% accurate RAG system dropped to 68% overnight.</p>
+                <h1>Case Study Archetype: The "Holiday Season" Drift</h1>
+                <p class="framework-subtitle">A composite case study showing how a 92% accurate RAG system dropped to 68% overnight.</p>
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content">
+
+
                     <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>This composite case study shows how holiday query drift collapsed retrieval quality and how evals isolated the intent cluster and guided fixes.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Intent mix shifted toward gift returns and policy edge cases.</li>
+
+
+                            <li>Retrieval mapped to irrelevant API docs, tanking adherence.</li>
+
+
+                            <li>Evals drove seasonal routing and policy-first retrieval fixes.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>Where did the drift occur?</h3>
+
+
+                        <p>Drift concentrated in holiday-specific intents like gift receipts and no-payment returns.</p>
+
+
+                        <h3>Which metrics flagged the incident?</h3>
+
+
+                        <p>Policy adherence and context precision dropped sharply, alongside a spike in escalations and refunds.</p>
+
+
+                        <h3>What changed after evals?</h3>
+
+
+                        <p>The system added seasonal intent routing, lexical fallback, and expanded golden sets for holiday queries.</p>
+
+
+                    </section>
+                    <div class="callout">
+                        <h4>About this case study</h4>
+                        <ul>
+                            <li><strong>Composite archetype:</strong> Synthesized from multiple production deployments
+                                to illustrate real-world eval workflows.</li>
+                            <li><strong>Data:</strong> Numbers are illustrative and anonymized to show how evals
+                                surfaced the issue and quantified impact.</li>
+                            <li><strong>System:</strong> Retail support RAG assistant handling order, return, and policy
+                                questions.</li>
+                        </ul>
+                    </div>
+
+                    <section id="snapshot">
+                        <h2>System Snapshot</h2>
+                        <ul>
+                            <li>Traffic: ~1.2M sessions/month, 64% self-serve deflection target.</li>
+                            <li>Stack: hybrid retrieval (BM25 + embeddings), top-6 chunks, policy-first prompt.</li>
+                            <li>Knowledge base: 18k policy and catalog articles, updated weekly.</li>
+                            <li>Evaluation: weekly golden set (1,800 queries) + 5% shadow eval on live traffic.</li>
+                            <li>Failure cost: incorrect return guidance triggers refunds, chargebacks, and CS escalations.</li>
+                        </ul>
+                    </section>
+
+                    <section id="timeline">
                         <h2>The Timeline</h2>
-                        <div class="mermaid-container"
-                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px;">
-                            <pre class="mermaid">
-timeline
-    title 48 Hours of Drift
-    Normal Operations : 92% Accuracy : "User queries standard"
-    Black Friday Starts : 85% Accuracy : "Traffic spikes 4x"
-    The Incident : 68% Accuracy : "New query pattern: 'Gift Receipt?'"
-    Discovery : Alerts Firing : "Team notices low adherence"
-    Fix Deployed : 94% Accuracy : "Added 'returns' to knowledge base"
-</pre>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 900 240" role="img"
+                                aria-label="Timeline of drift over 48 hours with accuracy changes">
+                                <line class="diagram-axis" x1="60" y1="120" x2="840" y2="120"></line>
+
+                                <circle class="diagram-dot" cx="120" cy="120" r="6"></circle>
+                                <text x="120" y="92" text-anchor="middle" class="diagram-label">92%</text>
+                                <text x="120" y="150" text-anchor="middle" class="diagram-note">Normal Ops</text>
+                                <text x="120" y="168" text-anchor="middle" class="diagram-note">Oct 18</text>
+
+                                <circle class="diagram-dot" cx="280" cy="120" r="6"></circle>
+                                <text x="280" y="92" text-anchor="middle" class="diagram-label">85%</text>
+                                <text x="280" y="150" text-anchor="middle" class="diagram-note">Black Friday</text>
+                                <text x="280" y="168" text-anchor="middle" class="diagram-note">Nov 24</text>
+
+                                <circle class="diagram-dot" cx="440" cy="120" r="6"></circle>
+                                <text x="440" y="92" text-anchor="middle" class="diagram-label">68%</text>
+                                <text x="440" y="150" text-anchor="middle" class="diagram-note">Incident</text>
+                                <text x="440" y="168" text-anchor="middle" class="diagram-note">Nov 25</text>
+
+                                <circle class="diagram-dot" cx="600" cy="120" r="6"></circle>
+                                <text x="600" y="92" text-anchor="middle" class="diagram-label">Alerts</text>
+                                <text x="600" y="150" text-anchor="middle" class="diagram-note">Discovery</text>
+                                <text x="600" y="168" text-anchor="middle" class="diagram-note">Nov 25</text>
+
+                                <circle class="diagram-dot" cx="760" cy="120" r="6"></circle>
+                                <text x="760" y="92" text-anchor="middle" class="diagram-label">94%</text>
+                                <text x="760" y="150" text-anchor="middle" class="diagram-note">Fix Deployed</text>
+                                <text x="760" y="168" text-anchor="middle" class="diagram-note">Nov 27</text>
+                            </svg>
+                        </div>
+                        <p>Accuracy collapsed in under 24 hours as the query mix flipped from order status to gift
+                            returns, exchanges, and holiday policy edge cases.</p>
+                    </section>
+
+                    <section id="drift">
+                        <h2>Where the Drift Happened (and Why It Mattered)</h2>
+                        <p>Drift was not global — it was concentrated in a new intent cluster. The semantic retriever
+                            mapped “gift receipt” and “no original payment method” to developer docs about receipts and
+                            API receipts, starving the LLM of policy context.</p>
+                        <div class="performance-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Intent Cluster</th>
+                                        <th>Share (Oct)</th>
+                                        <th>Share (Black Friday)</th>
+                                        <th>Impact</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Order tracking</td>
+                                        <td>58%</td>
+                                        <td>22%</td>
+                                        <td><span class="status-badge warning">Medium</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Returns &amp; exchanges</td>
+                                        <td>12%</td>
+                                        <td>34%</td>
+                                        <td><span class="status-badge warning">High</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gift receipts / no payment method</td>
+                                        <td>3%</td>
+                                        <td>18%</td>
+                                        <td><span class="status-badge error">Critical</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Promo / refund policy edge cases</td>
+                                        <td>7%</td>
+                                        <td>14%</td>
+                                        <td><span class="status-badge warning">High</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fraud / chargeback</td>
+                                        <td>2%</td>
+                                        <td>7%</td>
+                                        <td><span class="status-badge error">Critical</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p>Query embedding drift score (Jensen-Shannon divergence on intent clusters) jumped from 0.08
+                            to 0.42, crossing the 0.25 alert threshold.</p>
+                    </section>
+
+                    <section id="evals">
+                        <h2>Eval Design That Caught It</h2>
+                        <ul>
+                            <li>Shadow eval sampled 5% of live traffic and scored with a policy adherence rubric.</li>
+                            <li>Severity weighting: refund and fraud intents carried 5x penalty vs order tracking.</li>
+                            <li>Retrieval checks: context precision &gt;= 0.70 required for “policy” intents.</li>
+                            <li>Alerts triggered on any 10+ point drop in adherence or 2x escalation rate.</li>
+                        </ul>
+                    </section>
+
+                    <section id="methodology">
+                        <h2>Measurement Methodology (How This Would Be Measured)</h2>
+                        <ul>
+                            <li>Weekly golden set + shadow eval on 5% of live traffic, stratified by intent.</li>
+                            <li>Policy adherence scored with a rubric: correct policy, correct exception handling, citations present.</li>
+                            <li>Retrieval metrics computed on labeled relevance: precision@k and recall@k by intent slice.</li>
+                            <li>Operational impact derived from support logs: escalations, refunds, and CSAT deltas.</li>
+                        </ul>
+                    </section>
+
+                    <section id="dashboard">
+                        <h2>Impact Dashboard</h2>
+                        <div class="diagram-card">
+                            <img src="../images/case-studies/query-drift-dashboard.svg"
+                                alt="Mock dashboard showing KPIs and intent mix during the query drift incident"
+                                style="width: 100%; height: auto; border-radius: 10px;">
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;">
+                                Illustrative dashboard (synthetic data).
+                            </p>
+                        </div>
+                        <div class="kpi-grid">
+                            <div class="kpi-card">
+                                <div class="kpi-title">Answer Accuracy</div>
+                                <div class="kpi-value">92% → 68%</div>
+                                <div class="kpi-trend down">-24 pts during drift</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Policy Adherence</div>
+                                <div class="kpi-value">88% → 41%</div>
+                                <div class="kpi-trend down">-47 pts during drift</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Context Precision</div>
+                                <div class="kpi-value">0.74 → 0.38</div>
+                                <div class="kpi-trend down">-0.36</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Escalation Rate</div>
+                                <div class="kpi-value">9% → 24%</div>
+                                <div class="kpi-trend up">2.7x increase</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">Refund Exceptions</div>
+                                <div class="kpi-value">1.2% → 4.8%</div>
+                                <div class="kpi-trend up">4x increase</div>
+                            </div>
+                            <div class="kpi-card">
+                                <div class="kpi-title">CSAT (Post-Chat)</div>
+                                <div class="kpi-value">4.6 → 3.2</div>
+                                <div class="kpi-trend down">-1.4</div>
+                            </div>
+                        </div>
+                        <div class="performance-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>Baseline (Oct)</th>
+                                        <th>Drift (Nov 25)</th>
+                                        <th>After Fix (Nov 27)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Answer Accuracy</td>
+                                        <td>92%</td>
+                                        <td>68%</td>
+                                        <td>94%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Policy Adherence</td>
+                                        <td>88%</td>
+                                        <td>41%</td>
+                                        <td>90%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Context Precision</td>
+                                        <td>0.74</td>
+                                        <td>0.38</td>
+                                        <td>0.76</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Escalation Rate</td>
+                                        <td>9%</td>
+                                        <td>24%</td>
+                                        <td>8%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </section>
 
-                    <section>
-                        <h2>The Root Cause</h2>
-                        <p>Our retrieval system was optimized for semantic similarity on technical support. "Gift
-                            receipt" queries were semantically matched to "Receipt generation API", misleading the LLM.
-                        </p>
+                    <section id="fix">
+                        <h2>What Changed Because of Evals</h2>
+                        <ol>
+                            <li>Added a seasonal intent detector to route “gift receipt” and “no payment method” queries
+                                to a dedicated policy pack.</li>
+                            <li>Introduced hybrid retrieval with a lexical fallback for policy keywords.</li>
+                            <li>Inserted a “policy citation required” guardrail; responses without citations auto-escalated.</li>
+                            <li>Expanded the golden set with 400 holiday queries and added a “refund exception” category.</li>
+                            <li>Lowered alert thresholds during known seasonal shifts.</li>
+                        </ol>
+                        <div class="key-takeaway">
+                            <strong>Key takeaway</strong>
+                            <p>Drift wasn’t about model quality — it was about intent mix. Evals isolated the failure
+                                cluster, making the fix targeted and fast.</p>
+                        </div>
                     </section>
                 </div>
                 <div class="docs-footer-nav">
-                    <a href="../frameworks/rag-evaluation.html" class="nav-card"><span
-                            class="label">Previous</span><span class="title">← RAG Framework</span></a>
-                    <a href="hallucination-reduction.html" class="nav-card"><span class="label">Next</span><span
-                            class="title">Hallucination Reduction →</span></a>
+                    <a href="../best-practices.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Making Evals Real</span>
+                    </a>
+                    <a href="hallucination-reduction.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Hallucination Reduction &rarr;</span>
+                    </a>
                 </div>
             </div>
         </main>
     </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
 </body>
 
 </html>

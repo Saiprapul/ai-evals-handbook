@@ -4,10 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drift Monitoring | AI Evals Handbook</title>
+    <title>6a. Drift Monitoring | AI Evals Handbook</title>
     <meta name="description"
         content="Learn to detect query distribution drift and embedding drift in production AI systems before they impact users.">
-
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/frameworks/drift-monitoring.html">
+    <meta property="og:title" content="6a. Drift Monitoring | AI Evals Handbook">
+    <meta property="og:description" content="Production data drifts constantly. Detect shifts before they impact users.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/frameworks/drift-monitoring.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="6a. Drift Monitoring | AI Evals Handbook">
+    <meta name="twitter:description" content="Production data drifts constantly. Detect shifts before they impact users.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -23,62 +31,95 @@
         <div class="container">
             <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
             <div class="header-actions">
+                <a href="../why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
                 <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
             </div>
         </div>
     </header>
 
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="../glossary.html" class="sidebar-link">Glossary</a>
-                <a href="../faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="rag-evaluation.html" class="sidebar-link">RAG Systems</a>
-                <a href="human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="governance.html" class="sidebar-link">Enterprise Governance</a>
-                <a href="drift-monitoring.html" class="sidebar-link active">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
 
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
-                    <a href="../">Home</a><span class="separator">/</span><span>Architectures</span><span
-                        class="separator">/</span><span>Drift Monitoring</span>
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <span>Operating</span>
+                    <span class="separator">/</span>
+                    <span>6a. Drift Monitoring</span>
                 </div>
 
-                <h1>Drift Monitoring</h1>
+                <h1>6a. Drift Monitoring</h1>
                 <p class="framework-subtitle">Production data drifts constantly. Your evals must drift with it. Detect
                     shifts before they impact users.</p>
 
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>Drift monitoring detects shifts in query distribution and embedding space before they cause quality regressions.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Track cluster distribution shifts and similarity trends.</li>
+
+
+                            <li>Alert on drift thresholds tied to risk.</li>
+
+
+                            <li>Trigger retraining, guardrails, or human review.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>What is a drift score?</h3>
+
+
+                        <p>A drift score measures how much the current query distribution diverges from a baseline, often with Jensen-Shannon divergence.</p>
+
+
+                        <h3>How often should drift be checked?</h3>
+
+
+                        <p>Daily for high-volume systems; weekly for lower-volume systems or stable domains.</p>
+
+
+                        <h3>What actions follow an alert?</h3>
+
+
+                        <p>Investigate the slice, update the dataset, and decide between retrieval fixes, retraining, or escalation.</p>
+
+
+                    </section>
                     <section id="types">
                         <h2>Types of Drift in AI Systems</h2>
                         <p>
@@ -132,15 +173,43 @@
                         <p>Monitor retrieval confidence. A gradual decline in average Top-K cosine similarity indicates
                             the embedding model is losing its grasp on the domain.</p>
 
-                        <div class="mermaid-container"
-                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; margin: 24px 0;">
-                            <pre class="mermaid">
-graph TD
-    Q[Query] --> E[Embedding Model]
-    E --> V[Vector Store]
-    V -->|Scores < 0.7| Flag[Flag for Review]
-    V -->|Trend Declining| Alert[Trigger Retraining]
-</pre>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 900 240" role="img"
+                                aria-label="Embedding drift monitoring flow from query to vector store to actions">
+                                <defs>
+                                    <marker id="drift-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6"
+                                        markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"></path>
+                                    </marker>
+                                </defs>
+
+                                <rect class="diagram-node" x="40" y="90" width="150" height="60" rx="12"></rect>
+                                <text x="115" y="122" text-anchor="middle" class="diagram-label">Query</text>
+
+                                <rect class="diagram-node" x="230" y="90" width="170" height="60" rx="12"></rect>
+                                <text x="315" y="122" text-anchor="middle" class="diagram-label">Embedding Model</text>
+
+                                <rect class="diagram-node diagram-node-accent" x="440" y="90" width="160" height="60"
+                                    rx="12"></rect>
+                                <text x="520" y="122" text-anchor="middle" class="diagram-label">Vector Store</text>
+
+                                <rect class="diagram-node" x="660" y="40" width="190" height="60" rx="12"></rect>
+                                <text x="755" y="72" text-anchor="middle" class="diagram-label">Flag for Review</text>
+                                <text x="755" y="92" text-anchor="middle" class="diagram-note">Scores &lt; 0.7</text>
+
+                                <rect class="diagram-node" x="660" y="140" width="190" height="60" rx="12"></rect>
+                                <text x="755" y="172" text-anchor="middle" class="diagram-label">Trigger Retraining</text>
+                                <text x="755" y="192" text-anchor="middle" class="diagram-note">Trend declining</text>
+
+                                <path class="diagram-line-solid" d="M 190 120 L 230 120"
+                                    marker-end="url(#drift-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 400 120 L 440 120"
+                                    marker-end="url(#drift-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 600 120 L 660 70"
+                                    marker-end="url(#drift-arrow)"></path>
+                                <path class="diagram-line-solid" d="M 600 120 L 660 170"
+                                    marker-end="url(#drift-arrow)"></path>
+                            </svg>
                         </div>
                     </section>
 
@@ -158,25 +227,21 @@ graph TD
                 </div>
 
                 <div class="docs-footer-nav">
-                    <a href="governance.html" class="nav-card">
+                    <a href="../interpreting-results.html" class="nav-card">
                         <span class="label">Previous</span>
-                        <span class="title">← Governance</span>
+                        <span class="title">&larr; Reading Results</span>
                     </a>
-                    <a href="rag-evaluation.html" class="nav-card">
+                    <a href="../kpi-dashboard.html" class="nav-card">
                         <span class="label">Next</span>
-                        <span class="title">RAG Systems →</span>
+                        <span class="title">Evals as Product &rarr;</span>
                     </a>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Mermaid JS -->
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
     <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
 </body>
 
 </html>

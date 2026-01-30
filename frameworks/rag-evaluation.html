@@ -7,6 +7,15 @@
     <title>RAG Evaluation Framework | AI Evals Handbook</title>
     <meta name="description"
         content="A comprehensive guide to evaluating RAG systems. Learn about the 'RAG Triad', specific metrics like Context Precision and Faithfulness, and how to debug retrieval failures in production.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/frameworks/rag-evaluation.html">
+    <meta property="og:title" content="RAG Evaluation Framework | AI Evals Handbook">
+    <meta property="og:description" content="When retrieval fails, generation hallucinates. Evaluate both or evaluate neither.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/frameworks/rag-evaluation.html">
+    <meta property="og:site_name" content="AI Evals Handbook">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="RAG Evaluation Framework | AI Evals Handbook">
+    <meta name="twitter:description" content="When retrieval fails, generation hallucinates. Evaluate both or evaluate neither.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -22,56 +31,23 @@
         <div class="container">
             <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
             <div class="header-actions">
+                <a href="../why-evals-matter.html" class="btn btn-sm btn-primary">Start Here</a>
                 <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
             </div>
         </div>
     </header>
 
     <div class="docs-layout">
-        <aside class="docs-sidebar">
-            <div class="sidebar-group">
-                <div class="sidebar-title">Foundations</div>
-                <a href="../getting-started.html" class="sidebar-link">Getting Started</a>
-                <a href="../ecosystem.html" class="sidebar-link">The Ecosystem</a>
-                <a href="../glossary.html" class="sidebar-link">Glossary</a>
-                <a href="../faq.html" class="sidebar-link">FAQ</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Architectures</div>
-                <a href="rag-evaluation.html" class="sidebar-link active">RAG Systems</a>
-                <a href="human-in-the-loop.html" class="sidebar-link">Agentic AI</a>
-                <a href="governance.html" class="sidebar-link">Enterprise Governance</a>
-                <a href="drift-monitoring.html" class="sidebar-link">Drift Monitoring</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Techniques</div>
-                <a href="consequence-weighted.html" class="sidebar-link">Consequence Scoring</a>
-                <a href="llm-as-judge.html" class="sidebar-link">LLM-as-Judge</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Case Studies</div>
-                <a href="../case-studies/query-drift-rag.html" class="sidebar-link">Query Drift</a>
-                <a href="../case-studies/hallucination-reduction.html" class="sidebar-link">Hallucination Reduction</a>
-                <a href="../case-studies/embedding-drift.html" class="sidebar-link">Embedding Drift</a>
-            </div>
-            <div class="sidebar-group">
-                <div class="sidebar-title">Implementation</div>
-                <a href="../code/eval_pipeline.html" class="sidebar-link">EvalPipeline</a>
-                <a href="../code/consequence_scorer.html" class="sidebar-link">Scorers</a>
-                <a href="../code/rag_evaluator.html" class="sidebar-link">RAG Evaluator</a>
-                <a href="../code/confidence_calibrator.html" class="sidebar-link">Calibrator</a>
-                <a href="../best-practices.html" class="sidebar-link">Best Practices</a>
-            </div>
-        </aside>
+        <aside class="docs-sidebar" id="sidebar"></aside>
 
         <main class="docs-main">
             <div class="docs-content">
                 <div class="breadcrumbs">
                     <a href="../">Home</a>
                     <span class="separator">/</span>
-                    <a href="#">Architectures</a>
+                    <span>Eval Design</span>
                     <span class="separator">/</span>
-                    <span>RAG Systems</span>
+                    <span>RAG Evals</span>
                 </div>
 
                 <h1>RAG Evaluation Strategies</h1>
@@ -80,6 +56,69 @@
                 <hr style="margin: 2rem 0; border: none; border-bottom: 1px solid var(--border);">
 
                 <div class="content">
+
+
+                    <section>
+
+
+                        <h2 id="quick-answer">Quick Answer</h2>
+
+
+                        <p>RAG systems must be evaluated on retrieval and generation. The RAG triad - Query, Context, Response - prevents confusing retrieval errors with model errors.</p>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="tldr">TL;DR</h2>
+
+
+                        <ul>
+
+
+                            <li>Measure context precision and recall.</li>
+
+
+                            <li>Evaluate faithfulness and answer correctness.</li>
+
+
+                            <li>Debug failures by isolating retrieval vs. generation.</li>
+
+
+                        </ul>
+
+
+                    </section>
+
+
+                    <section>
+
+
+                        <h2 id="faq">FAQ</h2>
+
+
+                        <h3>What is the RAG triad?</h3>
+
+
+                        <p>It separates evaluation into the user query, retrieved context, and final response so you can find the failing layer.</p>
+
+
+                        <h3>Which metrics matter most?</h3>
+
+
+                        <p>Context precision/recall for retrieval and faithfulness for generation are usually the highest signal.</p>
+
+
+                        <h3>How do I debug a poor answer?</h3>
+
+
+                        <p>Check whether the correct document was retrieved. If not, fix retrieval; if yes, fix prompting or reasoning.</p>
+
+
+                    </section>
                     <section id="introduction">
                         <h2>The "Why" of RAG Evals</h2>
                         <p>Evaluate a RAG system as a single black box, and you'll never know <em>why</em> it failed.
@@ -87,18 +126,41 @@
                         <p>We break RAG evaluation into the <strong>RAG Triad</strong>: Query, Context, and Response.
                         </p>
 
-                        <div class="mermaid-container"
-                            style="background: var(--bg-secondary); padding: 24px; border-radius: 8px; border: 1px solid var(--border); margin: 24px 0; display: flex; justify-content: center;">
-                            <pre class="mermaid">
-graph LR
-    User[User Query] --> Retriever
-    Retriever -->|Context| LLM
-    User --> LLM
-    LLM --> Answer
-    
-    linkStyle 1 stroke:#6366f1,stroke-width:2px;
-    linkStyle 3 stroke:#10b981,stroke-width:2px;
-</pre>
+                        <div class="diagram-card">
+                            <svg class="diagram-svg" viewBox="0 0 900 220" role="img"
+                                aria-label="RAG flow from user query to retriever to LLM and answer">
+                                <defs>
+                                    <marker id="rag-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6"
+                                        markerHeight="6" orient="auto-start-reverse">
+                                        <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"></path>
+                                    </marker>
+                                </defs>
+                                <rect class="diagram-node" x="40" y="70" width="160" height="60" rx="12"></rect>
+                                <text x="120" y="103" text-anchor="middle" class="diagram-label">User Query</text>
+
+                                <rect class="diagram-node" x="250" y="70" width="160" height="60" rx="12"></rect>
+                                <text x="330" y="103" text-anchor="middle" class="diagram-label">Retriever</text>
+
+                                <rect class="diagram-node diagram-node-accent" x="460" y="70" width="160" height="60"
+                                    rx="12"></rect>
+                                <text x="540" y="95" text-anchor="middle" class="diagram-label">LLM</text>
+                                <text x="540" y="115" text-anchor="middle" class="diagram-note">Reason + Answer</text>
+
+                                <rect class="diagram-node" x="670" y="70" width="180" height="60" rx="12"></rect>
+                                <text x="760" y="103" text-anchor="middle" class="diagram-label">Final Answer</text>
+
+                                <path class="diagram-line-solid" d="M 200 100 L 250 100" marker-end="url(#rag-arrow)">
+                                </path>
+                                <path class="diagram-line-solid" d="M 410 100 L 460 100" marker-end="url(#rag-arrow)">
+                                </path>
+                                <path class="diagram-line-solid" d="M 620 100 L 670 100" marker-end="url(#rag-arrow)">
+                                </path>
+
+                                <path class="diagram-line-accent" d="M 120 70 L 120 40 L 540 40 L 540 70"
+                                    marker-end="url(#rag-arrow)"></path>
+                                <text x="330" y="32" text-anchor="middle" class="diagram-note">User question</text>
+                                <text x="330" y="122" text-anchor="middle" class="diagram-note">Context</text>
+                            </svg>
                         </div>
                     </section>
 
@@ -182,25 +244,21 @@ graph LR
                 </div>
 
                 <div class="docs-footer-nav">
-                    <a href="../ecosystem.html" class="nav-card">
+                    <a href="governance.html" class="nav-card">
                         <span class="label">Previous</span>
-                        <span class="title">← The Ecosystem</span>
+                        <span class="title">&larr; Risk-First Scoping</span>
                     </a>
-                    <a href="human-in-the-loop.html" class="nav-card">
+                    <a href="llm-as-judge.html" class="nav-card">
                         <span class="label">Next</span>
-                        <span class="title">Agentic AI →</span>
+                        <span class="title">LLM-as-Judge &rarr;</span>
                     </a>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Mermaid JS -->
-    <script type="module">
-        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-        mermaid.initialize({ startOnLoad: true, theme: 'neutral' });
-    </script>
     <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
 </body>
 
 </html>
