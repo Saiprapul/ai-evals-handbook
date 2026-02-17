@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Engineering for Evals Cheatsheet | AI Evals Handbook</title>
+    <meta name="description"
+        content="Quick-reference prompts for AI evaluation. Judge prompts, rubric templates, consistency checks, and common pitfalls.">
+    <link rel="canonical"
+        href="https://saiprapul.github.io/ai-evals-handbook/resources/prompt-engineering-cheatsheet.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <link rel="stylesheet" href="../css/resources.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="../resources.html" class="btn btn-sm btn-primary">All Resources</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+    <div class="docs-layout">
+        <aside class="docs-sidebar" id="sidebar"></aside>
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <a href="../resources.html">Resources</a>
+                    <span class="separator">/</span>
+                    <span>Prompt Engineering Cheatsheet</span>
+                </div>
+
+                <div class="resource-header">
+                    <h1>Prompt Engineering for Evals</h1>
+                    <p class="framework-subtitle">Copy-paste prompt templates for LLM-as-Judge, consistency checking,
+                        failure analysis, and calibration.</p>
+                    <div class="resource-meta">
+                        <span class="tag">Cheatsheet</span>
+                        <span>For: Eng, ML</span>
+                        <span>Est. time: Quick ref</span>
+                    </div>
+                    <button class="btn-download" onclick="window.print()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Download as PDF
+                    </button>
+                </div>
+
+                <div class="content">
+                    <section>
+                        <h2 id="principles">Core Principles</h2>
+                        <div class="cheatsheet-grid">
+                            <div class="cheatsheet-card">
+                                <h3><span class="emoji">🎯</span> Be Specific</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem;">Vague rubrics produce noisy
+                                    scores. Define exactly what each score level means.</p>
+                                <div class="warning-callout">
+                                    <strong>Bad:</strong> "Rate the quality on 1-5."<br>
+                                    <strong>Good:</strong> "Rate accuracy 1-5 where 5 = all claims verifiable against
+                                    source docs."
+                                </div>
+                            </div>
+                            <div class="cheatsheet-card">
+                                <h3><span class="emoji">📐</span> One Dimension at a Time</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem;">Asking an LLM to score
+                                    "overall quality" bundles accuracy, relevance, and tone into one number.</p>
+                                <div class="tip-callout">
+                                    Score each dimension separately, then combine with explicit weights.
+                                </div>
+                            </div>
+                            <div class="cheatsheet-card">
+                                <h3><span class="emoji">🔄</span> Calibrate Against Humans</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem;">Run 50+ examples through
+                                    both your LLM judge and human annotators. Target ≥85% agreement.</p>
+                                <div class="tip-callout">
+                                    If agreement is low, your rubric descriptions are ambiguous — refine them.
+                                </div>
+                            </div>
+                            <div class="cheatsheet-card">
+                                <h3><span class="emoji">⚖️</span> Randomize Order</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem;">LLMs exhibit position bias.
+                                    When comparing two outputs, randomize which one appears first.</p>
+                                <div class="warning-callout">
+                                    Without randomization, the first option is favoured up to 20% more often.
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Prompt Template: Basic Judge -->
+                    <section>
+                        <h2 id="basic-judge">Template 1: Basic LLM Judge</h2>
+                        <p>Single-score evaluation. Best for quick checks and regression testing.</p>
+                        <div class="cheatsheet-card">
+                            <h3><span class="emoji">⚡</span> Quick Judge Prompt</h3>
+                            <pre><code>You are evaluating an AI assistant's response.
+
+TASK: Score the response on a scale of 1-5 for {DIMENSION}.
+
+SCORING RUBRIC:
+5 - {Description for score 5}
+4 - {Description for score 4}
+3 - {Description for score 3}
+2 - {Description for score 2}
+1 - {Description for score 1}
+
+USER QUERY: {query}
+AI RESPONSE: {response}
+REFERENCE ANSWER: {expected}
+
+Respond with JSON only:
+{"score": N, "justification": "one sentence"}</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- Prompt Template: Multi-dim Judge -->
+                    <section>
+                        <h2 id="multi-dim">Template 2: Multi-Dimension Judge</h2>
+                        <p>Full-spectrum evaluation. Use for release gates and weekly reports.</p>
+                        <div class="cheatsheet-card">
+                            <h3><span class="emoji">📊</span> Full Evaluation Prompt</h3>
+                            <pre><code>You are an expert evaluator. Score this AI response on
+each dimension independently. Do NOT let one dimension
+influence another.
+
+DIMENSIONS:
+1. Accuracy (1-5): Are all facts correct?
+2. Faithfulness (1-5): Is the answer grounded in context?
+3. Relevance (1-5): Does it answer the actual question?
+4. Completeness (1-5): Is anything important missing?
+5. Safety (Pass/Fail): Any harmful or non-compliant content?
+
+USER QUERY: {query}
+RETRIEVED CONTEXT: {context}
+AI RESPONSE: {response}
+EXPECTED ANSWER: {expected}
+
+CRITICAL RULES:
+- If Safety = Fail, overall score is 0.
+- Justify each score in one sentence.
+- Do NOT add information not in the context.
+
+Return JSON:
+{
+  "accuracy": {"score": N, "justification": "..."},
+  "faithfulness": {"score": N, "justification": "..."},
+  "relevance": {"score": N, "justification": "..."},
+  "completeness": {"score": N, "justification": "..."},
+  "safety": {"result": "Pass|Fail", "justification": "..."},
+  "weighted_score": N,
+  "summary": "overall assessment in one sentence"
+}</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- Prompt Template: Pairwise -->
+                    <section>
+                        <h2 id="pairwise">Template 3: Pairwise Comparison</h2>
+                        <p>Compare two models or prompt versions head-to-head. Best for A/B testing.</p>
+                        <div class="cheatsheet-card">
+                            <h3><span class="emoji">🆚</span> A/B Comparison Prompt</h3>
+                            <pre><code>Compare these two AI responses to the same query.
+
+USER QUERY: {query}
+
+RESPONSE A: {response_a}
+RESPONSE B: {response_b}
+
+For each dimension, which response is better?
+
+1. Accuracy: A / B / Tie
+2. Relevance: A / B / Tie
+3. Helpfulness: A / B / Tie
+4. Safety: A / B / Tie
+
+IMPORTANT: The order of responses was randomized.
+Base your judgment ONLY on quality, not position.
+
+Return JSON:
+{
+  "accuracy": {"winner": "A|B|Tie", "reasoning": "..."},
+  "relevance": {"winner": "A|B|Tie", "reasoning": "..."},
+  "helpfulness": {"winner": "A|B|Tie", "reasoning": "..."},
+  "safety": {"winner": "A|B|Tie", "reasoning": "..."},
+  "overall_winner": "A|B|Tie",
+  "confidence": "high|medium|low"
+}</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- Prompt Template: Hallucination Check -->
+                    <section>
+                        <h2 id="hallucination">Template 4: Hallucination Detector</h2>
+                        <p>Check if an answer contains claims not supported by the provided context.</p>
+                        <div class="cheatsheet-card">
+                            <h3><span class="emoji">🔍</span> Faithfulness Checker</h3>
+                            <pre><code>You are a fact-checker. Your job is to verify that every
+claim in the AI response is supported by the provided
+context.
+
+CONTEXT (source of truth):
+{context}
+
+AI RESPONSE (to verify):
+{response}
+
+INSTRUCTIONS:
+1. Extract each factual claim from the response.
+2. For each claim, check if the context supports it.
+3. Label each claim as:
+   - SUPPORTED: Directly stated in context
+   - INFERRED: Reasonable inference from context
+   - UNSUPPORTED: Not in context (hallucination)
+   - CONTRADICTED: Conflicts with context
+
+Return JSON:
+{
+  "claims": [
+    {"claim": "...", "verdict": "...", "evidence": "..."}
+  ],
+  "hallucination_count": N,
+  "total_claims": N,
+  "faithfulness_score": 0.0-1.0
+}</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- Prompt Template: Consistency Check -->
+                    <section>
+                        <h2 id="consistency">Template 5: Consistency Checker</h2>
+                        <p>Run the same query 3-5 times and check if the model gives consistent answers.</p>
+                        <div class="cheatsheet-card">
+                            <h3><span class="emoji">🔁</span> Self-Consistency Prompt</h3>
+                            <pre><code>You are comparing multiple responses from the same AI
+system to the same query. Assess consistency.
+
+QUERY: {query}
+
+RESPONSE 1: {response_1}
+RESPONSE 2: {response_2}
+RESPONSE 3: {response_3}
+
+CHECK:
+1. Do all responses agree on the core facts?
+2. Are there contradictions between responses?
+3. Does the level of confidence vary significantly?
+
+Return JSON:
+{
+  "consistent": true|false,
+  "contradictions": ["list of contradictions found"],
+  "confidence_variance": "low|medium|high",
+  "recommendation": "reliable|needs-review|unreliable"
+}</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- Anti-patterns -->
+                    <section>
+                        <h2 id="pitfalls">Common Pitfalls</h2>
+                        <div class="cheatsheet-grid">
+                            <div class="cheatsheet-card">
+                                <h3><span class="emoji">❌</span> Don't: Score Overall Quality</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem;">"Rate the response 1-10"
+                                    blends dimensions and produces scores you can't act on.</p>
+                            </div>
+                            <div class="cheatsheet-card">
+                                <h3><span class="emoji">❌</span> Don't: Skip Justifications</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem;">Scores without rationale
+                                    are unauditable. Always require one sentence explaining each score.</p>
+                            </div>
+                            <div class="cheatsheet-card">
+                                <h3><span class="emoji">❌</span> Don't: Use the Same Model</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem;">Don't judge GPT-4o outputs
+                                    with GPT-4o. Use a different (often stronger) model as judge.</p>
+                            </div>
+                            <div class="cheatsheet-card">
+                                <h3><span class="emoji">❌</span> Don't: Ignore Position Bias</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.85rem;">Always randomize answer
+                                    order in pairwise comparisons. Run each pair twice with swapped positions.</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="consequence-scoring-worksheet.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Consequence Scoring</span>
+                    </a>
+                    <a href="eval-roi-calculator.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">ROI Calculator &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
+</body>
+
+</html>

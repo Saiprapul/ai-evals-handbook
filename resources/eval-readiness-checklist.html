@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eval Readiness Checklist | AI Evals Handbook</title>
+    <meta name="description"
+        content="A comprehensive pre-launch checklist for AI evaluation. Ensure your eval system covers data quality, metrics, infrastructure, and governance before shipping.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/resources/eval-readiness-checklist.html">
+    <meta property="og:title" content="Eval Readiness Checklist | AI Evals Handbook">
+    <meta property="og:description" content="Pre-launch checklist for AI evaluation readiness.">
+    <meta property="og:type" content="article">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <link rel="stylesheet" href="../css/resources.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="../resources.html" class="btn btn-sm btn-primary">All Resources</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+    <div class="docs-layout">
+        <aside class="docs-sidebar" id="sidebar"></aside>
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <a href="../resources.html">Resources</a>
+                    <span class="separator">/</span>
+                    <span>Eval Readiness Checklist</span>
+                </div>
+
+                <div class="resource-header">
+                    <h1>Eval Readiness Checklist</h1>
+                    <p class="framework-subtitle">Is your AI system ready for production? Walk through this checklist
+                        before every release.</p>
+                    <div class="resource-meta">
+                        <span class="tag">Template</span>
+                        <span>For: PM, Eng Lead, QA</span>
+                        <span>Est. time: 30 min</span>
+                    </div>
+                    <button class="btn-download" onclick="window.print()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Download as PDF
+                    </button>
+                </div>
+
+                <div id="progress-tracker" style="margin-bottom: 32px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <strong style="font-size: 0.9rem;">Progress</strong>
+                        <span class="progress-text" id="progress-label">0 / 32 complete</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <!-- Section 1: Data & Test Sets -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">📊</span> Data & Test Sets</h2>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c1" onchange="updateProgress()">
+                            <label for="c1"><strong>Golden set defined</strong><span>50-200 curated examples covering
+                                    critical user journeys and known edge cases.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c2" onchange="updateProgress()">
+                            <label for="c2"><strong>Edge cases cataloged</strong><span>Adversarial inputs, ambiguous
+                                    queries, multi-language, and out-of-scope requests.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c3" onchange="updateProgress()">
+                            <label for="c3"><strong>Data freshness policy</strong><span>Schedule defined for refreshing
+                                    test sets (e.g., monthly review, quarterly expansion).</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c4" onchange="updateProgress()">
+                            <label for="c4"><strong>Synthetic vs. real data ratio documented</strong><span>Balance
+                                    between synthetic test cases and real production samples is explicit.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c5" onchange="updateProgress()">
+                            <label for="c5"><strong>Label quality reviewed</strong><span>Inter-annotator agreement
+                                    measured (≥0.8 Cohen's kappa) or single-expert reviewed.</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Metrics & Rubrics -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">📏</span> Metrics & Rubrics</h2>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c6" onchange="updateProgress()">
+                            <label for="c6"><strong>Primary KPI defined</strong><span>Single north-star metric aligned
+                                    with business impact (e.g., consequence-weighted accuracy).</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c7" onchange="updateProgress()">
+                            <label for="c7"><strong>Support metrics identified</strong><span>Latency, cost-per-eval,
+                                    retrieval precision, faithfulness, or domain-specific metrics.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c8" onchange="updateProgress()">
+                            <label for="c8"><strong>Rubric documented</strong><span>Clear grading criteria for
+                                    qualitative assessments. Each dimension has 3-5 score levels.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c9" onchange="updateProgress()">
+                            <label for="c9"><strong>Baselines established</strong><span>Current performance benchmarked.
+                                    "Good enough" thresholds agreed with stakeholders.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c10" onchange="updateProgress()">
+                            <label for="c10"><strong>Failure taxonomy created</strong><span>Error categories defined
+                                    (e.g., hallucination, refusal, latency spike, wrong persona).</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Evaluation Infrastructure -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">⚙️</span> Evaluation Infrastructure</h2>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c11" onchange="updateProgress()">
+                            <label for="c11"><strong>Eval pipeline automated</strong><span>Tests run on every PR or
+                                    nightly, not just ad-hoc manual checks.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c12" onchange="updateProgress()">
+                            <label for="c12"><strong>LLM-as-Judge configured</strong><span>Judge model selected, prompt
+                                    tuned, calibrated against human ratings (≥85% agreement).</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c13" onchange="updateProgress()">
+                            <label for="c13"><strong>Regression tests in CI</strong><span>Known failure cases locked as
+                                    regression tests. New failures added within 48 hours.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c14" onchange="updateProgress()">
+                            <label for="c14"><strong>Results stored & versioned</strong><span>Eval results tied to model
+                                    version, prompt version, and retrieval config.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c15" onchange="updateProgress()">
+                            <label for="c15"><strong>Canary deployment planned</strong><span>New model versions tested
+                                    on 5-10% traffic before full rollout.</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Section 4: Monitoring & Drift -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">📡</span> Monitoring & Drift</h2>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c16" onchange="updateProgress()">
+                            <label for="c16"><strong>Query distribution tracked</strong><span>Monitoring for shifts in
+                                    topic, intent, or complexity of incoming queries.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c17" onchange="updateProgress()">
+                            <label for="c17"><strong>Embedding drift alerts set</strong><span>Cosine similarity or
+                                    distribution distance triggers configured.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c18" onchange="updateProgress()">
+                            <label for="c18"><strong>Human escalation rate monitored</strong><span>Rising escalation
+                                    rates trigger investigation (>15% threshold recommended).</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c19" onchange="updateProgress()">
+                            <label for="c19"><strong>Confidence calibration reviewed</strong><span>Model confidence
+                                    aligns with actual accuracy. Overconfident failures flagged.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c20" onchange="updateProgress()">
+                            <label for="c20"><strong>Refresh cadence defined</strong><span>Monthly golden set review +
+                                    quarterly deep audit scheduled.</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Section 5: Governance & Communication -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">🏛️</span> Governance & Communication</h2>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c21" onchange="updateProgress()">
+                            <label for="c21"><strong>Eval owner assigned</strong><span>One person (PM or Eng Lead) owns
+                                    the eval suite, rubric, and release gate.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c22" onchange="updateProgress()">
+                            <label for="c22"><strong>Release gate defined</strong><span>Clear pass/fail criteria: "Don't
+                                    ship if consequence-weighted accuracy < X%."</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c23" onchange="updateProgress()">
+                            <label for="c23"><strong>Stakeholder reporting cadence set</strong><span>Weekly or
+                                    sprint-level eval reports going to engineering and product
+                                    leadership.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c24" onchange="updateProgress()">
+                            <label for="c24"><strong>Incident response plan</strong><span>What happens when evals reveal
+                                    a critical failure in production? On-call defined.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c25" onchange="updateProgress()">
+                            <label for="c25"><strong>Compliance alignment checked</strong><span>Eval requirements mapped
+                                    to regulatory frameworks (SOC2, HIPAA, EU AI Act).</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Section 6: Human-in-the-Loop -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">👤</span> Human-in-the-Loop</h2>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c26" onchange="updateProgress()">
+                            <label for="c26"><strong>Confidence threshold for escalation set</strong><span>Below what
+                                    score does the system escalate to a human reviewer?</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c27" onchange="updateProgress()">
+                            <label for="c27"><strong>Human review sample rate defined</strong><span>Percentage of
+                                    "passed" outputs still randomly reviewed (5-10% recommended).</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c28" onchange="updateProgress()">
+                            <label for="c28"><strong>Feedback loop implemented</strong><span>Human corrections feed back
+                                    into golden set and rubric updates.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c29" onchange="updateProgress()">
+                            <label for="c29"><strong>Annotator guidelines documented</strong><span>Clear instructions
+                                    for human reviewers, including examples for each score level.</span></label>
+                        </div>
+                    </div>
+
+                    <!-- Section 7: Pre-Launch Final Check -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">🚀</span> Pre-Launch Final Check</h2>
+
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c30" onchange="updateProgress()">
+                            <label for="c30"><strong>All critical test cases pass</strong><span>Zero failures in
+                                    high-consequence scenarios.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c31" onchange="updateProgress()">
+                            <label for="c31"><strong>Performance regression checked</strong><span>New version ≥ previous
+                                    version on all primary metrics.</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="c32" onchange="updateProgress()">
+                            <label for="c32"><strong>Sign-off obtained</strong><span>Eval owner and product lead have
+                                    reviewed and approved the eval report.</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="../resources.html" class="nav-card">
+                        <span class="label">Back</span>
+                        <span class="title">&larr; All Resources</span>
+                    </a>
+                    <a href="golden-set-template.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Golden Set Template &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script>
+        function updateProgress() {
+            const total = document.querySelectorAll('.checklist-item input[type="checkbox"]').length;
+            const checked = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked').length;
+            const pct = Math.round((checked / total) * 100);
+            document.getElementById('progress-fill').style.width = pct + '%';
+            document.getElementById('progress-label').textContent = checked + ' / ' + total + ' complete';
+        }
+    </script>
+</body>
+
+</html>

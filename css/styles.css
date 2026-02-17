@@ -71,16 +71,34 @@ body {
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-weight: 600;
     line-height: 1.3;
     color: var(--text-primary);
 }
 
-h1 { font-size: 2.5rem; letter-spacing: -0.025em; }
-h2 { font-size: 1.875rem; letter-spacing: -0.02em; }
-h3 { font-size: 1.375rem; }
-h4 { font-size: 1.125rem; }
+h1 {
+    font-size: 2.5rem;
+    letter-spacing: -0.025em;
+}
+
+h2 {
+    font-size: 1.875rem;
+    letter-spacing: -0.02em;
+}
+
+h3 {
+    font-size: 1.375rem;
+}
+
+h4 {
+    font-size: 1.125rem;
+}
 
 p {
     color: var(--text-secondary);
@@ -252,6 +270,125 @@ a:hover {
 
 .hero-bg {
     display: none;
+}
+
+:root {
+    --content-width: 100%;
+    --sidebar-width: 0px;
+}
+
+.container {
+    padding: 0 16px;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+}
+
+/* Navigation */
+.nav-links {
+    display: none;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-primary);
+    flex-direction: column;
+    padding: 24px;
+    border-bottom: none;
+    z-index: 999;
+    overflow-y: auto;
+}
+
+.nav-links.active {
+    display: flex;
+}
+
+.nav-toggle {
+    display: flex;
+}
+
+/* Hero */
+.hero {
+    padding: 60px 0 40px;
+}
+
+.hero-title {
+    font-size: 2.25rem;
+}
+
+/* Grids */
+.frameworks-grid,
+.case-studies-grid,
+.problem-grid,
+.code-cards {
+    grid-template-columns: 1fr;
+}
+
+/* Framework Page */
+.content-grid {
+    grid-template-columns: 1fr;
+}
+
+.toc {
+    display: none;
+    /* Hide TOC on mobile for now, or move to bottom/collapse */
+}
+
+/* Docs Sidebar Fixes */
+.docs-sidebar {
+    top: 64px;
+    height: calc(100vh - 64px);
+}
+
+.docs-main {
+    padding: 24px 16px;
+}
+
+/* Header adjustments */
+.docs-header .container {
+    padding: 0 16px;
+}
+}
+
+/* Mobile Sidebar Toggle Button (injected via JS) */
+.sidebar-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius);
+    margin-right: 12px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+}
+
+.sidebar-toggle:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        display: flex;
+    }
+}
+
+/* Mobile Menu Open State */
+body.mobile-menu-open {
+    overflow: hidden;
 }
 
 /* Buttons */
@@ -573,7 +710,7 @@ a:hover {
     border-radius: 4px;
 }
 
-.demo-scenario > p {
+.demo-scenario>p {
     font-size: 0.9rem;
     margin-bottom: 12px;
     color: var(--text-secondary);
@@ -602,8 +739,13 @@ a:hover {
     font-size: 0.85rem;
 }
 
-.metric-value.low { color: var(--success); }
-.metric-value.high { color: var(--error); }
+.metric-value.low {
+    color: var(--success);
+}
+
+.metric-value.high {
+    color: var(--error);
+}
 
 /* Comparison Bars */
 .comparison {
@@ -741,7 +883,7 @@ a:hover {
     color: var(--text-primary);
 }
 
-.case-study-content > p {
+.case-study-content>p {
     font-size: 0.875rem;
     margin-bottom: 14px;
     line-height: 1.6;
@@ -801,12 +943,30 @@ a:hover {
     color: #e2e8f0;
 }
 
-.code-preview .keyword { color: #c084fc; }
-.code-preview .string { color: #86efac; }
-.code-preview .number { color: #fcd34d; }
-.code-preview .comment { color: #64748b; font-style: italic; }
-.code-preview .function { color: #7dd3fc; }
-.code-preview .class-name { color: #fcd34d; }
+.code-preview .keyword {
+    color: #c084fc;
+}
+
+.code-preview .string {
+    color: #86efac;
+}
+
+.code-preview .number {
+    color: #fcd34d;
+}
+
+.code-preview .comment {
+    color: #64748b;
+    font-style: italic;
+}
+
+.code-preview .function {
+    color: #7dd3fc;
+}
+
+.code-preview .class-name {
+    color: #fcd34d;
+}
 
 /* Code Cards */
 .code-cards {

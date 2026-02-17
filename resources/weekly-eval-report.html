@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Eval Report Template | AI Evals Handbook</title>
+    <meta name="description"
+        content="Template for communicating AI evaluation results to stakeholders. Structured format for metrics, trends, risks, and action items.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/resources/weekly-eval-report.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <link rel="stylesheet" href="../css/resources.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="../resources.html" class="btn btn-sm btn-primary">All Resources</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+    <div class="docs-layout">
+        <aside class="docs-sidebar" id="sidebar"></aside>
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <a href="../resources.html">Resources</a>
+                    <span class="separator">/</span>
+                    <span>Weekly Eval Report</span>
+                </div>
+
+                <div class="resource-header">
+                    <h1>Weekly Eval Report Template</h1>
+                    <p class="framework-subtitle">Communicate evaluation results to stakeholders clearly and
+                        consistently. Fill in this template each week.</p>
+                    <div class="resource-meta">
+                        <span class="tag">Template</span>
+                        <span>For: PM, Ops, Leadership</span>
+                        <span>Est. time: 15 min / week</span>
+                    </div>
+                    <button class="btn-download" onclick="window.print()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Download as PDF
+                    </button>
+                </div>
+
+                <div class="content">
+                    <!-- Report Header Section -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">📋</span> Report Header</h2>
+                        <div style="overflow-x: auto;">
+                            <table class="template-table">
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 180px;"><strong>Report Period</strong></td>
+                                        <td class="editable" contenteditable="true">Week of [DATE] – [DATE]</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>System / Product</strong></td>
+                                        <td class="editable" contenteditable="true">[Your AI system name]</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Report Owner</strong></td>
+                                        <td class="editable" contenteditable="true">[Name, Role]</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Overall Status</strong></td>
+                                        <td class="editable" contenteditable="true">🟢 Green / 🟡 Yellow / 🔴 Red</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Model Version</strong></td>
+                                        <td class="editable" contenteditable="true">[e.g., v2.3.1 + gpt-4o-mini]</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Key Metrics -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">📊</span> Key Metrics</h2>
+                        <div style="overflow-x: auto;">
+                            <table class="template-table">
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>Target</th>
+                                        <th>This Week</th>
+                                        <th>Last Week</th>
+                                        <th>Trend</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>CW Accuracy</strong></td>
+                                        <td class="score editable" contenteditable="true">≥ 92%</td>
+                                        <td class="score editable" contenteditable="true">93.2%</td>
+                                        <td class="score editable" contenteditable="true">91.8%</td>
+                                        <td class="score">↑</td>
+                                        <td class="score editable" contenteditable="true">🟢</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Faithfulness</strong></td>
+                                        <td class="score editable" contenteditable="true">≥ 4.0/5</td>
+                                        <td class="score editable" contenteditable="true">4.2</td>
+                                        <td class="score editable" contenteditable="true">4.1</td>
+                                        <td class="score">↑</td>
+                                        <td class="score editable" contenteditable="true">🟢</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Hallucination Rate</strong></td>
+                                        <td class="score editable" contenteditable="true">≤ 3%</td>
+                                        <td class="score editable" contenteditable="true">2.1%</td>
+                                        <td class="score editable" contenteditable="true">2.4%</td>
+                                        <td class="score">↓</td>
+                                        <td class="score editable" contenteditable="true">🟢</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Human Escalation Rate</strong></td>
+                                        <td class="score editable" contenteditable="true">≤ 12%</td>
+                                        <td class="score editable" contenteditable="true">14.3%</td>
+                                        <td class="score editable" contenteditable="true">11.9%</td>
+                                        <td class="score">↑</td>
+                                        <td class="score editable" contenteditable="true">🟡</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>P95 Latency</strong></td>
+                                        <td class="score editable" contenteditable="true">≤ 3s</td>
+                                        <td class="score editable" contenteditable="true">2.4s</td>
+                                        <td class="score editable" contenteditable="true">2.3s</td>
+                                        <td class="score">→</td>
+                                        <td class="score editable" contenteditable="true">🟢</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Highlights -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">✅</span> Highlights</h2>
+                        <ul style="padding-left: 20px; color: var(--text-secondary);">
+                            <li contenteditable="true" style="padding: 4px 0;">CW accuracy improved 1.4% after prompt
+                                refinement for product category queries.</li>
+                            <li contenteditable="true" style="padding: 4px 0;">New regression tests added for 8
+                                previously failing edge cases.</li>
+                            <li contenteditable="true" style="padding: 4px 0;">[Add your highlights here]</li>
+                        </ul>
+                    </div>
+
+                    <!-- Risks & Issues -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">⚠️</span> Risks & Issues</h2>
+                        <div style="overflow-x: auto;">
+                            <table class="template-table">
+                                <thead>
+                                    <tr>
+                                        <th>Issue</th>
+                                        <th>Severity</th>
+                                        <th>Impact</th>
+                                        <th>Action</th>
+                                        <th>Owner</th>
+                                        <th>ETA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="editable" contenteditable="true">Escalation rate spiked for billing
+                                            queries</td>
+                                        <td class="score editable" contenteditable="true">🟡 Med</td>
+                                        <td class="editable" contenteditable="true">2.4% increase in human review volume
+                                        </td>
+                                        <td class="editable" contenteditable="true">Investigate billing doc retrieval
+                                            pipeline</td>
+                                        <td class="editable" contenteditable="true">@eng-lead</td>
+                                        <td class="editable" contenteditable="true">EOW</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="editable" contenteditable="true">[Add risk]</td>
+                                        <td class="score editable" contenteditable="true"></td>
+                                        <td class="editable" contenteditable="true"></td>
+                                        <td class="editable" contenteditable="true"></td>
+                                        <td class="editable" contenteditable="true"></td>
+                                        <td class="editable" contenteditable="true"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Drift Indicators -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">📡</span> Drift Indicators</h2>
+                        <div style="overflow-x: auto;">
+                            <table class="template-table">
+                                <thead>
+                                    <tr>
+                                        <th>Signal</th>
+                                        <th>Threshold</th>
+                                        <th>Current</th>
+                                        <th>Status</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Query distribution shift</strong></td>
+                                        <td class="score editable" contenteditable="true">KL-div &lt; 0.15</td>
+                                        <td class="score editable" contenteditable="true">0.08</td>
+                                        <td class="score editable" contenteditable="true">🟢</td>
+                                        <td class="editable" contenteditable="true">Stable</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Embedding similarity</strong></td>
+                                        <td class="score editable" contenteditable="true">&gt; 0.85 cosine</td>
+                                        <td class="score editable" contenteditable="true">0.91</td>
+                                        <td class="score editable" contenteditable="true">🟢</td>
+                                        <td class="editable" contenteditable="true">No drift detected</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>New topic clusters</strong></td>
+                                        <td class="score editable" contenteditable="true">&lt; 5% new</td>
+                                        <td class="score editable" contenteditable="true">3.2%</td>
+                                        <td class="score editable" contenteditable="true">🟢</td>
+                                        <td class="editable" contenteditable="true">Minor uptick in pricing questions
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Action Items -->
+                    <div class="checklist-section">
+                        <h2><span class="section-icon">📌</span> Action Items for Next Week</h2>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="a1">
+                            <label for="a1" contenteditable="true"><strong>Investigate billing query escalation
+                                    spike</strong><span>Owner: @eng-lead | Due: Friday</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="a2">
+                            <label for="a2" contenteditable="true"><strong>Expand golden set with 15 new billing edge
+                                    cases</strong><span>Owner: @qa | Due: Wednesday</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="a3">
+                            <label for="a3" contenteditable="true"><strong>Run A/B test for updated retrieval
+                                    prompt</strong><span>Owner: @ml-eng | Due: Next Monday</span></label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="a4">
+                            <label for="a4" contenteditable="true"><strong>[Add action item]</strong><span>Owner: @ |
+                                    Due: </span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="eval-maturity-model.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Maturity Assessment</span>
+                    </a>
+                    <a href="consequence-scoring-worksheet.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Consequence Scoring &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
+</body>
+
+</html>

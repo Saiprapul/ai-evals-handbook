@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evals as Product | AI Evals Handbook</title>
-    <meta name="description" content="Dashboards that inform decisions. Trust signals for users. Executive narratives that don't cause panic.">
+    <meta name="description"
+        content="Dashboards that inform decisions. Trust signals for users. Executive narratives that don't cause panic.">
     <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/kpi-dashboard.html">
     <meta property="og:title" content="Evals as Product | AI Evals Handbook">
-    <meta property="og:description" content="Dashboards that inform decisions. Trust signals for users. Executive narratives that don't cause panic.">
+    <meta property="og:description"
+        content="Dashboards that inform decisions. Trust signals for users. Executive narratives that don't cause panic.">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://saiprapul.github.io/ai-evals-handbook/kpi-dashboard.html">
     <meta property="og:site_name" content="AI Evals Handbook">
@@ -57,7 +59,8 @@
                         <h2 id="quick-answer">Quick Answer</h2>
 
 
-                        <p>KPI dashboards translate eval signals into operational decisions. They help teams track quality, risk, and business impact on a predictable cadence.</p>
+                        <p>KPI dashboards translate eval signals into operational decisions. They help teams track
+                            quality, risk, and business impact on a predictable cadence.</p>
 
 
                     </section>
@@ -96,19 +99,22 @@
                         <h3>Which KPIs matter most?</h3>
 
 
-                        <p>Prioritize severity-weighted error rate, policy adherence, and user impact (escalations, refunds, CSAT).</p>
+                        <p>Prioritize severity-weighted error rate, policy adherence, and user impact (escalations,
+                            refunds, CSAT).</p>
 
 
                         <h3>Who owns the dashboard?</h3>
 
 
-                        <p>Typically a PM or eval lead with strong partnership from engineering and support to close the loop.</p>
+                        <p>Typically a PM or eval lead with strong partnership from engineering and support to close the
+                            loop.</p>
 
 
                         <h3>How do I avoid vanity metrics?</h3>
 
 
-                        <p>Only track metrics that map to decisions. If a metric does not trigger an action, remove it.</p>
+                        <p>Only track metrics that map to decisions. If a metric does not trigger an action, remove it.
+                        </p>
 
 
                     </section>
@@ -172,8 +178,7 @@
                                 <div class="kpi-title">Weekly Sessions</div>
                                 <div class="kpi-value">4.2k</div>
                                 <div class="kpi-trend up">+12% WoW</div>
-                                <svg class="kpi-sparkline" viewBox="0 0 120 40" role="img"
-                                    aria-label="Session trend">
+                                <svg class="kpi-sparkline" viewBox="0 0 120 40" role="img" aria-label="Session trend">
                                     <polyline class="kpi-line" points="0,30 20,28 40,24 60,20 80,18 100,12 120,10">
                                     </polyline>
                                 </svg>
@@ -202,8 +207,7 @@
                                 <div class="kpi-title">p95 Latency</div>
                                 <div class="kpi-value">9.4s</div>
                                 <div class="kpi-trend warning">Above SLA</div>
-                                <svg class="kpi-sparkline" viewBox="0 0 120 40" role="img"
-                                    aria-label="Latency trend">
+                                <svg class="kpi-sparkline" viewBox="0 0 120 40" role="img" aria-label="Latency trend">
                                     <polyline class="kpi-line" points="0,20 20,18 40,17 60,20 80,24 100,26 120,28">
                                     </polyline>
                                 </svg>
@@ -229,7 +233,8 @@
                                 <div class="dashboard-title">Daily Volume</div>
                                 <svg class="dashboard-chart" viewBox="0 0 240 160" role="img"
                                     aria-label="Daily volume line chart">
-                                    <polyline class="dashboard-line" points="10,120 40,110 70,105 100,90 130,95 160,70 190,60 220,55">
+                                    <polyline class="dashboard-line"
+                                        points="10,120 40,110 70,105 100,90 130,95 160,70 190,60 220,55">
                                     </polyline>
                                     <line class="dashboard-axis" x1="10" y1="130" x2="230" y2="130"></line>
                                 </svg>
@@ -293,10 +298,69 @@
                     <section id="cadence">
                         <h2>Operating Rhythm</h2>
                         <ul class="checklist">
-                            <li class="check-item"><strong>Weekly:</strong> PM reviews KPI deltas with Eng and Support.</li>
+                            <li class="check-item"><strong>Weekly:</strong> PM reviews KPI deltas with Eng and Support.
+                            </li>
                             <li class="check-item"><strong>Release gates:</strong> Block if high-risk KPIs regress.</li>
-                            <li class="check-item"><strong>Monthly:</strong> Refresh golden set + update thresholds.</li>
+                            <li class="check-item"><strong>Monthly:</strong> Refresh golden set + update thresholds.
+                            </li>
                         </ul>
+                    </section>
+
+                    <section id="tools">
+                        <h2>Tools & Templates</h2>
+                        <p>Use these resources to operationalize your dashboard and reporting rhythm.</p>
+                        <div class="code-cards" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+
+                            <a href="resources/weekly-eval-report.html" class="code-card">
+                                <div class="code-card-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                        <polyline points="14 2 14 8 20 8"></polyline>
+                                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4>Weekly Report Template</h4>
+                                    <p>Standardize stakeholder updates</p>
+                                </div>
+                            </a>
+
+                            <a href="resources/consequence-scoring-worksheet.html" class="code-card">
+                                <div class="code-card-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path
+                                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                                        </path>
+                                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4>Consequence Scoring</h4>
+                                    <p>Quantify risk for KPIs</p>
+                                </div>
+                            </a>
+
+                            <a href="resources/eval-roi-calculator.html" class="code-card">
+                                <div class="code-card-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                                        <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                        <line x1="8" y1="18" x2="8.01" y2="18"></line>
+                                        <line x1="16" y1="18" x2="16.01" y2="18"></line>
+                                        <path d="M8 14h8"></path>
+                                        <path d="M8 10h8"></path>
+                                        <path d="M8 6h8"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4>ROI Calculator</h4>
+                                    <p>Justify eval investments</p>
+                                </div>
+                            </a>
+
+                        </div>
                     </section>
                 </div>
 

@@ -18,7 +18,7 @@
   var currentKey = '';
   if (segments.length >= 2) {
     var folder = segments[segments.length - 2];
-    if (folder === 'frameworks' || folder === 'case-studies' || folder === 'code') {
+    if (folder === 'frameworks' || folder === 'case-studies' || folder === 'code' || folder === 'resources') {
       currentKey = folder + '/' + currentPage;
     } else {
       currentKey = currentPage;
@@ -75,6 +75,21 @@
         { href: 'code/consequence_scorer.html', label: 'Scorers' },
         { href: 'code/rag_evaluator.html', label: 'RAG Evaluator' },
         { href: 'code/confidence_calibrator.html', label: 'Calibrator' }
+      ]
+    },
+    {
+      title: 'Resources & Tools',
+      links: [
+        { href: 'resources.html', label: 'Overview' },
+        { href: 'resources/eval-readiness-checklist.html', label: 'Readiness Checklist' },
+        { href: 'resources/golden-set-template.html', label: 'Golden Set Template' },
+        { href: 'resources/llm-judge-rubric.html', label: 'LLM Judge Rubric' },
+        { href: 'resources/eval-maturity-model.html', label: 'Maturity Assessment' },
+        { href: 'resources/weekly-eval-report.html', label: 'Weekly Report' },
+        { href: 'resources/consequence-scoring-worksheet.html', label: 'Consequence Scoring' },
+        { href: 'resources/prompt-engineering-cheatsheet.html', label: 'Prompt Engineering' },
+        { href: 'resources/eval-roi-calculator.html', label: 'ROI Calculator' },
+        { href: 'resources/vendor-comparison.html', label: 'Vendor Comparison' }
       ]
     },
     {

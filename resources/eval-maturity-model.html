@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eval Maturity Assessment | AI Evals Handbook</title>
+    <meta name="description"
+        content="Assess your team's AI evaluation maturity across 5 levels. Identify gaps and build a roadmap from ad-hoc testing to continuous evaluation.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/resources/eval-maturity-model.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <link rel="stylesheet" href="../css/resources.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="../resources.html" class="btn btn-sm btn-primary">All Resources</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+    <div class="docs-layout">
+        <aside class="docs-sidebar" id="sidebar"></aside>
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <a href="../resources.html">Resources</a>
+                    <span class="separator">/</span>
+                    <span>Eval Maturity Assessment</span>
+                </div>
+
+                <div class="resource-header">
+                    <h1>Eval Maturity Assessment</h1>
+                    <p class="framework-subtitle">Where is your team on the evaluation maturity curve? Identify your
+                        current level and build a roadmap to the next.</p>
+                    <div class="resource-meta">
+                        <span class="tag">Assessment</span>
+                        <span>For: Leadership, PM</span>
+                        <span>Est. time: 20 min</span>
+                    </div>
+                    <button class="btn-download" onclick="window.print()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Download as PDF
+                    </button>
+                </div>
+
+                <div class="content">
+                    <section>
+                        <h2 id="overview">The 5 Levels</h2>
+                        <p>Most teams are at Level 1-2. The goal isn't perfection—it's moving one level up, sustainably.
+                        </p>
+                    </section>
+
+                    <!-- Level 1 -->
+                    <div class="maturity-level level-1">
+                        <h3><span class="maturity-badge">1</span> Ad Hoc — "We eyeball it"</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px;">Evaluation happens informally.
+                            Someone spot-checks a few outputs before release.</p>
+                        <ul class="maturity-criteria">
+                            <li>No formal test set exists</li>
+                            <li>Quality assessed by "vibes" — team member reads a few outputs</li>
+                            <li>No metrics tracked over time</li>
+                            <li>Failures discovered by customers, not evaluations</li>
+                            <li>No defined owner for evaluation</li>
+                        </ul>
+                        <div class="tip-callout" style="margin-top: 16px;">
+                            <strong>To reach Level 2:</strong> Create a golden set of 50 examples covering your top 5
+                            user queries. Define one metric (e.g., accuracy). Run it before each release.
+                        </div>
+                    </div>
+
+                    <!-- Level 2 -->
+                    <div class="maturity-level level-2">
+                        <h3><span class="maturity-badge">2</span> Defined — "We have a test set"</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px;">A golden set exists, basic metrics
+                            are tracked, but evaluation is manual and sporadic.</p>
+                        <ul class="maturity-criteria">
+                            <li>Golden set of 50-200 examples maintained</li>
+                            <li>1-3 metrics defined (accuracy, latency, faithfulness)</li>
+                            <li>Evaluation runs before major releases</li>
+                            <li>Results shared in release notes or Slack</li>
+                            <li>One team member informally owns eval</li>
+                        </ul>
+                        <div class="tip-callout" style="margin-top: 16px;">
+                            <strong>To reach Level 3:</strong> Automate your eval pipeline (nightly runs). Add
+                            LLM-as-Judge for qualitative dimensions. Set up alerts for metrics crossing thresholds.
+                        </div>
+                    </div>
+
+                    <!-- Level 3 -->
+                    <div class="maturity-level level-3">
+                        <h3><span class="maturity-badge">3</span> Automated — "Evals run in CI"</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px;">Evaluations are automated and
+                            integrated into the development workflow.</p>
+                        <ul class="maturity-criteria">
+                            <li>Eval pipeline runs on every PR or nightly</li>
+                            <li>LLM-as-Judge calibrated against human ratings (≥85% agreement)</li>
+                            <li>Regression tests for known failures</li>
+                            <li>Results dashboard accessible to the team</li>
+                            <li>Formal eval owner with defined responsibilities</li>
+                            <li>Release gates based on eval metrics</li>
+                        </ul>
+                        <div class="tip-callout" style="margin-top: 16px;">
+                            <strong>To reach Level 4:</strong> Add production monitoring (drift detection, confidence
+                            calibration). Implement consequence weighting. Build human-in-the-loop escalation.
+                        </div>
+                    </div>
+
+                    <!-- Level 4 -->
+                    <div class="maturity-level level-4">
+                        <h3><span class="maturity-badge">4</span> Measured — "We catch drift before users feel it"</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px;">Production monitoring closes the
+                            loop between deployment and evaluation.</p>
+                        <ul class="maturity-criteria">
+                            <li>Query distribution drift monitored in real time</li>
+                            <li>Embedding drift alerts configured</li>
+                            <li>Consequence-weighted scoring prioritizes what matters</li>
+                            <li>Human escalation rate tracked as a leading indicator</li>
+                            <li>Human corrections feed back into golden set</li>
+                            <li>Weekly eval reports shared with leadership</li>
+                            <li>Canary deployments for new model versions</li>
+                        </ul>
+                        <div class="tip-callout" style="margin-top: 16px;">
+                            <strong>To reach Level 5:</strong> Tie eval metrics to business KPIs. Build self-healing
+                            eval sets. Automate rubric evolution based on production patterns.
+                        </div>
+                    </div>
+
+                    <!-- Level 5 -->
+                    <div class="maturity-level level-5">
+                        <h3><span class="maturity-badge">5</span> Optimized — "Evals drive product decisions"</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 12px;">Evaluation is a strategic
+                            capability, not just quality assurance.</p>
+                        <ul class="maturity-criteria">
+                            <li>Eval metrics directly tied to revenue, NPS, and support costs</li>
+                            <li>A/B testing uses eval scores as guardrails</li>
+                            <li>Golden sets auto-refresh with production data</li>
+                            <li>Cross-functional eval review board (PM, Eng, Legal, Support)</li>
+                            <li>Eval insights drive product roadmap decisions</li>
+                            <li>Compliance and regulatory evals automated</li>
+                            <li>Organization-wide eval standards and shared tooling</li>
+                        </ul>
+                    </div>
+
+                    <!-- Self-Assessment -->
+                    <section>
+                        <h2 id="self-assessment">Quick Self-Assessment</h2>
+                        <p>Answer these questions to identify your current level:</p>
+                        <div class="checklist-section">
+                            <h2><span class="section-icon">🔍</span> Assessment Questions</h2>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="sa1">
+                                <label for="sa1"><strong>Do you have a golden set?</strong><span>No = Level 1. Yes = at
+                                        least Level 2.</span></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="sa2">
+                                <label for="sa2"><strong>Do evals run automatically?</strong><span>No = Level 2. Yes =
+                                        at least Level 3.</span></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="sa3">
+                                <label for="sa3"><strong>Do you monitor production drift?</strong><span>No = Level 3.
+                                        Yes = at least Level 4.</span></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="sa4">
+                                <label for="sa4"><strong>Do eval metrics influence business decisions?</strong><span>No
+                                        = Level 4. Yes = Level 5.</span></label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="sa5">
+                                <label for="sa5"><strong>Do release gates block bad models from
+                                        shipping?</strong><span>Missing this = still in the Level 2-3
+                                        range.</span></label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Roadmap Template -->
+                    <section>
+                        <h2 id="roadmap">Maturity Roadmap Template</h2>
+                        <div style="overflow-x: auto;">
+                            <table class="template-table">
+                                <thead>
+                                    <tr>
+                                        <th>Current Level</th>
+                                        <th>Target Level</th>
+                                        <th>Key Actions</th>
+                                        <th>Timeline</th>
+                                        <th>Owner</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="editable" contenteditable="true">Level 1</td>
+                                        <td class="editable" contenteditable="true">Level 2</td>
+                                        <td class="editable" contenteditable="true">Build golden set, define 1 metric,
+                                            assign eval owner</td>
+                                        <td class="editable" contenteditable="true">2 weeks</td>
+                                        <td class="editable" contenteditable="true">PM</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="editable" contenteditable="true">Level 2</td>
+                                        <td class="editable" contenteditable="true">Level 3</td>
+                                        <td class="editable" contenteditable="true">Automate pipeline, add LLM judge,
+                                            set release gates</td>
+                                        <td class="editable" contenteditable="true">1 month</td>
+                                        <td class="editable" contenteditable="true">Eng Lead</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="editable" contenteditable="true">Level 3</td>
+                                        <td class="editable" contenteditable="true">Level 4</td>
+                                        <td class="editable" contenteditable="true">Add drift monitoring, consequence
+                                            weighting, HITL</td>
+                                        <td class="editable" contenteditable="true">2 months</td>
+                                        <td class="editable" contenteditable="true">ML Eng</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="llm-judge-rubric.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; LLM-as-Judge Rubric</span>
+                    </a>
+                    <a href="weekly-eval-report.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Weekly Report &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
+</body>
+
+</html>

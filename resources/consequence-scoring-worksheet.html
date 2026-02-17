@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consequence Scoring Worksheet | AI Evals Handbook</title>
+    <meta name="description"
+        content="Prioritize what to evaluate first by mapping AI failure modes to business consequences. Score and rank risks to focus your eval effort.">
+    <link rel="canonical"
+        href="https://saiprapul.github.io/ai-evals-handbook/resources/consequence-scoring-worksheet.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <link rel="stylesheet" href="../css/resources.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="../resources.html" class="btn btn-sm btn-primary">All Resources</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+    <div class="docs-layout">
+        <aside class="docs-sidebar" id="sidebar"></aside>
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <a href="../resources.html">Resources</a>
+                    <span class="separator">/</span>
+                    <span>Consequence Scoring</span>
+                </div>
+
+                <div class="resource-header">
+                    <h1>Consequence Scoring Worksheet</h1>
+                    <p class="framework-subtitle">Not all AI errors are equal. Map failure modes to business
+                        consequences and prioritize what to test first.</p>
+                    <div class="resource-meta">
+                        <span class="tag">Worksheet</span>
+                        <span>For: PM, Risk, Eng</span>
+                        <span>Est. time: 45 min</span>
+                    </div>
+                    <button class="btn-download" onclick="window.print()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Download as PDF
+                    </button>
+                </div>
+
+                <div class="content">
+                    <section>
+                        <h2 id="how-it-works">How Consequence Scoring Works</h2>
+                        <p>Traditional accuracy treats all errors equally. A misspelling and a compliance violation both
+                            count as "1 error." Consequence scoring fixes this by weighting errors by their real-world
+                            impact.</p>
+                        <div class="tip-callout">
+                            <strong>Formula:</strong>
+                            <code>Consequence Score = Σ (Error Severity × Frequency × Detection Difficulty)</code>
+                        </div>
+                    </section>
+
+                    <!-- Severity Scale -->
+                    <section>
+                        <h2 id="severity">Step 1: Define Severity Scale</h2>
+                        <div style="overflow-x: auto;">
+                            <table class="template-table">
+                                <thead>
+                                    <tr>
+                                        <th>Score</th>
+                                        <th>Severity</th>
+                                        <th>Description</th>
+                                        <th>Examples</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="score" style="color: #EF4444;"><strong>5</strong></td>
+                                        <td><strong>Critical</strong></td>
+                                        <td>Legal liability, safety risk, regulatory violation</td>
+                                        <td class="editable" contenteditable="true">Wrong medical advice, GDPR
+                                            violation, financial misstatement</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="score" style="color: #F97316;"><strong>4</strong></td>
+                                        <td><strong>High</strong></td>
+                                        <td>Revenue loss, customer churn, brand damage</td>
+                                        <td class="editable" contenteditable="true">Wrong pricing, offensive response,
+                                            data leak via hallucination</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="score" style="color: #F59E0B;"><strong>3</strong></td>
+                                        <td><strong>Medium</strong></td>
+                                        <td>Bad user experience, support ticket generated</td>
+                                        <td class="editable" contenteditable="true">Wrong feature described, outdated
+                                            info, confusing answer</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="score" style="color: #3B82F6;"><strong>2</strong></td>
+                                        <td><strong>Low</strong></td>
+                                        <td>Minor friction, user can self-correct</td>
+                                        <td class="editable" contenteditable="true">Slightly verbose, suboptimal
+                                            formatting, minor imprecision</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="score" style="color: #6B7280;"><strong>1</strong></td>
+                                        <td><strong>Cosmetic</strong></td>
+                                        <td>No real impact, polish issue</td>
+                                        <td class="editable" contenteditable="true">Typo, awkward phrasing, slightly
+                                            wrong emoji</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Failure Mode Inventory -->
+                    <section>
+                        <h2 id="inventory">Step 2: Inventory Failure Modes</h2>
+                        <p>List every way your AI system can fail. Score each on severity, frequency, and detection
+                            difficulty.</p>
+                        <div style="overflow-x: auto;">
+                            <table class="template-table" id="failure-table">
+                                <thead>
+                                    <tr>
+                                        <th>Failure Mode</th>
+                                        <th>Category</th>
+                                        <th>Severity<br>(1-5)</th>
+                                        <th>Frequency<br>(1-5)</th>
+                                        <th>Detection<br>(1-5)</th>
+                                        <th>Risk Score</th>
+                                        <th>Priority</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="editable" contenteditable="true">Hallucinated policy details</td>
+                                        <td class="editable" contenteditable="true">Accuracy</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">5</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">3</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">4</td>
+                                        <td class="score risk-score">60</td>
+                                        <td class="score priority-cell" style="color: #EF4444;">P0</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="editable" contenteditable="true">Prompt injection compliance</td>
+                                        <td class="editable" contenteditable="true">Safety</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">5</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">2</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">3</td>
+                                        <td class="score risk-score">30</td>
+                                        <td class="score priority-cell" style="color: #F59E0B;">P1</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="editable" contenteditable="true">Wrong product recommendation</td>
+                                        <td class="editable" contenteditable="true">Relevance</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">3</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">4</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">3</td>
+                                        <td class="score risk-score">36</td>
+                                        <td class="score priority-cell" style="color: #F97316;">P1</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="editable" contenteditable="true">Outdated pricing info</td>
+                                        <td class="editable" contenteditable="true">Freshness</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">4</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">2</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">2</td>
+                                        <td class="score risk-score">16</td>
+                                        <td class="score priority-cell" style="color: #3B82F6;">P2</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="editable" contenteditable="true">Verbose answers</td>
+                                        <td class="editable" contenteditable="true">Tone</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">1</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">5</td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)">1</td>
+                                        <td class="score risk-score">5</td>
+                                        <td class="score priority-cell" style="color: #6B7280;">P3</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="editable" contenteditable="true">[Add failure mode]</td>
+                                        <td class="editable" contenteditable="true"></td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)"></td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)"></td>
+                                        <td class="score editable" contenteditable="true" oninput="calcRow(this)"></td>
+                                        <td class="score risk-score">—</td>
+                                        <td class="score priority-cell">—</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Priority Matrix -->
+                    <section>
+                        <h2 id="priority-matrix">Step 3: Priority Matrix</h2>
+                        <div style="overflow-x: auto;">
+                            <table class="template-table">
+                                <thead>
+                                    <tr>
+                                        <th>Priority</th>
+                                        <th>Risk Score</th>
+                                        <th>Action</th>
+                                        <th>Timeline</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="score" style="color: #EF4444;"><strong>P0 — Block release</strong>
+                                        </td>
+                                        <td class="score">≥ 50</td>
+                                        <td>Must have eval coverage. Zero tolerance for failure.</td>
+                                        <td>Before any release</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="score" style="color: #F97316;"><strong>P1 — Fix this sprint</strong>
+                                        </td>
+                                        <td class="score">25 – 49</td>
+                                        <td>Eval coverage required. Monitor closely.</td>
+                                        <td>Within 1 sprint</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="score" style="color: #F59E0B;"><strong>P2 — Track & plan</strong>
+                                        </td>
+                                        <td class="score">10 – 24</td>
+                                        <td>Add to golden set. Include in quarterly review.</td>
+                                        <td>Within 1 quarter</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="score" style="color: #6B7280;"><strong>P3 — Backlog</strong></td>
+                                        <td class="score">&lt; 10</td>
+                                        <td>Log for awareness. Evaluate if resources allow.</td>
+                                        <td>Best effort</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="weekly-eval-report.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; Weekly Report</span>
+                    </a>
+                    <a href="prompt-engineering-cheatsheet.html" class="nav-card">
+                        <span class="label">Next</span>
+                        <span class="title">Prompt Engineering &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script>
+        function calcRow(el) {
+            var row = el.closest('tr');
+            var cells = row.querySelectorAll('td.editable[oninput]');
+            if (cells.length < 3) return;
+            var s = parseInt(cells[0].textContent) || 0;
+            var f = parseInt(cells[1].textContent) || 0;
+            var d = parseInt(cells[2].textContent) || 0;
+            var score = s * f * d;
+            var scoreCell = row.querySelector('.risk-score');
+            var prioCell = row.querySelector('.priority-cell');
+            if (!score) { scoreCell.textContent = '—'; prioCell.textContent = '—'; prioCell.style.color = '#6B7280'; return; }
+            scoreCell.textContent = score;
+            if (score >= 50) { prioCell.textContent = 'P0'; prioCell.style.color = '#EF4444'; }
+            else if (score >= 25) { prioCell.textContent = 'P1'; prioCell.style.color = '#F97316'; }
+            else if (score >= 10) { prioCell.textContent = 'P2'; prioCell.style.color = '#F59E0B'; }
+            else { prioCell.textContent = 'P3'; prioCell.style.color = '#6B7280'; }
+        }
+        // Init all rows
+        document.querySelectorAll('#failure-table tbody tr').forEach(function (row) {
+            var el = row.querySelector('td[oninput]');
+            if (el) calcRow(el);
+        });
+    </script>
+</body>
+
+</html>

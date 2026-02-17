@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eval Vendor Comparison Matrix | AI Evals Handbook</title>
+    <meta name="description"
+        content="Compare AI evaluation tools and platforms. Feature comparison for LangSmith, Braintrust, Humanloop, Arize, TruLens, and open-source alternatives.">
+    <link rel="canonical" href="https://saiprapul.github.io/ai-evals-handbook/resources/vendor-comparison.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/framework-page.css">
+    <link rel="stylesheet" href="../css/docs.css">
+    <link rel="stylesheet" href="../css/resources.css">
+</head>
+
+<body>
+    <header class="docs-header">
+        <div class="container">
+            <a href="../" class="docs-logo"><span class="logo-icon">E</span>AI Evals Handbook</a>
+            <div class="header-actions">
+                <a href="../resources.html" class="btn btn-sm btn-primary">All Resources</a>
+                <a href="https://github.com/saiprapul/ai-evals-handbook" target="_blank" class="btn btn-sm">GitHub</a>
+            </div>
+        </div>
+    </header>
+    <div class="docs-layout">
+        <aside class="docs-sidebar" id="sidebar"></aside>
+        <main class="docs-main">
+            <div class="docs-content">
+                <div class="breadcrumbs">
+                    <a href="../">Home</a>
+                    <span class="separator">/</span>
+                    <a href="../resources.html">Resources</a>
+                    <span class="separator">/</span>
+                    <span>Vendor Comparison</span>
+                </div>
+
+                <div class="resource-header">
+                    <h1>Eval Tools & Vendor Comparison</h1>
+                    <p class="framework-subtitle">Side-by-side comparison of popular AI evaluation platforms and
+                        open-source tools. Updated for 2025.</p>
+                    <div class="resource-meta">
+                        <span class="tag">Reference</span>
+                        <span>For: Eng, PM, Leadership</span>
+                        <span>Updated: 2025</span>
+                    </div>
+                    <button class="btn-download" onclick="window.print()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                        </svg>
+                        Download as PDF
+                    </button>
+                </div>
+
+                <div class="content">
+                    <section>
+                        <h2 id="disclaimer">About This Comparison</h2>
+                        <div class="warning-callout">
+                            <strong>Disclaimer:</strong> This comparison is based on publicly available information and
+                            the author's experience. Pricing and features change frequently — always verify directly
+                            with vendors. This guide is tool-agnostic; the goal is to help you evaluate, not endorse.
+                        </div>
+                    </section>
+
+                    <!-- Main Comparison -->
+                    <section>
+                        <h2 id="comparison">Feature Comparison</h2>
+                        <div style="overflow-x: auto;">
+                            <table class="comparison-table">
+                                <thead>
+                                    <tr>
+                                        <th>Feature</th>
+                                        <th>LangSmith</th>
+                                        <th>Braintrust</th>
+                                        <th>Humanloop</th>
+                                        <th>Arize Phoenix</th>
+                                        <th>TruLens</th>
+                                        <th>DIY (Open Source)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>LLM-as-Judge</strong></td>
+                                        <td><span class="rating-full">●</span> Built-in</td>
+                                        <td><span class="rating-full">●</span> Built-in</td>
+                                        <td><span class="rating-full">●</span> Built-in</td>
+                                        <td><span class="rating-full">●</span> Built-in</td>
+                                        <td><span class="rating-full">●</span> Built-in</td>
+                                        <td><span class="rating-partial">◐</span> Build your own</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Custom metrics</strong></td>
+                                        <td><span class="rating-full">●</span> Python SDK</td>
+                                        <td><span class="rating-full">●</span> Python SDK</td>
+                                        <td><span class="rating-full">●</span> UI + SDK</td>
+                                        <td><span class="rating-full">●</span> Python SDK</td>
+                                        <td><span class="rating-full">●</span> Python SDK</td>
+                                        <td><span class="rating-full">●</span> Full control</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>RAG evaluation</strong></td>
+                                        <td><span class="rating-full">●</span> RAG triad</td>
+                                        <td><span class="rating-full">●</span> Retrieval metrics</td>
+                                        <td><span class="rating-partial">◐</span> Basic</td>
+                                        <td><span class="rating-full">●</span> RAG analysis</td>
+                                        <td><span class="rating-full">●</span> RAG triad</td>
+                                        <td><span class="rating-partial">◐</span> Build your own</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Drift monitoring</strong></td>
+                                        <td><span class="rating-partial">◐</span> Via tracing</td>
+                                        <td><span class="rating-none">○</span> Not built-in</td>
+                                        <td><span class="rating-none">○</span> Not built-in</td>
+                                        <td><span class="rating-full">●</span> Core feature</td>
+                                        <td><span class="rating-partial">◐</span> Basic</td>
+                                        <td><span class="rating-partial">◐</span> Build your own</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Human review UI</strong></td>
+                                        <td><span class="rating-full">●</span> Annotation queue</td>
+                                        <td><span class="rating-full">●</span> Review UI</td>
+                                        <td><span class="rating-full">●</span> Best-in-class</td>
+                                        <td><span class="rating-partial">◐</span> Basic</td>
+                                        <td><span class="rating-none">○</span> Not built-in</td>
+                                        <td><span class="rating-none">○</span> Build your own</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>CI/CD integration</strong></td>
+                                        <td><span class="rating-full">●</span> GitHub Actions</td>
+                                        <td><span class="rating-full">●</span> GitHub / CI</td>
+                                        <td><span class="rating-partial">◐</span> API-based</td>
+                                        <td><span class="rating-partial">◐</span> API-based</td>
+                                        <td><span class="rating-partial">◐</span> API-based</td>
+                                        <td><span class="rating-full">●</span> Full control</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Dataset management</strong></td>
+                                        <td><span class="rating-full">●</span> Versioned</td>
+                                        <td><span class="rating-full">●</span> Versioned</td>
+                                        <td><span class="rating-full">●</span> Versioned</td>
+                                        <td><span class="rating-partial">◐</span> Import</td>
+                                        <td><span class="rating-partial">◐</span> Basic</td>
+                                        <td><span class="rating-partial">◐</span> Git / S3</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tracing / observability</strong></td>
+                                        <td><span class="rating-full">●</span> Core feature</td>
+                                        <td><span class="rating-partial">◐</span> Basic</td>
+                                        <td><span class="rating-partial">◐</span> Log-based</td>
+                                        <td><span class="rating-full">●</span> Core feature</td>
+                                        <td><span class="rating-full">●</span> Core feature</td>
+                                        <td><span class="rating-none">○</span> Build your own</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Prompt management</strong></td>
+                                        <td><span class="rating-full">●</span> Hub</td>
+                                        <td><span class="rating-partial">◐</span> Basic</td>
+                                        <td><span class="rating-full">●</span> Core feature</td>
+                                        <td><span class="rating-none">○</span> Not built-in</td>
+                                        <td><span class="rating-none">○</span> Not built-in</td>
+                                        <td><span class="rating-partial">◐</span> Git-based</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Free tier</strong></td>
+                                        <td><span class="rating-full">●</span> Generous</td>
+                                        <td><span class="rating-full">●</span> Yes</td>
+                                        <td><span class="rating-partial">◐</span> Limited</td>
+                                        <td><span class="rating-full">●</span> OSS option</td>
+                                        <td><span class="rating-full">●</span> Fully OSS</td>
+                                        <td><span class="rating-full">●</span> Free</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Self-hosted option</strong></td>
+                                        <td><span class="rating-partial">◐</span> Enterprise</td>
+                                        <td><span class="rating-none">○</span> Cloud only</td>
+                                        <td><span class="rating-none">○</span> Cloud only</td>
+                                        <td><span class="rating-full">●</span> OSS</td>
+                                        <td><span class="rating-full">●</span> OSS</td>
+                                        <td><span class="rating-full">●</span> By definition</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 12px;">
+                            <span class="rating-full">●</span> = Strong &nbsp;
+                            <span class="rating-partial">◐</span> = Partial / Basic &nbsp;
+                            <span class="rating-none">○</span> = Not available
+                        </p>
+                    </section>
+
+                    <!-- Decision Framework -->
+                    <section>
+                        <h2 id="decision">Decision Framework</h2>
+                        <p>Use this table to narrow your choice based on your primary need:</p>
+                        <div style="overflow-x: auto;">
+                            <table class="template-table">
+                                <thead>
+                                    <tr>
+                                        <th>If your priority is...</th>
+                                        <th>Consider</th>
+                                        <th>Why</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Full LLMOps lifecycle</strong></td>
+                                        <td>LangSmith</td>
+                                        <td>Tracing + evals + prompt mgmt in one platform</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Best eval UX for teams</strong></td>
+                                        <td>Braintrust</td>
+                                        <td>Clean UI, experiment tracking, strong scoring</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Human review workflows</strong></td>
+                                        <td>Humanloop</td>
+                                        <td>Best annotation UI, prompt versioning</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Production monitoring</strong></td>
+                                        <td>Arize Phoenix</td>
+                                        <td>Drift detection, embedding analysis, open source</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>RAG-specific evaluation</strong></td>
+                                        <td>TruLens</td>
+                                        <td>Built for RAG triad, open source</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Maximum control / budget</strong></td>
+                                        <td>DIY</td>
+                                        <td>Full customization, no vendor lock-in, $0/mo</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Build vs Buy -->
+                    <section>
+                        <h2 id="build-vs-buy">Build vs. Buy Checklist</h2>
+                        <div class="cheatsheet-grid">
+                            <div class="cheatsheet-card">
+                                <h3><span class="emoji">🔨</span> Build (DIY) When...</h3>
+                                <ul>
+                                    <li>Budget is the primary constraint</li>
+                                    <li>You need deep customization</li>
+                                    <li>Data residency requirements prevent cloud use</li>
+                                    <li>Your eval needs are simple (< 5 metrics)</li>
+                                    <li>You have ML engineering capacity</li>
+                                </ul>
+                            </div>
+                            <div class="cheatsheet-card">
+                                <h3><span class="emoji">🛒</span> Buy When...</h3>
+                                <ul>
+                                    <li>Speed to market matters most</li>
+                                    <li>Team lacks ML ops expertise</li>
+                                    <li>You need human review UIs</li>
+                                    <li>Compliance requires audit trails</li>
+                                    <li>Multiple teams need shared tooling</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Evaluation Checklist for Vendors -->
+                    <section>
+                        <h2 id="eval-vendors">Vendor Evaluation Checklist</h2>
+                        <p>Use these questions when evaluating any eval platform:</p>
+                        <div class="checklist-section">
+                            <div class="checklist-item">
+                                <input type="checkbox" id="v1">
+                                <label for="v1"><strong>Data ownership:</strong> Who owns the eval data? Can you export
+                                    it?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="v2">
+                                <label for="v2"><strong>Lock-in risk:</strong> Can you migrate away without rewriting
+                                    eval code?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="v3">
+                                <label for="v3"><strong>Custom metrics:</strong> Can you define metrics beyond the
+                                    built-in set?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="v4">
+                                <label for="v4"><strong>CI/CD integration:</strong> Does it plug into your deployment
+                                    pipeline?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="v5">
+                                <label for="v5"><strong>Pricing model:</strong> Per-eval, per-seat, or volume-based?
+                                    Does it scale?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="v6">
+                                <label for="v6"><strong>Compliance:</strong> SOC2, HIPAA, GDPR compliant? Self-hosted
+                                    option?</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="v7">
+                                <label for="v7"><strong>Support:</strong> Documentation quality, community, response
+                                    time?</label>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="docs-footer-nav">
+                    <a href="eval-roi-calculator.html" class="nav-card">
+                        <span class="label">Previous</span>
+                        <span class="title">&larr; ROI Calculator</span>
+                    </a>
+                    <a href="../resources.html" class="nav-card">
+                        <span class="label">Back</span>
+                        <span class="title">All Resources &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="../js/main.js"></script>
+    <script src="../js/sidebar.js"></script>
+</body>
+
+</html>

@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
+        anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
@@ -142,4 +142,107 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     console.log('AI Evals Handbook loaded');
+
+    // Mobile Sidebar Toggle Injection
+    const sidebar = document.getElementById('sidebar');
+    const headerContainer = document.querySelector('.docs-header .container');
+
+    if (sidebar && headerContainer) {
+        // Create Toggle Button
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'sidebar-toggle';
+        toggleBtn.innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        `;
+        toggleBtn.setAttribute('aria-label', 'Toggle Menu');
+
+        // Insert before logo
+        const logo = headerContainer.querySelector('.docs-logo');
+        if (logo) {
+            headerContainer.insertBefore(toggleBtn, logo);
+        } else {
+            headerContainer.prepend(toggleBtn);
+        }
+
+        // Create Backdrop
+        const backdrop = document.createElement('div');
+        backdrop.className = 'sidebar-backdrop';
+        document.body.appendChild(backdrop);
+
+        // Toggle Logic
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            backdrop.classList.toggle('active');
+            document.body.classList.toggle('mobile-menu-open');
+        }
+
+        toggleBtn.addEventListener('click', toggleSidebar);
+        backdrop.addEventListener('click', toggleSidebar);
+
+        // Close on link click
+        sidebar.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    toggleSidebar();
+                }
+            });
+        });
+    } else if (headerContainer && !sidebar) {
+        // Mobile Nav Toggle Injection (Landing Page)
+        if (!document.querySelector('.nav-toggle')) {
+            const toggleBtn = document.createElement('div');
+            toggleBtn.className = 'nav-toggle';
+            toggleBtn.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+             `;
+
+            // Insert before logo
+            const logo = headerContainer.querySelector('.docs-logo');
+            if (logo) {
+                headerContainer.insertBefore(toggleBtn, logo);
+            } else {
+                headerContainer.prepend(toggleBtn);
+            }
+        }
+    }
+
+    // Mobile Nav Toggle for Landing Page
+    const mobileNavToggle = document.querySelector('.nav-toggle');
+    const mobileNavLinks = document.querySelector('.nav-links');
+
+    if (mobileNavToggle && mobileNavLinks) {
+        // Create Backdrop for main nav if not exists
+        let navBackdrop = document.querySelector('.nav-backdrop');
+        if (!navBackdrop) {
+            navBackdrop = document.createElement('div');
+            navBackdrop.className = 'sidebar-backdrop nav-backdrop';
+            document.body.appendChild(navBackdrop);
+        }
+
+        function toggleMobileNav() {
+            mobileNavLinks.classList.toggle('active');
+            navBackdrop.classList.toggle('active');
+            document.body.classList.toggle('mobile-menu-open');
+        }
+
+        mobileNavToggle.addEventListener('click', toggleMobileNav);
+        navBackdrop.addEventListener('click', toggleMobileNav);
+
+        // Close on link click
+        mobileNavLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileNavLinks.classList.remove('active');
+                navBackdrop.classList.remove('active');
+                document.body.classList.remove('mobile-menu-open');
+            });
+        });
+    }
 });
