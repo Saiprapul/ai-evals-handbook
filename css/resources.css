@@ -451,8 +451,8 @@
 }
 
 .cheatsheet-card pre {
-    background: var(--bg-primary);
-    border: 1px solid var(--border);
+    background: var(--bg-code);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 8px;
     padding: 14px;
     font-size: 0.8rem;
@@ -462,6 +462,7 @@
 
 .cheatsheet-card code {
     font-family: 'JetBrains Mono', monospace;
+    color: #e2e8f0;
 }
 
 .cheatsheet-card ul {

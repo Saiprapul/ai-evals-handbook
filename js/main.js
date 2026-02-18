@@ -103,16 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
         lastScroll = currentScroll;
     });
 
-    // Code syntax highlighting enhancement (if needed)
-    document.querySelectorAll('pre code').forEach(block => {
-        // Add line numbers
-        const lines = block.innerHTML.split('\n');
-        if (lines.length > 3) {
-            block.innerHTML = lines.map((line, i) => {
-                return `<span class="line-number">${i + 1}</span>${line}`;
-            }).join('\n');
-        }
-    });
 
     // Reading time calculation
     const content = document.querySelector('.docs-content .content, .docs-content .content-grid');

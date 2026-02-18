@@ -499,6 +499,25 @@ body {
     transform-origin: 80px 80px;
 }
 
+/* Code blocks */
+.content pre {
+    background: var(--bg-code);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    overflow-x: auto;
+    margin: 20px 0;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.content pre code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #e2e8f0;
+    background: none;
+    padding: 0;
+}
+
 /* Breadcrumbs */
 .breadcrumbs {
     display: flex;
